@@ -54,6 +54,7 @@ class MaterialStatus extends StatelessWidget {
                     height: size.height - size.height / 4,
                     child: GridView.count(
                       crossAxisCount: 2,
+                      padding: EdgeInsets.fromLTRB(50,0,50,50),
                       children: <Widget>[
                         MaterialStatusContent(
                           emoji: "😷",
