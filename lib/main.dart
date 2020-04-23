@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pinemoji/pages/health.dart';
 import 'package:pinemoji/pages/material.dart';
 
 void main() => runApp(MyApp());
@@ -9,7 +10,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.white,
-        body: MaterialStatus(),
+        body: HealthStatus(),
       ),
     );
   }
