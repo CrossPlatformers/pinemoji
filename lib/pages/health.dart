@@ -42,22 +42,22 @@ class HealthStatus extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 20),
               child: SizedBox(
-                width: 210,
+                width: 180,
                 child: Divider(
                   color: Color.fromRGBO(226, 221, 221, 0.3),
                 ),
               ),
             ),
             Container(
-                height: 500,
+                height: size.height - size.height / 4,
                 child: HealthWidgetController(
                   healthStatusModelList: [
                     HealthStatusModel(
-                      emoji: "   🤢\n🤒 😷",
+                      emoji: "  🤢\n🤒 😷",
                       text: "Test Sonucum \n      Pozitif",
                     ),
                     HealthStatusModel(
-                      emoji: "   😊\n✌💪",
+                      emoji: "  😊\n✌💪",
                       text: "Test Sonucum \n      Negatif",
                     ),
                   ],
@@ -99,4 +99,3 @@ class HealthStatus extends StatelessWidget {
     );
   }
 }
-

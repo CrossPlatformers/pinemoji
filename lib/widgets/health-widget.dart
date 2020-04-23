@@ -7,19 +7,21 @@ class HealthStatusModel {
 
   HealthStatusModel({this.emoji, this.text});
 }
+
 class HealthStatusContent extends StatelessWidget {
-
   final HealthStatusModel healthStatusModel;
-  
 
-  const HealthStatusContent({Key key, this.healthStatusModel}) : super(key: key);@override
+  const HealthStatusContent({Key key, this.healthStatusModel})
+      : super(key: key);
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(70),
         border: Border.all(
-          color: healthStatusModel.isActive ? Colors.redAccent : Colors.white,
+          width: 3,
+          color: healthStatusModel.isActive ? Color(0xFFF93963) : Colors.white,
         ),
       ),
       height: size.width / 2.3,
@@ -39,9 +41,8 @@ class HealthStatusContent extends StatelessWidget {
           Text(
             healthStatusModel.text,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 16,
               fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.bold,
               color: Color(0xFFC7CAD1),
             ),
           )
@@ -50,4 +51,3 @@ class HealthStatusContent extends StatelessWidget {
     );
   }
 }
-
