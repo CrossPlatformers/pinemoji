@@ -46,14 +46,14 @@ class BottomNavyBar extends StatelessWidget {
         color: Colors.transparent,
         boxShadow: [
           CustomBoxShadow(
-              color: Colors.white,
+              color: Colors.white38,
               offset: new Offset(1, -0.2),
-              blurRadius: 10.0,
+              blurRadius: 11.0,
               blurStyle: BlurStyle.outer),
           CustomBoxShadow(
-              color: Colors.white,
+              color: Colors.white38,
               offset: new Offset(-1, -0.2),
-              blurRadius: 10.0,
+              blurRadius: 11.0,
               blurStyle: BlurStyle.outer),
         ],
         borderRadius: BorderRadius.only(
@@ -153,7 +153,7 @@ class _ItemWidget extends StatelessWidget {
                 style: TextStyle(
                   color: isSelected ? item.activeColor : item.inactiveColor,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 10,
                   fontStyle: FontStyle.italic,
                 ),
                 maxLines: 2,

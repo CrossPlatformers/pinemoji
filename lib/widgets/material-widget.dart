@@ -33,7 +33,7 @@ class MaterialStatusContent extends StatelessWidget {
               Text(
                 text,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 20,
                   fontStyle: FontStyle.italic,
                   color: Color(0xFFC7CAD1),
                 ),

@@ -37,15 +37,13 @@ class MaterialStatus extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
                     height: (((size.width - 120) / 2) * 3) + 120,
                     child: GridView.count(
                       primary: false,
                       crossAxisCount: 2,
-                      padding: EdgeInsets.all(60),
+                      padding: EdgeInsets.fromLTRB(50, 55, 50, 55),
                       children: <Widget>[
                         MaterialStatusContent(
                           emoji: "😷",
@@ -85,15 +83,15 @@ class MaterialStatus extends StatelessWidget {
                           boxShadow: [
                             CustomBoxShadow(
                               color: Theme.of(context).primaryColorDark,
-                                offset: new Offset(3, 3),
-                                blurRadius: 2.0,
-                                blurStyle: BlurStyle.outer
+                              offset: new Offset(3, 3),
+                              blurRadius: 2.0,
+                              blurStyle: BlurStyle.outer,
                             ),
                             CustomBoxShadow(
                               color: Theme.of(context).primaryColorDark,
-                                offset: new Offset(-1, 3),
-                                blurRadius: 2.0,
-                                blurStyle: BlurStyle.outer
+                              offset: new Offset(-1, 3),
+                              blurRadius: 2.0,
+                              blurStyle: BlurStyle.outer,
                             ),
                             CustomBoxShadow(
                                 color: Colors.white,
@@ -102,12 +100,6 @@ class MaterialStatus extends StatelessWidget {
                                 blurStyle: BlurStyle.outer),
                           ],
                         ),
-                        // decoration: BoxDecoration(
-                        //   borderRadius: BorderRadius.circular(21.5),
-                        //   border: Border.all(
-                        //     color: Color(0xFFC7CAD1),
-                        //   ),
-                        // ),
                         child: Center(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),

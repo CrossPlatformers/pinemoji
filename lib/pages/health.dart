@@ -38,23 +38,22 @@ class HealthStatus extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                      height: (size.width / 2.9 + 158) + 120,
-                      child: HealthWidgetController(
-                        healthStatusModelList: [
-                          HealthStatusModel(
-                            emoji: "  🤢\n🤒 😷",
-                            text: "Test Sonucum \n      Pozitif",
-                          ),
-                          HealthStatusModel(
-                            emoji: "  😊\n✌💪",
-                            text: "Test Sonucum \n      Negatif",
-                          ),
-                        ],
-                      )),
+                    height: (((size.width - 120) / 2) * 3) + 120,
+                    child: HealthWidgetController(
+                      healthStatusModelList: [
+                        HealthStatusModel(
+                          emoji: "  🤢\n🤒 😷",
+                          text: "Test Sonucum \n      Pozitif",
+                        ),
+                        HealthStatusModel(
+                          emoji: "  😊\n✌💪",
+                          text: "Test Sonucum \n      Negatif",
+                        ),
+                      ],
+                    ),
+                  ),
                   Center(
                     child: GestureDetector(
                       onTap: () {},
@@ -97,9 +96,6 @@ class HealthStatus extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 80,
-                  )
                 ],
               ),
             ),

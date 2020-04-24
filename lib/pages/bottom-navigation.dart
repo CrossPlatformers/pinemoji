@@ -62,13 +62,13 @@ class _BottomNavigationState extends State<BottomNavigation> {
           items: [
             BottomNavyBarItem(
                 icon: Icon(NotiIcons.compass_1),
-                title: Text("Malzeme Stok"),
+                title: Text("Malzeme\nDurumu"),
                 activeColor: Theme.of(context).primaryColorDark,
                 inactiveColor: Theme.of(context).primaryColorLight,
                 textAlign: TextAlign.center),
             BottomNavyBarItem(
                 icon: Icon(Icons.error_outline),
-                title: Text("Test Sonucu"),
+                title: Text("Sağlık\nDurumu"),
                 activeColor: Theme.of(context).primaryColorDark,
                 inactiveColor: Theme.of(context).primaryColorLight,
                 textAlign: TextAlign.center),
