@@ -4,10 +4,11 @@ import 'package:pinemoji/pages/bottom-navigation.dart';
 import 'package:pinemoji/shared/custom_theme.dart';
 
 void main() => runApp(
-      DevicePreview(
-        builder: (context) => MyApp(),
-        enabled: true,
-      ),
+      MyApp(),
+      // DevicePreview(
+      //   builder: (context) => MyApp(),
+      //   enabled: true,
+      // ),
     );
 
 class MyApp extends StatelessWidget {

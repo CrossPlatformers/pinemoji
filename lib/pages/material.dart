@@ -34,47 +34,39 @@ class MaterialStatus extends StatelessWidget {
               ),
             ),
           ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    height: size.height * .7,
-                    child: GridView.count(
-                      primary: false,
-                      crossAxisCount: 2,
-                      padding: EdgeInsets.fromLTRB(50, 55, 50, 55),
-                      children: <Widget>[
-                        MaterialStatusContent(
-                          emoji: "😷",
-                          text: " Tıbbi\nMaske",
-                        ),
-                        MaterialStatusContent(
-                          emoji: "😷",
-                          text: "  N95\nMaske",
-                        ),
-                        MaterialStatusContent(
-                          emoji: "🥽",
-                          text: "Siperlik /\n Gözlük",
-                        ),
-                        MaterialStatusContent(
-                          emoji: "🧤",
-                          text: "Eldiven",
-                        ),
-                        MaterialStatusContent(
-                          emoji: "🥼",
-                          text: "Önlük",
-                        ),
-                        MaterialStatusContent(
-                          emoji: "⚗",
-                          text: "Solunum\n Cihazı",
-                        ),
-                      ],
-                    ),
+          Expanded(
+            child: Container(
+              child: GridView.count(
+                crossAxisCount: 2,
+                padding: EdgeInsets.fromLTRB(50, 55, 50, 55),
+                children: <Widget>[
+                  MaterialStatusContent(
+                    emoji: "😷",
+                    text: " Tıbbi\nMaske",
                   ),
-                ),
+                  MaterialStatusContent(
+                    emoji: "😷",
+                    text: "  N95\nMaske",
+                  ),
+                  MaterialStatusContent(
+                    emoji: "🥽",
+                    text: "Siperlik /\n Gözlük",
+                  ),
+                  MaterialStatusContent(
+                    emoji: "🧤",
+                    text: "Eldiven",
+                  ),
+                  MaterialStatusContent(
+                    emoji: "🥼",
+                    text: "Önlük",
+                  ),
+                  MaterialStatusContent(
+                    emoji: "⚗",
+                    text: "Solunum\n Cihazı",
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
           Center(
             child: GestureDetector(
@@ -119,6 +111,9 @@ class MaterialStatus extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+          SizedBox(
+            height: 80,
           )
         ],
       ),

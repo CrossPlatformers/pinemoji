@@ -35,12 +35,13 @@ class HealthStatus extends StatelessWidget {
               ),
             ),
           ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    height: size.height * .7,
+          Expanded(
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SingleChildScrollView(
                     child: HealthWidgetController(
                       healthStatusModelList: [
                         HealthStatusModel(
@@ -54,9 +55,9 @@ class HealthStatus extends StatelessWidget {
                       ],
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
           Center(
             child: GestureDetector(
@@ -100,6 +101,9 @@ class HealthStatus extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(
+            height: 80,
+          )
         ],
       ),
     );
