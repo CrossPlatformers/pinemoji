@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pinemoji/pages/bottom-navigation.dart';
+import 'package:pinemoji/pages/phone.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -46,14 +46,13 @@ class WelcomePage extends StatelessWidget {
               child: OutcomeButton(
                 text: "İlerle",
                 action: () {
-                  Navigator.pushAndRemoveUntil(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return BottomNavigation();
+                        return PhoneValidationPage();
                       },
-                    ),
-                    (Route<dynamic> route) => false,
+                    )
                   );
                 },
               ),
