@@ -5,7 +5,6 @@ import 'package:pinemoji/widgets/outcome-button.dart';
 class PhoneValidationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SafeArea(
@@ -21,25 +20,27 @@ class PhoneValidationPage extends StatelessWidget {
                 children: [
                   Image.asset(
                     "assets/right.png",
-                    fit: BoxFit.fitHeight,
+                    height: double.infinity,
+                    fit: BoxFit.fill,
                   ),
                 ],
               ),
             ),
             Container(
-              height: 240,
+              height: height * 0.25,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                    padding: const EdgeInsets.only(left: 30),
                     child: Container(
                       child: Text(
                         "Odamız İle\nPaylaşmış\nOlduğunuz Cep\nTelefonu Numaranızı\nGiriniz.",
                         style: TextStyle(
-                          fontSize: 34,
+                          fontSize: (height * 0.04).toInt().toDouble(),
                           fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColorDark,
                         ),
                       ),
                     ),
@@ -52,22 +53,24 @@ class PhoneValidationPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(
-                  width: 280,
-                  padding: EdgeInsets.fromLTRB(0, 20, 20, 60),
+                  width: height * 0.33,
+                  padding: EdgeInsets.only(right: 20),
                   child: Column(
                     children: <Widget>[
+                      SizedBox(
+                        height: height * 0.022,
+                      ),
                       TextField(
                         decoration: InputDecoration(
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 0,
+                                style: BorderStyle.none,
+                              ),
                             ),
-                          ),
-                          hintText: "05xx xxx xx xx"
-                        ),
+                            hintText: "05xx xxx xx xx"),
                         style: TextStyle(
-                          fontSize: 34,
+                          fontSize: (height * 0.04).toInt().toDouble(),
                           fontWeight: FontWeight.bold,
                         ),
                         keyboardType: TextInputType.phone,
@@ -80,27 +83,30 @@ class PhoneValidationPage extends StatelessWidget {
                           Theme.of(context).primaryColor,
                           Colors.white
                         ])),
-                      )
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
-              child: OutcomeButton(
-                text: "İlerle",
-                action: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return ValidationCodePage();
-                      },
-                    ),
-                  );
-                },
-              ),
+            SizedBox(
+              height: height * 0.11,
+            ),
+            OutcomeButton(
+              text: "İlerle",
+              action: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return ValidationCodePage();
+                    },
+                  ),
+                );
+              },
+            ),
+            SizedBox(
+              height: height * 0.045,
             )
           ],
         ),

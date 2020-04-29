@@ -21,25 +21,27 @@ class ValidationCodePage extends StatelessWidget {
                 children: [
                   Image.asset(
                     "assets/left.png",
-                    fit: BoxFit.fitHeight,
+                    height: double.infinity,
+                    fit: BoxFit.fill,
                   ),
                 ],
               ),
             ),
             Container(
-              height: 240,
+              height: height * 0.25,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                    padding: const EdgeInsets.only(left: 30),
                     child: Container(
                       child: Text(
                         "Telefonunuza\nGönderdiğimiz Kodu\nGiriniz.",
                         style: TextStyle(
-                          fontSize: 34,
+                          fontSize: (height * 0.04).toInt().toDouble(),
                           fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColorDark,
                         ),
                       ),
                     ),
@@ -52,25 +54,28 @@ class ValidationCodePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(
-                  width: 280,
-                  padding: EdgeInsets.fromLTRB(0, 20, 20, 60),
+                  width: height * 0.22,
+                  padding: EdgeInsets.only(right: 20),
                   child: Column(
                     children: <Widget>[
+                      SizedBox(
+                        height: height * 0.022,
+                      ),
                       TextField(
                         decoration: InputDecoration(
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 0,
+                                style: BorderStyle.none,
+                              ),
                             ),
-                          ),
-                          hintText: "xx xx xx"
-                        ),
+                            hintText: "xx xx xx"),
                         textAlign: TextAlign.end,
                         keyboardType: TextInputType.number,
                         style: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: 32),
+                          fontWeight: FontWeight.bold,
+                          fontSize: (height * 0.04).toInt().toDouble(),
+                        ),
                       ),
                       Container(
                         height: 1,
@@ -86,23 +91,26 @@ class ValidationCodePage extends StatelessWidget {
                 ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
-              child: OutcomeButton(
-                text: "Giriş Yap",
-                action: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return BottomNavigation();
-                      },
-                    ),
-                    (Route<dynamic> route) => false,
-                  );
-                },
-              ),
-            )
+            SizedBox(
+              height: height * 0.11,
+            ),
+            OutcomeButton(
+              text: "Giriş Yap",
+              action: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return BottomNavigation();
+                    },
+                  ),
+                  (Route<dynamic> route) => false,
+                );
+              },
+            ),
+            SizedBox(
+              height: height * 0.045,
+            ),
           ],
         ),
       ),

@@ -22,12 +22,12 @@ class WelcomePage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
                     child: Container(
-                      width: 300,
                       child: Text(
                         "Tabipler\nOdası İletişim\nPlatformuna\nHoşgeldiniz",
                         style: TextStyle(
-                          fontSize: 40,
+                          fontSize: height * 0.045,
                           fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColorDark,
                         ),
                       ),
                     ),
@@ -39,6 +39,7 @@ class WelcomePage extends StatelessWidget {
               child: Image.asset(
                 "assets/image.png",
                 width: height - 370 > (width / (373 / 296)) ? width : height - 370,
+                fit: BoxFit.fill,
               ),
             ),
             Padding(
