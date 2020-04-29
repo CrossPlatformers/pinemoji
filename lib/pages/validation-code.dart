@@ -1,8 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinemoji/pages/bottom-navigation.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
 
 class ValidationCodePage extends StatelessWidget {
+  final _auth = FirebaseAuth.instance;
+
+  String verificationId, status;
+  final TextEditingController codeController = new TextEditingController();
+
+  ValidationCodePage({this.verificationId});
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
@@ -57,15 +65,15 @@ class ValidationCodePage extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       TextField(
+                        controller: codeController,
                         decoration: InputDecoration(
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 0,
+                                style: BorderStyle.none,
+                              ),
                             ),
-                          ),
-                          hintText: "xx xx xx"
-                        ),
+                            hintText: "xx xx xx"),
                         textAlign: TextAlign.end,
                         keyboardType: TextInputType.number,
                         style: TextStyle(
@@ -91,21 +99,40 @@ class ValidationCodePage extends StatelessWidget {
               child: OutcomeButton(
                 text: "Giriş Yap",
                 action: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return BottomNavigation();
-                      },
-                    ),
-                    (Route<dynamic> route) => false,
-                  );
+                  _signInWithPhoneNumber(codeController.text, context);
                 },
               ),
             )
           ],
         ),
       ),
+    );
+  }
+
+  void _signInWithPhoneNumber(String smsCode, BuildContext context) async {
+    var _authCredential = PhoneAuthProvider.getCredential(
+        verificationId: verificationId, smsCode: smsCode);
+    try {
+      AuthResult authStatus = await _auth.signInWithCredential(_authCredential);
+      if (authStatus != null) {
+        // login operaitions
+      }
+      // with empty or wrong verification code
+      pushToLandingPage(context);
+    } catch (e) {
+      pushToLandingPage(context);
+    }
+  }
+
+  Future pushToLandingPage(BuildContext context) {
+    return Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return BottomNavigation();
+        },
+      ),
+      (Route<dynamic> route) => false,
     );
   }
 }

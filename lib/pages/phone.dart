@@ -1,8 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinemoji/pages/validation-code.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
 
 class PhoneValidationPage extends StatelessWidget {
+  final _auth = FirebaseAuth.instance;
+  String phoneNo, verificationId;
+
+  final TextEditingController phoneController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
@@ -57,15 +63,15 @@ class PhoneValidationPage extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       TextField(
+                        controller: phoneController,
                         decoration: InputDecoration(
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 0,
+                                style: BorderStyle.none,
+                              ),
                             ),
-                          ),
-                          hintText: "05xx xxx xx xx"
-                        ),
+                            hintText: "05xx xxx xx xx"),
                         style: TextStyle(
                           fontSize: 34,
                           fontWeight: FontWeight.bold,
@@ -91,19 +97,49 @@ class PhoneValidationPage extends StatelessWidget {
               child: OutcomeButton(
                 text: "İlerle",
                 action: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return ValidationCodePage();
-                      },
-                    ),
-                  );
+                  verifyPhone('+9' + phoneController.text, context);
                 },
               ),
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Future<void> verifyPhone(phoneNo, context) async {
+    final PhoneVerificationCompleted verified = (AuthCredential auth) {};
+    final PhoneVerificationFailed verificationFailed =
+        (AuthException authException) {
+      print('${authException.message}');
+      // with empty phone number
+      pushToValidationPage(context);
+    };
+    final PhoneCodeSent smsSent = (String verId, [int forceResend]) {
+      this.verificationId = verId;
+    };
+    final PhoneCodeAutoRetrievalTimeout autoTimeout = (String verId) {
+      this.verificationId = verId;
+    };
+
+    _auth.verifyPhoneNumber(
+        phoneNumber: phoneNo,
+        timeout: const Duration(
+          seconds: 30,
+        ),
+        verificationCompleted: verified,
+        verificationFailed: verificationFailed,
+        codeSent: smsSent,
+        codeAutoRetrievalTimeout: autoTimeout);
+  }
+
+  pushToValidationPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return ValidationCodePage(verificationId: verificationId);
+        },
       ),
     );
   }
