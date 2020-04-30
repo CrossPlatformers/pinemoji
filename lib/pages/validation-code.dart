@@ -29,25 +29,27 @@ class ValidationCodePage extends StatelessWidget {
                 children: [
                   Image.asset(
                     "assets/left.png",
-                    fit: BoxFit.fitHeight,
+                    height: double.infinity,
+                    fit: BoxFit.fill,
                   ),
                 ],
               ),
             ),
             Container(
-              height: 240,
+              height: height * 0.25,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                    padding: const EdgeInsets.only(left: 30),
                     child: Container(
                       child: Text(
                         "Telefonunuza\nGönderdiğimiz Kodu\nGiriniz.",
                         style: TextStyle(
-                          fontSize: 34,
+                          fontSize: (height * 0.04).toInt().toDouble(),
                           fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColorDark,
                         ),
                       ),
                     ),
@@ -60,10 +62,13 @@ class ValidationCodePage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(
-                  width: 280,
-                  padding: EdgeInsets.fromLTRB(0, 20, 20, 60),
+                  width: height * 0.22,
+                  padding: EdgeInsets.only(right: 20),
                   child: Column(
                     children: <Widget>[
+                      SizedBox(
+                        height: height * 0.022,
+                      ),
                       TextField(
                         controller: codeController,
                         decoration: InputDecoration(
@@ -77,8 +82,9 @@ class ValidationCodePage extends StatelessWidget {
                         textAlign: TextAlign.end,
                         keyboardType: TextInputType.number,
                         style: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                            fontSize: 32),
+                          fontWeight: FontWeight.bold,
+                          fontSize: (height * 0.04).toInt().toDouble(),
+                        ),
                       ),
                       Container(
                         height: 1,
