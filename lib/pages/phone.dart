@@ -121,6 +121,7 @@ class PhoneValidationPage extends StatelessWidget {
     };
     final PhoneCodeSent smsSent = (String verId, [int forceResend]) {
       this.verificationId = verId;
+      pushToValidationPage(context);
     };
     final PhoneCodeAutoRetrievalTimeout autoTimeout = (String verId) {
       this.verificationId = verId;
