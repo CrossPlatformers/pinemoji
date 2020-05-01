@@ -27,6 +27,7 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _scaffOldState,
       body: !isLoading
@@ -41,10 +42,14 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        SizedBox(
+                          width: height * 0.1,
+                        ),
                         Image.asset(
-                          "assets/right.png",
+                          "assets/welcome-right.png",
                           height: double.infinity,
                           fit: BoxFit.fill,
+                          width: width - height * 0.1,
                         ),
                       ],
                     ),
@@ -155,7 +160,6 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
       SnackBar(
         content: Text(text),
         behavior: SnackBarBehavior.fixed,
-
       ),
     );
   }

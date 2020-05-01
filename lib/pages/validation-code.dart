@@ -42,10 +42,14 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Image.asset(
-                          "assets/left.png",
+                          "assets/welcome-left.png",
                           height: double.infinity,
                           fit: BoxFit.fill,
+                          width: width - height * 0.1,
                         ),
+                        SizedBox(
+                          width: height * 0.1,
+                        )
                       ],
                     ),
                   ),

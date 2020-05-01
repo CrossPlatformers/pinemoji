@@ -37,7 +37,7 @@ class WelcomePage extends StatelessWidget {
             ),
             Center(
               child: Image.asset(
-                "assets/image.png",
+                "assets/welcome.png",
                 width: height - 370 > (width / (373 / 296)) ? width : height - 370,
                 fit: BoxFit.fill,
               ),
