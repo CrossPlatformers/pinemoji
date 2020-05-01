@@ -34,58 +34,61 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: <Color>[
-            Theme.of(context).primaryColorDark,
-            Theme.of(context).primaryColorDark.withOpacity(0.9),
-            Theme.of(context).primaryColorDark.withOpacity(0.7),
-            Theme.of(context).primaryColorDark.withOpacity(0.3),
-          ],
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: <Color>[
+              Theme.of(context).primaryColorDark,
+              Theme.of(context).primaryColorDark.withOpacity(0.9),
+              Theme.of(context).primaryColorDark.withOpacity(0.7),
+              Theme.of(context).primaryColorDark.withOpacity(0.2),
+            ],
+          ),
         ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        bottomNavigationBar: BottomNavyBar(
-          selectedIndex: _selectedIndex,
+        child: Scaffold(
           backgroundColor: Colors.transparent,
-          showElevation: true,
-          // use this to remove appBar's elevation
-          onItemSelected: (index) => setState(() {
-            _selectedIndex = index;
-            _pageController.animateToPage(index,
-                duration: Duration(milliseconds: 300), curve: Curves.ease);
-          }),
-          items: [
-            BottomNavyBarItem(
-                icon: Icon(NotiIcons.compass_1),
-                title: Text("Malzeme\nDurumu"),
-                activeColor: Theme.of(context).primaryColorDark,
-                inactiveColor: Theme.of(context).primaryColorLight,
-                textAlign: TextAlign.center),
-            BottomNavyBarItem(
-                icon: Icon(Icons.error_outline),
-                title: Text("Sağlık\nDurumu"),
-                activeColor: Theme.of(context).primaryColorDark,
-                inactiveColor: Theme.of(context).primaryColorLight,
-                textAlign: TextAlign.center),
-          ],
-        ),
-        body: PageView(
-          controller: _pageController,
-          onPageChanged: (index) {
-            setState(() => _selectedIndex = index);
-            if (_selectedIndex != 1) {
-              _isEditMode = false;
-            }
-          },
-          children: <Widget>[
-            MaterialStatus(),
-            HealthStatus(),
-          ],
+          bottomNavigationBar: BottomNavyBar(
+            selectedIndex: _selectedIndex,
+            backgroundColor: Colors.transparent,
+            showElevation: true,
+            // use this to remove appBar's elevation
+            onItemSelected: (index) => setState(() {
+              _selectedIndex = index;
+              _pageController.animateToPage(index,
+                  duration: Duration(milliseconds: 300), curve: Curves.ease);
+            }),
+            items: [
+              BottomNavyBarItem(
+                  icon: Icon(NotiIcons.compass_1),
+                  title: Text("Malzeme\nDurumu"),
+                  activeColor: Theme.of(context).primaryColorDark,
+                  inactiveColor: Theme.of(context).primaryColorLight,
+                  textAlign: TextAlign.center),
+              BottomNavyBarItem(
+                  icon: Icon(Icons.error_outline),
+                  title: Text("Sağlık\nDurumu"),
+                  activeColor: Theme.of(context).primaryColorDark,
+                  inactiveColor: Theme.of(context).primaryColorLight,
+                  textAlign: TextAlign.center),
+            ],
+          ),
+          body: PageView(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() => _selectedIndex = index);
+              if (_selectedIndex != 1) {
+                _isEditMode = false;
+              }
+            },
+            children: <Widget>[
+              MaterialStatus(),
+              HealthStatus(),
+            ],
+          ),
         ),
       ),
     );
