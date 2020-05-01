@@ -18,35 +18,43 @@ class HealthStatusContent extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(70),
+        borderRadius: BorderRadius.circular(30),
         border: Border.all(
           width: 3,
-          color: healthStatusModel.isActive ? Color(0xFFF93963) : Colors.white,
+          color: healthStatusModel.isActive ? Color(0xFFF93963) : Colors.transparent,
         ),
       ),
-      height: size.width / 2.3,
-      width: size.width / 2.9,
-      margin: EdgeInsets.all(15),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            healthStatusModel.emoji,
-            style: TextStyle(fontSize: 35),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Text(
-            healthStatusModel.text,
-            style: TextStyle(
-              fontSize: 16,
-              fontStyle: FontStyle.italic,
-              color: Color(0xFFC7CAD1),
+      width: size.width,
+      margin: EdgeInsets.all(10),
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              healthStatusModel.emoji,
+              style: TextStyle(fontSize: 35),
             ),
-          )
-        ],
+            SizedBox(
+              height: 5,
+            ),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(4.0,0,4.0,0),
+                child: Text(
+                  healthStatusModel.text,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic,
+                    color: Color(0xFFC7CAD1),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

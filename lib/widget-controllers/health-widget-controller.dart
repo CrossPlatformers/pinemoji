@@ -13,7 +13,7 @@ class HealthWidgetController extends StatefulWidget {
 class _HealthWidgetControllerState extends State<HealthWidgetController> {
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: widget.healthStatusModelList.map((healthModelWidget) {
@@ -27,12 +27,8 @@ class _HealthWidgetControllerState extends State<HealthWidgetController> {
                   healthModelWidget.isActive = true;
                 });
               },
-              child: Padding(
-                padding: widget.healthStatusModelList.indexOf(healthModelWidget) % 2 == 0 ?const EdgeInsets.fromLTRB(0,0,0,128)
-                :const EdgeInsets.fromLTRB(0,128,0,0),
-                child: HealthStatusContent(
-                  healthStatusModel: healthModelWidget,
-                ),
+              child: HealthStatusContent(
+                healthStatusModel: healthModelWidget,
               ),
             ),
           );
