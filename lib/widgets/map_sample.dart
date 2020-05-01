@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:pinemoji/repositories/map_repository.dart';
 
 class MapSample extends StatefulWidget {
   @override
@@ -32,6 +33,7 @@ class MapSampleState extends State<MapSample> {
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
+        markers: MapRepository.markers,
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: searchAndGo,
@@ -42,24 +44,14 @@ class MapSampleState extends State<MapSample> {
   }
 
   Future<void> searchAndGo() async {
-    LatLng latLang = await getLocationFromName('dokuz eylül hastanesi');
+    PlaceDetails placeDetails = await MapRepository.getPlaceDetailsFromName(
+        'dokuz eylül hastanesi izmir');
+    LatLng latLang = MapRepository.getLatLngFromPlaceDetails(placeDetails);
+    setState(() {
+      MapRepository.addMarker(placeDetails);
+    });
     final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newLatLng(latLang));
-  }
-
-  Future<LatLng> getLocationFromName(String query) async {
-    GoogleMapsPlaces places =
-        GoogleMapsPlaces(apiKey: 'AIzaSyCl9rJExNnfjE4Qd3AcZ5ONJYEpfah1GTg');
-    PlacesAutocompleteResponse autocompleteResponse =
-        await places.autocomplete(query,language: 'TR');
-    if (autocompleteResponse.predictions.length == 0) {
-      getLocationFromName(query);
-      return null;
-    }
-    Prediction prediction = autocompleteResponse.predictions.first;
-    PlacesDetailsResponse detailsByPlaceId =
-        await places.getDetailsByPlaceId(prediction.placeId);
-    PlaceDetails result = detailsByPlaceId.result;
-    return LatLng(result.geometry.location.lat, result.geometry.location.lng);
+//    LatLng(37.43296265331129, -122.08832357078792)
+    controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 15));
   }
 }
