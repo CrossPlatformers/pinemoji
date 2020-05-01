@@ -1,4 +1,4 @@
-package com.example.pinemoji
+package com.cagriaydin.pinemoji
 
 import io.flutter.embedding.android.FlutterActivity
 
