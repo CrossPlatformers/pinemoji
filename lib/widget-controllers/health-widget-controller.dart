@@ -16,12 +16,18 @@ class _HealthWidgetControllerState extends State<HealthWidgetController> {
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: widget.healthStatusModelList.map((healthModelWidget) {
+        children: answerList(widget.healthStatusModelList),
+        );
+  }
+
+
+List<Widget> answerList(List<HealthStatusModel> healthStatusModelList ){
+List<Widget> widgetList = healthStatusModelList.map((healthModelWidget) {
           return Padding(
             padding: const EdgeInsets.all(0),
             child: GestureDetector(
               onTap: () {
-                for (var current in widget.healthStatusModelList)
+                for (var current in healthStatusModelList)
                   current.isActive = false;
                 setState(() {
                   healthModelWidget.isActive = true;
@@ -32,6 +38,7 @@ class _HealthWidgetControllerState extends State<HealthWidgetController> {
               ),
             ),
           );
-        }).toList());
-  }
+        }).toList();
+        return widgetList;
+}
 }

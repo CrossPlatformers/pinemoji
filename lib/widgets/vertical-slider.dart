@@ -10,9 +10,12 @@ class VerticalSlider extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Expanded(
       child: CarouselSlider(
-        carouselController: CarouselController()
-        ,
-        options: CarouselOptions(height: size.height),
+        carouselController: CarouselController(),
+        options: CarouselOptions(
+          height: size.height - 240,
+          enableInfiniteScroll: false,
+          enlargeCenterPage: true,
+        ),
         items: [
           Padding(
             padding: const EdgeInsets.all(4.0),
@@ -22,7 +25,7 @@ class VerticalSlider extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
                     width: 3,
-                    color: Colors.white,
+                    color: Colors.white38,
                   ),
                 ),
                 child: Column(
@@ -34,30 +37,28 @@ class VerticalSlider extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         "Şu ana kadar COVID-19 tanısı aldınız mı?",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                        ),
+                        style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ),
                     SingleChildScrollView(
                       child: HealthWidgetController(
                         healthStatusModelList: [
                           HealthStatusModel(
-                            emoji: "😊",
-                            text: "Hayır",
+                            "😊",
+                            "Hayır",
                           ),
                           HealthStatusModel(
-                            emoji: "😒",
-                            text: "Evet, test sonucum pozitif çıktı",
+                            "😒",
+                            "Evet, test sonucum pozitif çıktı",
                           ),
                           HealthStatusModel(
-                            emoji: "😐",
-                            text: "Evet test negatifti ama BT sonucuma göre",
+                            "😐",
+                            "Evet test negatifti ama BT sonucuma göre",
                           ),
                           HealthStatusModel(
-                            emoji: "😶",
-                            text: "Diğer",
+                            "😶",
+                            "Diğer",
+                            isOther:true,
                           ),
                         ],
                       ),
@@ -75,7 +76,7 @@ class VerticalSlider extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
                     width: 3,
-                    color: Colors.white,
+                    color: Colors.white38,
                   ),
                 ),
                 child: Column(
@@ -97,28 +98,29 @@ class VerticalSlider extends StatelessWidget {
                       child: HealthWidgetController(
                         healthStatusModelList: [
                           HealthStatusModel(
-                            emoji: "😊",
-                            text: "Tanı almadım",
+                            "😊",
+                            "Tanı almadım",
                           ),
                           HealthStatusModel(
-                            emoji: "😷",
-                            text: "Hastalığı evde ilaç alarak geçirdim",
+                            "😷",
+                            "Hastalığı evde ilaç alarak geçirdim",
                           ),
                           HealthStatusModel(
-                            emoji: "🤒",
-                            text: "Serviste yatarak tedavi gördüm",
+                            "🤒",
+                            "Serviste yatarak tedavi gördüm",
                           ),
                           HealthStatusModel(
-                            emoji: "😶",
-                            text: "Yoğun bakımda yatarak tedavi gördüm",
+                            "😶",
+                            "Yoğun bakımda yatarak tedavi gördüm",
                           ),
                           HealthStatusModel(
-                            emoji: "🤢",
-                            text: "Entübe edildim",
+                            "🤢",
+                            "Entübe edildim",
                           ),
                           HealthStatusModel(
-                            emoji: "😶",
-                            text: "Diğer",
+                            "😶",
+                            "Diğer",
+                            isOther: true,
                           ),
                         ],
                       ),
@@ -136,7 +138,7 @@ class VerticalSlider extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
                     width: 3,
-                    color: Colors.white,
+                    color: Colors.white38,
                   ),
                 ),
                 child: Column(
@@ -158,20 +160,20 @@ class VerticalSlider extends StatelessWidget {
                       child: HealthWidgetController(
                         healthStatusModelList: [
                           HealthStatusModel(
-                            emoji: "😊",
-                            text: "Hayır",
+                            "😊",
+                            "Hayır",
                           ),
                           HealthStatusModel(
-                            emoji: "😐",
-                            text: "Evet düşük riskli",
+                            "😐",
+                            "Evet düşük riskli",
                           ),
                           HealthStatusModel(
-                            emoji: "🙁",
-                            text: "Evet orta riskli",
+                            "🙁",
+                            "Evet orta riskli",
                           ),
                           HealthStatusModel(
-                            emoji: "😰",
-                            text: "Evet yüksek riskli",
+                            "😰",
+                            "Evet yüksek riskli",
                           ),
                         ],
                       ),
@@ -189,7 +191,7 @@ class VerticalSlider extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
                     width: 3,
-                    color: Colors.white,
+                    color: Colors.white38,
                   ),
                 ),
                 child: Column(
@@ -211,28 +213,25 @@ class VerticalSlider extends StatelessWidget {
                       child: HealthWidgetController(
                         healthStatusModelList: [
                           HealthStatusModel(
-                            emoji: "😊",
-                            text:
-                                "Hayır, protokol uygulanmadı ve çalışmaya zorlandım",
+                            "😓",
+                            "Hayır, protokol uygulanmadı ve çalışmaya zorlandım",
                           ),
                           HealthStatusModel(
-                            emoji: "😷",
-                            text:
-                                "Evet, yüksek riskliydim hidroksiklorin tedavisiyle beş gün istirahat sonrasında testim negatif çıktı işe başladım",
+                             "🤢",
+                            "Evet, yüksek riskliydim hidroksiklorin tedavisiyle beş gün istirahat sonrasında testim negatif çıktı işe başladım",
                           ),
                           HealthStatusModel(
-                            emoji: "🤒",
-                            text:
-                                "Evet orta riskliydim maskeyle çalıştım ve beş gün sonra test yapıldı",
+                            "😷",
+                            "Evet orta riskliydim maskeyle çalıştım ve beş gün sonra test yapıldı",
                           ),
                           HealthStatusModel(
-                            emoji: "😶",
-                            text:
-                                "Evet düşük riskliydim, maske ile çalıştım, semptom takibim yapıldı ve yedinci günde test yapıldı",
+                            "😷",
+                            "Evet düşük riskliydim, maske ile çalıştım, semptom takibim yapıldı ve yedinci günde test yapıldı",
                           ),
                           HealthStatusModel(
-                            emoji: "😶",
-                            text: "Diğer",
+                            "😶",
+                            "Diğer",
+                            isOther : true,
                           ),
                         ],
                       ),
