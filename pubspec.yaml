@@ -20,7 +20,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-
+  flutter_launcher_icons: 0.7.5
+  flutter_native_splash: ^0.1.9
   device_preview: ^0.4.4
   firebase_core: ^0.4.4+3
   firebase_auth: ^0.16.0
@@ -35,6 +36,15 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon.png"
+
+flutter_native_splash:
+  image: assets/logoXC.png
+  color: "#000000"
+  fill: true
 
 # The following section is specific to Flutter.
 flutter:
