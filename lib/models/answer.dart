@@ -11,36 +11,36 @@ String answerToJson(Answer data) => json.encode(data.toMap());
 
 class Answer {
     final String answerText;
-    final String ownerId;
-    final String location;
-
+    final String emojiText;
+    final Map<String, String> ownerList;
+    
     Answer({
         @required this.answerText,
-        @required this.ownerId,
-        @required this.location,
+        @required this.emojiText,
+        @required this.ownerList,
     });
 
     Answer copyWith({
         String answerText,
-        String ownerId,
-        String location,
+        String emojiText,
+        Map<String, String> ownerList,
     }) => 
         Answer(
             answerText: answerText ?? this.answerText,
-            ownerId: ownerId ?? this.ownerId,
-            location: location ?? this.location,
+            emojiText: emojiText ?? this.emojiText,
+            ownerList: ownerList ?? this.ownerList,
         );
 
     factory Answer.fromMap(Map<String, dynamic> json) => Answer(
         answerText: json["answerText"] == null ? null : json["answerText"],
-        ownerId: json["ownerId"] == null ? null : json["ownerId"],
-        location: json["location"] == null ? null : json["location"],
+        emojiText: json["emojiText"] == null ? null : json["emojiText"],
+        ownerList: Map.from(json["ownerList"]).map((k, v) => MapEntry<String, String>(k, v)),
     );
 
     Map<String, dynamic> toMap() => {
         "answerText": answerText == null ? null : answerText,
-        "ownerId": ownerId == null ? null : ownerId,
-        "location": location == null ? null : location,
+        "emojiText": emojiText == null ? null : emojiText,
+        "ownerList": Map.from(ownerList).map((k, v) => MapEntry<String, dynamic>(k, v)),
     };
 }
 

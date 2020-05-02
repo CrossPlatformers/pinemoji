@@ -8,6 +8,7 @@ class BottomNavyBar extends StatelessWidget {
   final int selectedIndex;
   final double iconSize;
   final Color backgroundColor;
+  final Color shadowColor;
   final bool showElevation;
   final Duration animationDuration;
   final List<BottomNavyBarItem> items;
@@ -22,6 +23,7 @@ class BottomNavyBar extends StatelessWidget {
     this.showElevation = true,
     this.iconSize = 30,
     this.backgroundColor,
+    this.shadowColor,
     this.itemCornerRadius = 50,
     this.animationDuration = const Duration(milliseconds: 270),
     this.mainAxisAlignment = MainAxisAlignment.spaceAround,
@@ -46,12 +48,12 @@ class BottomNavyBar extends StatelessWidget {
         color: Colors.transparent,
         boxShadow: [
           CustomBoxShadow(
-              color: Colors.white38,
+              color: shadowColor,
               offset: new Offset(1, -0.2),
               blurRadius: 11.0,
               blurStyle: BlurStyle.outer),
           CustomBoxShadow(
-              color: Colors.white38,
+              color: shadowColor,
               offset: new Offset(-1, -0.2),
               blurRadius: 11.0,
               blurStyle: BlurStyle.outer),

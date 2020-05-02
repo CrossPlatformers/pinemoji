@@ -134,7 +134,9 @@ class ValidationCodePage extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (BuildContext context) {
-          return BottomNavigation();
+          return BottomNavigation(
+            isAdminUser: true,
+          );
         },
       ),
       (Route<dynamic> route) => false,

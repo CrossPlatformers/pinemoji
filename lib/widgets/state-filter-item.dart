@@ -8,6 +8,7 @@ class StateFilterItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
+        color: Theme.of(context).primaryColorLight,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(12))),
         elevation: 5,
