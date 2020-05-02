@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pinemoji/widgets/map_sample.dart';
 import 'package:pinemoji/widgets/material-widget.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
 
@@ -14,14 +15,30 @@ class MaterialStatus extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(left: 20, top: 20),
-            child: Text(
-              "Malzeme Durumu",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-                color: Theme.of(context).primaryColorLight,
-              ),
+            padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "Malzeme Durumu",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    color: Theme.of(context).primaryColorLight,
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.map),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return MapSample();
+                    }));
+                  },
+                )
+              ],
             ),
           ),
           Padding(

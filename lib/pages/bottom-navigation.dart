@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pinemoji/repositories/map_repository.dart';
 import 'package:pinemoji/shared/noti_icons_icons.dart';
 import 'package:pinemoji/widgets/bottom.navi.bar.dart';
 
@@ -24,6 +25,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
   void initState() {
     super.initState();
     _pageController = PageController();
+
+    MapRepository.init();
   }
 
   @override
