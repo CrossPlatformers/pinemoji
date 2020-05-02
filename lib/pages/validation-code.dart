@@ -172,7 +172,9 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
       context,
       MaterialPageRoute(
         builder: (BuildContext context) {
-          return BottomNavigation();
+          return BottomNavigation(
+            isAdminUser: true,
+          );
         },
       ),
       (Route<dynamic> route) => false,

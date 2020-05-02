@@ -7,6 +7,7 @@ const secondaryDark = Color(0xff26315F);
 const onPrimary = Color(0xff30E3CA);
 const title = Color(0xff26315F);
 const subTitle = Color(0xff393E45);
+const darkCard = Color(0xff4F546B);
 
 ThemeData customTheme = ThemeData.light().copyWith(
   scaffoldBackgroundColor: Colors.white,
@@ -18,6 +19,8 @@ ThemeData customTheme = ThemeData.light().copyWith(
   accentColor: secondaryDark,
   primaryColor: lightPrimary,
   primaryColorLight: secondaryLight,
+  cardColor: darkCard,
+  highlightColor: onPrimary,
   iconTheme: IconThemeData(color: secondaryLight),
   floatingActionButtonTheme:
       FloatingActionButtonThemeData(backgroundColor: onPrimary),
