@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pinemoji/widgets/material-widget.dart';
+import 'package:pinemoji/widgets/status-title.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
 
 class MaterialStatus extends StatelessWidget {
@@ -13,26 +14,7 @@ class MaterialStatus extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 20, top: 20),
-            child: Text(
-              "Malzeme Durumu",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-                color: Theme.of(context).primaryColorLight,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: SizedBox(
-              width: 210,
-              child: Divider(
-                color: Theme.of(context).primaryColor.withOpacity(.5),
-              ),
-            ),
-          ),
+          StatusTitle("Malzeme Durumu"),
           Expanded(
             child: Container(
               child: GridView.count(
@@ -72,7 +54,7 @@ class MaterialStatus extends StatelessWidget {
             action: () {},
           ),
           SizedBox(
-            height: 80,
+            height: 50,
           )
         ],
       ),
