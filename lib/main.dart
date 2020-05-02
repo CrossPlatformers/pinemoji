@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pinemoji/pages/bottom-navigation.dart';
 import 'package:pinemoji/pages/welcome.dart';
+import 'package:pinemoji/services/authentication-service.dart';
 import 'package:pinemoji/shared/custom_theme.dart';
 
 void main() => runApp(
@@ -14,9 +16,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: customTheme,
       home: Scaffold(
-        body: WelcomePage(),
+        body: StreamBuilder(
+            stream: AuthenticationService.instance.onAuthStateChanged,
+            builder: (BuildContext context, snapshot) {
+              if (snapshot.hasData) {
+                // AuthenticationService.instance.signOut();
+                return BottomNavigation();
+              }
+              return WelcomePage();
+            }),
       ),
     );
   }
