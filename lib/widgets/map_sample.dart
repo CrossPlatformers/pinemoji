@@ -49,9 +49,9 @@ class MapSampleState extends State<MapSample> {
                   mapType: MapType.normal,
                   initialCameraPosition: _kGooglePlex,
                   onMapCreated: (GoogleMapController controller) async {
-                    String mapStyle = await rootBundle
-                        .loadString('assets/map_style/night.json');
-                    controller.setMapStyle(mapStyle);
+//                    String mapStyle = await rootBundle
+//                        .loadString('assets/map_style/night.json');
+//                    controller.setMapStyle(mapStyle);
                     _controller.complete(controller);
                   },
                   markers: MapRepository.markers,
