@@ -26,6 +26,7 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _scaffOldState,
       body: !hasLoading
