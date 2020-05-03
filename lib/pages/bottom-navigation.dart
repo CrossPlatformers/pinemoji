@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pinemoji/repositories/map_repository.dart';
 import 'package:pinemoji/pages/health.dart';
 import 'package:pinemoji/pages/survey-result.dart';
 import 'package:pinemoji/shared/noti_icons_icons.dart';
@@ -17,7 +18,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   /// We are changing the page with [_selectedIndex]
   /// also it activates the current [BottomNavyBarItem]
   int _selectedIndex = 0;
-  
+
   /// It help us to animate between pages when we are changing tabs
   PageController _pageController;
 
@@ -25,6 +26,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
   void initState() {
     super.initState();
     _pageController = PageController();
+
+    MapRepository.init();
   }
 
   @override

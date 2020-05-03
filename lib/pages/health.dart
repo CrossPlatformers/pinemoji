@@ -14,15 +14,18 @@ class HealthStatus extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          StatusTitle("Sağlık Durumu"),
+          StatusTitle(
+            "Sağlık Durumu",
+            180,
+          ),
           VerticalSlider(),
           OutcomeButton(
             text: "Durum Bildir",
             action: () {},
           ),
           SizedBox(
-                height: 40,
-              ),
+            height: 40,
+          ),
         ],
       ),
     );
