@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pinemoji/widgets/map_sample.dart';
+import 'package:pinemoji/pages/map_page.dart';
 import 'package:pinemoji/widgets/material-widget.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
 
@@ -34,7 +34,7 @@ class MaterialStatus extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return MapSample();
+                      return MapPage();
                     }));
                   },
                 )

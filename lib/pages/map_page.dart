@@ -6,12 +6,12 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:pinemoji/repositories/map_repository.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
 
-class MapSample extends StatefulWidget {
+class MapPage extends StatefulWidget {
   @override
-  State<MapSample> createState() => MapSampleState();
+  State<MapPage> createState() => MapPageState();
 }
 
-class MapSampleState extends State<MapSample> {
+class MapPageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
 
   static final CameraPosition _kGooglePlex = CameraPosition(
@@ -86,7 +86,6 @@ class MapSampleState extends State<MapSample> {
     await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 16));
     await Future.delayed(Duration(milliseconds: 400));
     await controller.animateCamera(CameraUpdate.scrollBy(0, -150));
-
   }
 }
 
