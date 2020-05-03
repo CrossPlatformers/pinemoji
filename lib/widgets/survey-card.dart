@@ -14,7 +14,7 @@ class SurveyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: question == selectedQuestion ? 1 : 0.4,
+      opacity: selectedQuestion == null || question == selectedQuestion ? 1 : 0.4,
       child: Card(
         elevation: 5,
         color: Theme.of(context).cardColor,
