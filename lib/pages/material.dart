@@ -15,34 +15,27 @@ class MaterialStatus extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                StatusTitle("Malzeme Durumu"),
-                IconButton(
-                  icon: Icon(Icons.map),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return MapPage();
-                    }));
-                  },
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: SizedBox(
-              width: 210,
-              child: Divider(
-                color: Theme.of(context).primaryColor.withOpacity(.5),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              StatusTitle(
+                "Malzeme Durumu",
+                210,
               ),
-            ),
+              GestureDetector(
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
+                  return MapPage();
+                })),
+                child: Image.asset(
+                  "assets/map.png",
+                  width: 90,
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ],
           ),
           Expanded(
             child: Container(

@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 class StatusTitle extends StatelessWidget {
   String text;
-  StatusTitle(String text){
+  double width;
+
+  StatusTitle(String text, double width) {
     this.text = text;
+    this.width = width;
   }
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class StatusTitle extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 20),
             child: SizedBox(
-              width: 180,
+              width: width,
               child: Divider(
                 color: Theme.of(context).primaryColor.withOpacity(.5),
               ),
