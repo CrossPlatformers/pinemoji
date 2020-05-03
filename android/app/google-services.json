@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1074011055856",
+    "firebase_url": "https://pinemoji-xp.firebaseio.com",
+    "project_id": "pinemoji-xp",
+    "storage_bucket": "pinemoji-xp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1074011055856:android:56190b86ef5f9090920435",
+        "android_client_info": {
+          "package_name": "com.cagriaydin.pinemoji"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1074011055856-141e3fr1vtf00mmv1duadosmvot3nr6d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKIBYOGXy1w9MA4pIxj82_IOoxivL5Ao8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1074011055856-141e3fr1vtf00mmv1duadosmvot3nr6d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1074011055856-12gntuqjhd44jn13tdh5cgsirbafaqd6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cagriaydin.pinemoji"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

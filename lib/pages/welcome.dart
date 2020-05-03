@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pinemoji/pages/phone.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
+import 'package:pinemoji/widgets/state-filter-item.dart';
 
 class WelcomePage extends StatelessWidget {
   @override
@@ -37,7 +38,7 @@ class WelcomePage extends StatelessWidget {
             ),
             Center(
               child: Image.asset(
-                "assets/image.png",
+                "assets/welcome.png",
                 width: height - 370 > (width / (373 / 296)) ? width : height - 370,
                 fit: BoxFit.fill,
               ),
@@ -47,14 +48,11 @@ class WelcomePage extends StatelessWidget {
               child: OutcomeButton(
                 text: "İlerle",
                 action: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return PhoneValidationPage();
-                      },
-                    )
-                  );
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return PhoneValidationPage();
+                    },
+                  ));
                 },
               ),
             )

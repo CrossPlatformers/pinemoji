@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pinemoji/pages/map_page.dart';
 import 'package:pinemoji/widgets/material-widget.dart';
+import 'package:pinemoji/widgets/status-title.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
 
 class MaterialStatus extends StatelessWidget {
@@ -21,14 +22,7 @@ class MaterialStatus extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  "Malzeme Durumu",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    color: Theme.of(context).primaryColorLight,
-                  ),
-                ),
+                StatusTitle("Malzeme Durumu"),
                 IconButton(
                   icon: Icon(Icons.map),
                   onPressed: () {
@@ -89,7 +83,7 @@ class MaterialStatus extends StatelessWidget {
             action: () {},
           ),
           SizedBox(
-            height: 80,
+            height: 50,
           )
         ],
       ),

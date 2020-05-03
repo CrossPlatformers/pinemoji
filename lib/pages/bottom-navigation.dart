@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:pinemoji/repositories/map_repository.dart';
+import 'package:pinemoji/pages/health.dart';
+import 'package:pinemoji/pages/survey-result.dart';
 import 'package:pinemoji/shared/noti_icons_icons.dart';
 import 'package:pinemoji/widgets/bottom.navi.bar.dart';
 
-import 'health.dart';
 import 'material.dart';
 
 class BottomNavigation extends StatefulWidget {
+  final bool isAdminUser;
+  BottomNavigation({this.isAdminUser = false});
   @override
   _BottomNavigationState createState() => _BottomNavigationState();
 }
@@ -18,8 +21,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   /// It help us to animate between pages when we are changing tabs
   PageController _pageController;
-
-  bool _isEditMode = false;
 
   @override
   void initState() {
@@ -53,10 +54,11 @@ class _BottomNavigationState extends State<BottomNavigation> {
           ),
         ),
         child: Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: !widget.isAdminUser || _selectedIndex == 0 ? Colors.transparent : Theme.of(context).primaryColorLight,
           bottomNavigationBar: BottomNavyBar(
             selectedIndex: _selectedIndex,
             backgroundColor: Colors.transparent,
+            shadowColor: !widget.isAdminUser || _selectedIndex == 0 ? Colors.white38 : Theme.of(context).primaryColor,
             showElevation: true,
             // use this to remove appBar's elevation
             onItemSelected: (index) => setState(() {
@@ -69,13 +71,13 @@ class _BottomNavigationState extends State<BottomNavigation> {
                   icon: Icon(NotiIcons.compass_1),
                   title: Text("Malzeme\nDurumu"),
                   activeColor: Theme.of(context).primaryColorDark,
-                  inactiveColor: Theme.of(context).primaryColorLight,
+                  inactiveColor: !widget.isAdminUser || _selectedIndex == 0 ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
                   textAlign: TextAlign.center),
               BottomNavyBarItem(
                   icon: Icon(Icons.error_outline),
                   title: Text("Sağlık\nDurumu"),
                   activeColor: Theme.of(context).primaryColorDark,
-                  inactiveColor: Theme.of(context).primaryColorLight,
+                  inactiveColor: !widget.isAdminUser || _selectedIndex == 0 ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
                   textAlign: TextAlign.center),
             ],
           ),
@@ -83,13 +85,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
             controller: _pageController,
             onPageChanged: (index) {
               setState(() => _selectedIndex = index);
-              if (_selectedIndex != 1) {
-                _isEditMode = false;
-              }
             },
             children: <Widget>[
               MaterialStatus(),
-              HealthStatus(),
+              widget.isAdminUser ? SurveyResultPage() : HealthStatus(),
             ],
           ),
         ),
