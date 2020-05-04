@@ -15,8 +15,11 @@ class SurveyRepository {
   Future<Result> getSurveyResult() async {
     Survey survey = CompanyRepository().getSurvey();
     var query = await Firestore.instance.collection(collectionName).where("surveyId", isEqualTo: survey.id).getDocuments();
-    var querySnapshot = query.documents.elementAt(0);
-    return Result.fromMap(querySnapshot.data);
+    if (query.documents.length > 0) {
+      var querySnapshot = query.documents.elementAt(0);
+      return Result.fromMap(querySnapshot.data);
+    }
+    return null;
   }
 
   Future<void> sendSurvey(

@@ -42,7 +42,6 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
             Container(
               constraints: BoxConstraints(maxHeight: selectedQuestion != null ? MediaQuery.of(context).size.height / 2 - 50 : MediaQuery.of(context).size.height - 50),
               child: GridView.count(
-                childAspectRatio: 0.8,
                 crossAxisCount: 2,
                 padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
                 mainAxisSpacing: 40,

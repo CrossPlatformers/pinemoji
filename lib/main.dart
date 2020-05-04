@@ -28,7 +28,9 @@ class MyApp extends StatelessWidget {
             builder: (BuildContext context, snapshot) {
               if (snapshot.hasData) {
                 // AuthenticationService.instance.signOut();
-                return BottomNavigation();
+                return BottomNavigation(
+                  isAdminUser: true,
+                );
               }
               return WelcomePage();
             }),

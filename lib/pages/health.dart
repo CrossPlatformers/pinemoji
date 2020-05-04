@@ -22,8 +22,7 @@ class _HealthStatusState extends State<HealthStatus> {
   @override
   void initState() {
     // TODO: implement initState
-    SurveyRepository().getOwnData(HealthStatus.survey.id).then((map) => setState(() => 
-    resultMap = map));
+    SurveyRepository().getOwnData(HealthStatus.survey.id).then((map) => setState(() => resultMap = map));
     super.initState();
   }
 
