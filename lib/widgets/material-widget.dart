@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 
+class MaterialStatusModel {
+  String emoji;
+  String text;
+  bool isActive = false;
+  MaterialStatusModel(String emoji, String text) {
+    this.emoji = emoji;
+    this.text = text;
+  }
+}
 class MaterialStatusContent extends StatelessWidget {
-  MaterialStatusContent({@required this.emoji, @required this.text});
+  final MaterialStatusModel materialStatusModel;
 
-  final String emoji;
-  final String text;
+  const MaterialStatusContent({Key key, this.materialStatusModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +22,9 @@ class MaterialStatusContent extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
-          color: Color(0xFFC7CAD1),
+          color: materialStatusModel.isActive
+                  ? Color(0xFFF93963)
+                  : Colors.white38,
         ),
       ),
       height: size.width / 3,
@@ -23,14 +34,14 @@ class MaterialStatusContent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            emoji,
+            materialStatusModel.emoji,
             style: TextStyle(fontSize: size.height / 18),
           ),
           SizedBox(
             height: 5,
           ),
           Text(
-            text,
+            materialStatusModel.text,
             style: TextStyle(
               fontSize: size.height / 45,
               fontStyle: FontStyle.italic,

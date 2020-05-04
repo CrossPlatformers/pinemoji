@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pinemoji/pages/map_page.dart';
+import 'package:pinemoji/widget-controllers/material-widget-controller.dart';
 import 'package:pinemoji/widgets/material-widget.dart';
 import 'package:pinemoji/widgets/status-title.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
@@ -37,39 +38,33 @@ class MaterialStatus extends StatelessWidget {
               ),
             ],
           ),
-          Expanded(
-            child: Container(
-              child: GridView.count(
-                crossAxisCount: 2,
-                padding: EdgeInsets.fromLTRB(50, 55, 50, 55),
-                children: <Widget>[
-                  MaterialStatusContent(
-                    emoji: "😷",
-                    text: " Tıbbi\nMaske",
-                  ),
-                  MaterialStatusContent(
-                    emoji: "😷",
-                    text: "  N95\nMaske",
-                  ),
-                  MaterialStatusContent(
-                    emoji: "🥽",
-                    text: "Siperlik /\n Gözlük",
-                  ),
-                  MaterialStatusContent(
-                    emoji: "🧤",
-                    text: "Eldiven",
-                  ),
-                  MaterialStatusContent(
-                    emoji: "🥼",
-                    text: "Önlük",
-                  ),
-                  MaterialStatusContent(
-                    emoji: "⚗",
-                    text: "Solunum\n Cihazı",
-                  ),
-                ],
+          MaterialWidgetController(
+            materialStatusModelList: [
+              MaterialStatusModel(
+                "😷",
+                " Tıbbi\nMaske",
               ),
-            ),
+              MaterialStatusModel(
+                "😷",
+                "  N95\nMaske",
+              ),
+              MaterialStatusModel(
+                "🥽",
+                "Siperlik /\n Gözlük",
+              ),
+              MaterialStatusModel(
+                "🧤",
+                "Eldiven",
+              ),
+              MaterialStatusModel(
+                "🥼",
+                "Önlük",
+              ),
+              MaterialStatusModel(
+                "⚗",
+                "Solunum\n Cihazı",
+              ),
+            ],
           ),
           OutcomeButton(
             text: "Durum Bildir",

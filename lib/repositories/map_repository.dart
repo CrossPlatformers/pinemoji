@@ -4,8 +4,9 @@ import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:pinemoji/enums/marker-type-enum.dart';
 
-enum MarkerType { red, yellow, blue }
+
 
 class MapRepository {
   static final GoogleMapsPlaces places =

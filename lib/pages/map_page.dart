@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:pinemoji/enums/marker-type-enum.dart';
 import 'package:pinemoji/repositories/map_repository.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
 
