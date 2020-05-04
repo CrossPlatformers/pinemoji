@@ -20,7 +20,7 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
       child: Container(
         child: GridView.count(
           crossAxisCount: 2,
-          padding: EdgeInsets.fromLTRB(60, 65, 60, 65),
+          padding: EdgeInsets.fromLTRB(50, 55, 50, 55),
           children: materialList(widget.materialStatusModelList),
         ),
       ),
