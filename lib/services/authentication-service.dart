@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:pinemoji/enums/authentication-enum.dart';
 import 'package:pinemoji/enums/verification-status-enum.dart';
 import 'package:pinemoji/models/authentication-status.dart';
+import 'package:pinemoji/models/user.dart';
+import 'package:pinemoji/repositories/user_repository.dart';
 
 class AuthenticationService {
   static final instance = FirebaseAuth.instance;
@@ -12,7 +14,18 @@ class AuthenticationService {
     AuthResult result;
     try {
       result = await instance.signInWithCredential(credential);
-      if (result != null) return VerificationStatusEnum.ok;
+      if (result != null) {
+        await UserRepository().addUser(new User(
+            id: result.user.uid,
+            name: "Çağrı",
+            surname: "AYDIN",
+            extraInfo: null,
+            model: null,
+            brand: null,
+            os: null,
+            phoneNumber: result.user.phoneNumber));
+        return VerificationStatusEnum.ok;
+      }
     } on PlatformException catch (e) {
       switch (e.code) {
         case "ERROR_MISSING_VERIFICATION_CODE":

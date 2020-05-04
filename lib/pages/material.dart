@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:pinemoji/pages/map_page.dart';
 import 'package:pinemoji/widget-controllers/material-widget-controller.dart';
+import 'package:pinemoji/repositories/company_repository.dart';
 import 'package:pinemoji/widgets/material-widget.dart';
 import 'package:pinemoji/widgets/status-title.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
 
 class MaterialStatus extends StatelessWidget {
+  static var emojiList = CompanyRepository().getEmojiList();
+
   const MaterialStatus({
     Key key,
   }) : super(key: key);
@@ -39,32 +42,13 @@ class MaterialStatus extends StatelessWidget {
             ],
           ),
           MaterialWidgetController(
-            materialStatusModelList: [
-              MaterialStatusModel(
-                "😷",
-                " Tıbbi\nMaske",
-              ),
-              MaterialStatusModel(
-                "😷",
-                "  N95\nMaske",
-              ),
-              MaterialStatusModel(
-                "🥽",
-                "Siperlik /\n Gözlük",
-              ),
-              MaterialStatusModel(
-                "🧤",
-                "Eldiven",
-              ),
-              MaterialStatusModel(
-                "🥼",
-                "Önlük",
-              ),
-              MaterialStatusModel(
-                "⚗",
-                "Solunum\n Cihazı",
-              ),
-            ],
+            materialStatusModelList: emojiList.map((currentElement) {
+                  return MaterialStatusModel(
+                    currentElement.info,
+                    currentElement.description,
+                  );
+                }).toList(),
+              
           ),
           OutcomeButton(
             text: "Durum Bildir",

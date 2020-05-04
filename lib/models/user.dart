@@ -2,6 +2,7 @@
 //
 //     final user = userFromJson(jsonString);
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
@@ -10,7 +11,7 @@ User userFromJson(String str) => User.fromMap(json.decode(str));
 String userToJson(User data) => json.encode(data.toMap());
 
 class User {
-  final String id;
+  String id;
   final String name;
   final String surname;
   final Map extraInfo;
@@ -20,7 +21,7 @@ class User {
   final String phoneNumber;
 
   User({
-    @required this.id,
+    this.id,
     @required this.name,
     @required this.surname,
     @required this.extraInfo,
@@ -61,6 +62,22 @@ class User {
         brand: json["brand"] == null ? null : json["brand"],
         os: json["os"] == null ? null : json["os"],
         phoneNumber: json["phoneNumber"] == null ? null : json["phoneNumber"],
+      );
+
+  factory User.fromSnapshot(DocumentSnapshot snapshot) => User(
+        id: snapshot.data["id"] == null ? null : snapshot.data["id"],
+        name: snapshot.data["name"] == null ? null : snapshot.data["name"],
+        surname:
+            snapshot.data["surname"] == null ? null : snapshot.data["surname"],
+        extraInfo: snapshot.data["extraInfo"] == null
+            ? null
+            : Map.from(snapshot.data["extraInfo"]),
+        model: snapshot.data["model"] == null ? null : snapshot.data["model"],
+        brand: snapshot.data["brand"] == null ? null : snapshot.data["brand"],
+        os: snapshot.data["os"] == null ? null : snapshot.data["os"],
+        phoneNumber: snapshot.data["phoneNumber"] == null
+            ? null
+            : snapshot.data["phoneNumber"],
       );
 
   Map<String, dynamic> toMap() => {
