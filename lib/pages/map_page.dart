@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:location/location.dart' as lc;
 import 'package:pinemoji/repositories/map_repository.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
 
@@ -22,51 +23,203 @@ class MapPageState extends State<MapPage> {
 
   String _query = 'dokuz eylül hastanesi izmir';
 
+  CameraPosition _lastCameraPosition;
+
+  lc.Location location;
+
+  bool isSearchMode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    handleLocation();
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: Column(
+      body: Stack(
         children: <Widget>[
-          Expanded(
-            child: Stack(
-              children: <Widget>[
-                GoogleMap(
-                  mapType: MapType.normal,
-                  initialCameraPosition: _kGooglePlex,
-                  onMapCreated: (GoogleMapController controller) async {
-                    String mapStyle = await rootBundle
-                        .loadString('assets/map_style/standart.json');
-                    controller.setMapStyle(mapStyle);
-                    _controller.complete(controller);
-                  },
-                  markers: MapRepository.markers,
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: GradientAppBar(
-                    title: SearchBar(
-                      onChanged: (String text) {
-                        _query = text;
-                      },
+          Column(
+            children: <Widget>[
+              Expanded(
+                child: Stack(
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Container(
+                          height: 100,
+                        ),
+                        Expanded(
+                          child: GoogleMap(
+                            myLocationButtonEnabled: true,
+                            myLocationEnabled: true,
+                            onCameraMove: (CameraPosition cameraPosition) {
+                              _lastCameraPosition = cameraPosition;
+                            },
+//                        cameraTargetBounds: CameraTargetBounds(LatLngBounds()),
+                            mapType: MapType.normal,
+                            initialCameraPosition: _lastCameraPosition ??
+                                CameraPosition(
+                                    target: LatLng(38.9637, 35.2433), zoom: 5),
+                            onMapCreated:
+                                (GoogleMapController controller) async {
+                              String mapStyle = await rootBundle
+                                  .loadString('assets/map_style/standart.json');
+                              controller.setMapStyle(mapStyle);
+                              _controller.complete(controller);
+                            },
+                            markers: MapRepository.markers,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: GradientAppBar(
+                        title: !isSearchMode
+                            ? Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Malzemeler',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        decoration: TextDecoration.underline,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => setState(() {
+                                      isSearchMode = true;
+                                    }),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        Icons.search,
+                                        color: Color(0xffC7CAD1),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : SearchBar(
+                                onChanged: (String text) {
+                                  _query = text;
+                                },
+                              ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 8,
+                      bottom: 50,
+                      child: FloatingActionButton.extended(
+                        onPressed: searchAndGo,
+                        label: Text('To the lake!'),
+                        icon: Icon(Icons.directions_boat),
+                      ),
+                    ),
+                  ],
+                  fit: StackFit.expand,
                 ),
-                Positioned(
-                  right: 8,
-                  bottom: 8,
-                  child: FloatingActionButton.extended(
-                    onPressed: searchAndGo,
-                    label: Text('To the lake!'),
-                    icon: Icon(Icons.directions_boat),
-                  ),
-                ),
-              ],
-              fit: StackFit.expand,
-            ),
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height / 3,
+                width: MediaQuery.of(context).size.width,
+              ),
+            ],
           ),
-          Container(
-            height: MediaQuery.of(context).size.height / 3,
-            child: Text('malzeme stok durumu'),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: MediaQuery.of(context).size.height / 2.3,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    topRight: Radius.circular(50),
+                  )),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Malzeme Stok Durumu',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Color(0xff26315F),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 10),
+                            height: 1,
+                            width: 170,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Theme.of(context).primaryColor,
+                                  Theme.of(context).primaryColor,
+                                  Colors.white
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          'Hastane',
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontSize: 18,
+                            color: Color(0xff26315F).withOpacity(.6),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Malzeme',
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontSize: 18,
+                            color: Color(0xff26315F).withOpacity(.6),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        padding: EdgeInsets.all(0),
+                        itemBuilder: (context, index) {
+                          return HospitalConditionCard(
+                            hospitalName: 'DokuzEylül',
+                            emoji: '😷',
+                            emojiDescription: 'N95 Maske',
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -86,13 +239,36 @@ class MapPageState extends State<MapPage> {
 //    LatLng(37.43296265331129, -122.08832357078792)
     await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 16));
     await Future.delayed(Duration(milliseconds: 400));
-    await controller.animateCamera(CameraUpdate.scrollBy(0, -150));
+    await controller.animateCamera(CameraUpdate.scrollBy(0, -50));
+  }
+
+  void handleLocation() async {
+    location = lc.Location();
+    lc.PermissionStatus hasPermission = await location.hasPermission();
+    if (hasPermission == lc.PermissionStatus.granted) {
+      lc.LocationData locationData = await location.getLocation();
+      _lastCameraPosition = CameraPosition(
+        target: LatLng(locationData.latitude, locationData.longitude),
+        zoom: 15,
+      );
+      final GoogleMapController controller = await _controller.future;
+      await controller.animateCamera(
+          CameraUpdate.newLatLngZoom(_lastCameraPosition.target, 11));
+      await Future.delayed(Duration(milliseconds: 400));
+      await controller.animateCamera(CameraUpdate.scrollBy(0, -50));
+    } else {
+      lc.PermissionStatus requestPermission =
+          await location.requestPermission();
+      if (requestPermission == lc.PermissionStatus.granted) {
+        handleLocation();
+      }
+    }
   }
 }
 
 class GradientAppBar extends StatelessWidget {
   final Widget title;
-  final double barHeight = 270.0;
+  final double barHeight = 280.0;
 
   GradientAppBar({this.title});
 
@@ -121,32 +297,23 @@ class GradientAppBar extends StatelessWidget {
               Expanded(child: title),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Malzemeler',
-              style: TextStyle(
-                color: Colors.white,
-                decoration: TextDecoration.underline,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          SizedBox(
+            height: 8,
           ),
+          ConditionFilter(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: StockFilter(),
             ),
           ),
-          ConditionFilter(),
         ],
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
             colors: [
               Color(0xff26315F),
-              Color(0xff26315F).withOpacity(.8),
+              Color(0xff26315F).withOpacity(.7),
               Colors.transparent,
             ],
             begin: const FractionalOffset(0.0, 0.0),
@@ -303,6 +470,7 @@ class _ConditionFilterState extends State<ConditionFilter> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: conditionFilterModels.map((current) {
         return GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () {
             conditionFilterModels.forEach((element) {
               element.isActive = false;
@@ -340,55 +508,121 @@ class ConditionFilterModel {
 
 class ConditionFilterItem extends StatelessWidget {
   const ConditionFilterItem({
-    this.disabledColor = Colors.transparent,
-    this.activeColor = const Color(0xffD71773),
     this.conditionFilterModel,
   });
 
   final ConditionFilterModel conditionFilterModel;
-  final Color disabledColor;
-  final Color activeColor;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(
-          color: conditionFilterModel.isActive
-              ? Color(0xffD71773)
-              : Color(0xFFC7CAD1),
+    return AnimatedOpacity(
+      opacity: conditionFilterModel.isActive ? 1 : .3,
+      duration: Duration(milliseconds: 300),
+      child: Container(
+        padding: EdgeInsets.all(8),
+        height: size.width / 4,
+        width: size.width / 4,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              conditionFilterModel.text,
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                color: Color(0xFFC7CAD1),
+              ),
+            ),
+            Text(
+              conditionFilterModel.pinCount.toString(),
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                color: Color(0xFFC7CAD1),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Expanded(
+                child: Image.asset(
+              conditionFilterModel.imagePath,
+            )),
+          ],
         ),
       ),
-      padding: EdgeInsets.all(8),
-      height: size.width / 4,
-      width: size.width / 4,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            conditionFilterModel.text,
-            style: TextStyle(
-              fontStyle: FontStyle.italic,
-              color: Color(0xFFC7CAD1),
-            ),
+    );
+  }
+}
+
+class HospitalConditionCard extends StatelessWidget {
+  final String hospitalName;
+
+  final String emojiDescription;
+
+  final String emoji;
+
+  const HospitalConditionCard({
+    Key key,
+    @required this.hospitalName,
+    @required this.emojiDescription,
+    @required this.emoji,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8,4,8,4),
+      child: Card(
+        color: Colors.white,
+        elevation: 10,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Row(
+                children: <Widget>[
+                  Stack(
+                    children: <Widget>[
+                      Image.asset(
+                        "assets/red-pin.png",
+                        width: 24,
+                      ),
+                      Positioned(
+                        top: 2,
+                        left: 7,
+                        child: Text(
+                          "H",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(hospitalName),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    emoji,
+                    style: TextStyle(fontSize: 26),
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(emojiDescription),
+                ],
+              )
+            ],
           ),
-          Text(
-            conditionFilterModel.pinCount.toString(),
-            style: TextStyle(
-              fontStyle: FontStyle.italic,
-              color: Color(0xFFC7CAD1),
-            ),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Expanded(
-              child: Image.asset(
-            conditionFilterModel.imagePath,
-          )),
-        ],
+        ),
       ),
     );
   }
