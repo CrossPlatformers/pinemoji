@@ -136,7 +136,7 @@ class GradientAppBar extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: CastFilter(),
+              child: StockFilter(),
             ),
           ),
         ],
@@ -166,16 +166,16 @@ class FilterEntry {
 
 typedef Function GetFilters(List<String> filters);
 
-class CastFilter extends StatefulWidget {
+class StockFilter extends StatefulWidget {
   final GetFilters getFilters;
 
-  const CastFilter({Key key, this.getFilters}) : super(key: key);
+  const StockFilter({Key key, this.getFilters}) : super(key: key);
 
   @override
-  State createState() => CastFilterState();
+  State createState() => StockFilterState();
 }
 
-class CastFilterState extends State<CastFilter> {
+class StockFilterState extends State<StockFilter> {
   final List<FilterEntry> _cast = <FilterEntry>[
     const FilterEntry('Tıbbi Maske', '😷'),
     const FilterEntry('N95 Maske', '😷'),
