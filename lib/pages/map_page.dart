@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:pinemoji/repositories/map_repository.dart';
@@ -33,9 +34,9 @@ class MapPageState extends State<MapPage> {
                   mapType: MapType.normal,
                   initialCameraPosition: _kGooglePlex,
                   onMapCreated: (GoogleMapController controller) async {
-//                    String mapStyle = await rootBundle
-//                        .loadString('assets/map_style/sliver.json');
-//                    controller.setMapStyle(mapStyle);
+                    String mapStyle = await rootBundle
+                        .loadString('assets/map_style/standart.json');
+                    controller.setMapStyle(mapStyle);
                     _controller.complete(controller);
                   },
                   markers: MapRepository.markers,
