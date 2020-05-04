@@ -13,24 +13,29 @@ QuestionResult questionResultFromJson(String str) =>
 String questionResultToJson(QuestionResult data) => json.encode(data.toMap());
 
 class QuestionResult {
+  final String questionId;
   final String questionText;
   final List<Answer> answerList;
 
   QuestionResult({
+    @required this.questionId,
     @required this.questionText,
     @required this.answerList,
   });
 
   QuestionResult copyWith({
+    String questionId,
     String questionText,
     List<Answer> answerList,
   }) =>
       QuestionResult(
+        questionId: questionId ?? this.questionId,
         questionText: questionText ?? this.questionText,
         answerList: answerList ?? this.answerList,
       );
 
   factory QuestionResult.fromMap(Map<String, dynamic> json) => QuestionResult(
+        questionId: json["questionId"] == null ? null : json["questionId"],
         questionText:
             json["questionText"] == null ? null : json["questionText"],
         answerList: json["answerList"] == null
@@ -40,6 +45,7 @@ class QuestionResult {
       );
 
   Map<String, dynamic> toMap() => {
+        "questionId": questionId == null ? null : questionId,
         "questionText": questionText == null ? null : questionText,
         "answerList": answerList == null
             ? null

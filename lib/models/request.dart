@@ -2,6 +2,7 @@
 //
 //     final request = requestFromJson(jsonString);
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
@@ -12,7 +13,7 @@ Request requestFromJson(String str) => Request.fromMap(json.decode(str));
 String requestToJson(Request data) => json.encode(data.toMap());
 
 class Request {
-  final String id;
+  String id;
   final String ownerId;
   final String location;
   final String companyId;
@@ -24,7 +25,7 @@ class Request {
   final DateTime date;
 
   Request({
-    @required this.id,
+    this.id,
     @required this.ownerId,
     @required this.location,
     @required this.companyId,
@@ -73,6 +74,23 @@ class Request {
     option: json["option"] == null ? null : json["option"],
     date: json["date"] == null ? null : DateTime.parse(json["date"]),
   );
+
+  factory Request.fromSnapshot(DocumentSnapshot snapshot) =>
+      Request(
+        id: snapshot.data["id"] ?? snapshot.documentID,
+        ownerId: snapshot.data["ownerId"],
+        location: snapshot.data["location"],
+        companyId: snapshot.data["companyId"],
+        emoji: snapshot.data["emoji"],
+        image: snapshot.data["image"],
+        state: snapshot.data["image"],
+        date: (snapshot.data["date"] as Timestamp).toDate(),
+        option: snapshot.data["option"],
+        responseList: snapshot.data["response"] == null
+            ? []
+            : List<Response>.from(
+                snapshot.data["response"].map((x) => responseFromJson(x))),
+      );
 
   Map<String, dynamic> toMap() => {
     "id": id == null ? null : id,

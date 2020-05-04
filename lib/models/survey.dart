@@ -12,6 +12,7 @@ Survey surveyFromJson(String str) => Survey.fromMap(json.decode(str));
 String surveyToJson(Survey data) => json.encode(data.toMap());
 
 class Survey {
+  String id;
   final String companyId;
   final DateTime startDate;
   final DateTime endDate;
@@ -22,6 +23,7 @@ class Survey {
   final String info;
 
   Survey({
+    this.id,
     @required this.companyId,
     @required this.startDate,
     @required this.endDate,
@@ -33,6 +35,7 @@ class Survey {
   });
 
   Survey copyWith({
+    String id,
     String companyId,
     String startDate,
     String endDate,
@@ -43,6 +46,7 @@ class Survey {
     String info,
   }) =>
       Survey(
+        id: id ?? this.id,
         companyId: companyId ?? this.companyId,
         startDate: startDate ?? this.startDate,
         endDate: endDate ?? this.endDate,
@@ -54,28 +58,37 @@ class Survey {
       );
 
   factory Survey.fromMap(Map<String, dynamic> json) => Survey(
-    companyId: json["companyId"] == null ? null : json["companyId"],
-    startDate: json["startDate"] == null ? null : DateTime.parse(json["startDate"]),
-    endDate: json["endDate"] == null ? null : DateTime.parse(json["endDate"]),
-    active: json["active"] == null ? null : json["active"],
-    sendType: json["sendType"] == null ? null : json["sendType"],
-    answerType: json["answerType"] == null ? null : json["answerType"],
-    questionList: json["questionList"] == null ? null : List<Question>.from(json["questionList"].map((x) => Question.fromMap(x))),
-    info: json["info"] == null ? null : json["info"],
-  );
+        id: json["id"] == null ? null : json["id"],
+        companyId: json["companyId"] == null ? null : json["companyId"],
+        startDate: json["startDate"] == null
+            ? null
+            : DateTime.parse(json["startDate"]),
+        endDate:
+            json["endDate"] == null ? null : DateTime.parse(json["endDate"]),
+        active: json["active"] == null ? null : json["active"],
+        sendType: json["sendType"] == null ? null : json["sendType"],
+        answerType: json["answerType"] == null ? null : json["answerType"],
+        questionList: json["questionList"] == null
+            ? null
+            : List<Question>.from(
+                json["questionList"].map((x) => Question.fromMap(x))),
+        info: json["info"] == null ? null : json["info"],
+      );
 
   Map<String, dynamic> toMap() => {
-    "companyId": companyId == null ? null : companyId,
-    "startDate": startDate == null ? null : startDate,
-    "endDate": endDate == null ? null : endDate,
-    "active": active == null ? null : active,
-    "sendType": sendType == null ? null : sendType,
-    "answerType": answerType == null ? null : answerType,
-    "questionList": questionList == null ? null : List<dynamic>.from(questionList.map((x) => x.toMap())),
-    "info": info == null ? null : info,
-  };
+        "id": id == null ? null : id,
+        "companyId": companyId == null ? null : companyId,
+        "startDate": startDate == null ? null : startDate,
+        "endDate": endDate == null ? null : endDate,
+        "active": active == null ? null : active,
+        "sendType": sendType == null ? null : sendType,
+        "answerType": answerType == null ? null : answerType,
+        "questionList": questionList == null
+            ? null
+            : List<dynamic>.from(questionList.map((x) => x.toMap())),
+        "info": info == null ? null : info,
+      };
 }
-
 
 //{
 //"companyId": "id",

@@ -75,7 +75,7 @@ class SurveyCard extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Theme.of(context).primaryColorLight,
-                        fontSize: 16),
+                        fontSize: 14),
                   ),
                 ],
               )),
