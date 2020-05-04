@@ -92,7 +92,7 @@ class MapPageState extends State<MapPage> {
 
 class GradientAppBar extends StatelessWidget {
   final Widget title;
-  final double barHeight = 250.0;
+  final double barHeight = 270.0;
 
   GradientAppBar({this.title});
 
@@ -139,6 +139,7 @@ class GradientAppBar extends StatelessWidget {
               child: StockFilter(),
             ),
           ),
+          ConditionFilter(),
         ],
       ),
       decoration: BoxDecoration(
@@ -167,9 +168,9 @@ class FilterEntry {
 typedef Function GetFilters(List<String> filters);
 
 class StockFilter extends StatefulWidget {
-  final GetFilters getFilters;
+  final GetFilters onFilterChange;
 
-  const StockFilter({Key key, this.getFilters}) : super(key: key);
+  const StockFilter({Key key, this.onFilterChange}) : super(key: key);
 
   @override
   State createState() => StockFilterState();
@@ -188,8 +189,8 @@ class StockFilterState extends State<StockFilter> {
   List<String> _filters = <String>[];
 
   getFilters() {
-    if (widget.getFilters != null) {
-      widget.getFilters(_filters);
+    if (widget.onFilterChange != null) {
+      widget.onFilterChange(_filters);
     }
     return _filters;
   }
@@ -226,9 +227,9 @@ class StockFilterState extends State<StockFilter> {
           elevation: 0,
           pressElevation: 0,
           checkmarkColor: activeColor(),
-          disabledColor: Colors.blue,
           selectedColor: Colors.transparent,
           selectedShadowColor: activeColor(),
+          disabledColor: Colors.transparent,
           showCheckmark: false,
           shadowColor: Colors.transparent,
           selected: _filters.contains(filter.name),
@@ -261,6 +262,133 @@ class StockFilterState extends State<StockFilter> {
         spacing: 0,
         direction: Axis.vertical,
         children: filterWidgets.toList(),
+      ),
+    );
+  }
+}
+
+class ConditionFilter extends StatefulWidget {
+  final Function(String) onFilterChange;
+
+  const ConditionFilter({Key key, this.onFilterChange}) : super(key: key);
+
+  @override
+  _ConditionFilterState createState() => _ConditionFilterState();
+}
+
+class _ConditionFilterState extends State<ConditionFilter> {
+  List<ConditionFilterModel> conditionFilterModels = [
+    ConditionFilterModel(
+      text: 'Acil Destek',
+      imagePath: 'assets/pins/red.png',
+      pinCount: 50,
+      isActive: true,
+    ),
+    ConditionFilterModel(
+      text: 'Azalıyor!',
+      imagePath: 'assets/pins/yellow.png',
+      pinCount: 500,
+    ),
+    ConditionFilterModel(
+      text: 'Yeterli',
+      imagePath: 'assets/pins/blue.png',
+      pinCount: 100,
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: conditionFilterModels.map((current) {
+        return GestureDetector(
+          onTap: () {
+            conditionFilterModels.forEach((element) {
+              element.isActive = false;
+            });
+            setState(() {
+              current.isActive = true;
+            });
+            if (widget.onFilterChange != null) {
+              widget.onFilterChange(current.text);
+            }
+          },
+          child: ConditionFilterItem(
+            conditionFilterModel: current,
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
+class ConditionFilterModel {
+  final String imagePath;
+  final String text;
+  bool isActive;
+
+  final int pinCount;
+
+  ConditionFilterModel({
+    @required this.imagePath,
+    @required this.text,
+    @required this.pinCount,
+    this.isActive = false,
+  });
+}
+
+class ConditionFilterItem extends StatelessWidget {
+  const ConditionFilterItem({
+    this.disabledColor = Colors.transparent,
+    this.activeColor = const Color(0xffD71773),
+    this.conditionFilterModel,
+  });
+
+  final ConditionFilterModel conditionFilterModel;
+  final Color disabledColor;
+  final Color activeColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(
+          color: conditionFilterModel.isActive
+              ? Color(0xffD71773)
+              : Color(0xFFC7CAD1),
+        ),
+      ),
+      padding: EdgeInsets.all(8),
+      height: size.width / 4,
+      width: size.width / 4,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            conditionFilterModel.text,
+            style: TextStyle(
+              fontStyle: FontStyle.italic,
+              color: Color(0xFFC7CAD1),
+            ),
+          ),
+          Text(
+            conditionFilterModel.pinCount.toString(),
+            style: TextStyle(
+              fontStyle: FontStyle.italic,
+              color: Color(0xFFC7CAD1),
+            ),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Expanded(
+              child: Image.asset(
+            conditionFilterModel.imagePath,
+          )),
+        ],
       ),
     );
   }
