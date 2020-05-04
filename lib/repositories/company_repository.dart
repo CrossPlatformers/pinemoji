@@ -19,7 +19,7 @@ class CompanyRepository {
     List<Emoji> emojiList = [
       Emoji(
           companyId: "2df77a23-1534-4736-825c-d180566250a3",
-          description: "Tıbbi Maske",
+          description: " Tıbbi\nMaske",
           info: "😷",
           optionList: [
             EmojiOption(name: "Acil Destek", color: "D71773"),
@@ -29,7 +29,7 @@ class CompanyRepository {
           stateList: []),
       Emoji(
           companyId: "2df77a23-1534-4736-825c-d180566250a3",
-          description: "N95 Maske",
+          description: "  N95\nMaske",
           info: "😷",
           optionList: [
             EmojiOption(name: "Acil Destek", color: "D71773"),
@@ -39,7 +39,7 @@ class CompanyRepository {
           stateList: []),
       Emoji(
           companyId: "2df77a23-1534-4736-825c-d180566250a3",
-          description: "Siperlik / Gözlük",
+          description: "Siperlik /\n Gözlük",
           info: "🥽",
           optionList: [
             EmojiOption(name: "Acil Destek", color: "D71773"),
@@ -69,7 +69,7 @@ class CompanyRepository {
           stateList: []),
       Emoji(
           companyId: "2df77a23-1534-4736-825c-d180566250a3",
-          description: "Solunum Cihazı",
+          description: "Solunum\n  Cihazı",
           info: "⚗",
           optionList: [
             EmojiOption(name: "Acil Destek", color: "D71773"),

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pinemoji/pages/map_page.dart';
+import 'package:pinemoji/repositories/company_repository.dart';
 import 'package:pinemoji/widgets/material-widget.dart';
 import 'package:pinemoji/widgets/status-title.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
 
 class MaterialStatus extends StatelessWidget {
+  static var emojiList = CompanyRepository().getEmojiList();
+
   const MaterialStatus({
     Key key,
   }) : super(key: key);
@@ -42,32 +45,12 @@ class MaterialStatus extends StatelessWidget {
               child: GridView.count(
                 crossAxisCount: 2,
                 padding: EdgeInsets.fromLTRB(50, 55, 50, 55),
-                children: <Widget>[
-                  MaterialStatusContent(
-                    emoji: "😷",
-                    text: " Tıbbi\nMaske",
-                  ),
-                  MaterialStatusContent(
-                    emoji: "😷",
-                    text: "  N95\nMaske",
-                  ),
-                  MaterialStatusContent(
-                    emoji: "🥽",
-                    text: "Siperlik /\n Gözlük",
-                  ),
-                  MaterialStatusContent(
-                    emoji: "🧤",
-                    text: "Eldiven",
-                  ),
-                  MaterialStatusContent(
-                    emoji: "🥼",
-                    text: "Önlük",
-                  ),
-                  MaterialStatusContent(
-                    emoji: "⚗",
-                    text: "Solunum\n Cihazı",
-                  ),
-                ],
+                children: emojiList.map((currentElement) {
+                  return MaterialStatusContent(
+                    emoji: currentElement.info,
+                    text: currentElement.description,
+                  );
+                }).toList(),
               ),
             ),
           ),
