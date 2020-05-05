@@ -21,6 +21,7 @@ class _MyAppState extends State<MyApp> {
   bool loggedIn;
   @override
   void initState() {
+    // AuthenticationService().signOut();
     AuthenticationService.instance.onAuthStateChanged.listen((event) {
       if (event != null) {
         AuthenticationService().checkPhoneNumber(event.phoneNumber).then((val) {

@@ -13,8 +13,14 @@ class UserRepository {
       documentReference.setData(user.toMap());
       return documentReference;
     } else {
-      DocumentReference documentReference =
-          Firestore.instance.collection(collectionName).document(user.id);
+      var query = await Firestore.instance
+          .collection(collectionName)
+          .where("phoneNumber", isEqualTo: user.phoneNumber)
+          .getDocuments();
+
+      DocumentReference documentReference = Firestore.instance
+          .collection(collectionName)
+          .document(query.documents.first.documentID);
       documentReference.setData(user.toMap());
       return documentReference;
     }
