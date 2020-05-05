@@ -60,6 +60,7 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
               )
             ],
           ),
+          // child: gridList(materialList(widget.materialStatusModelList)),
         ),
       ),
     );
@@ -124,6 +125,29 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
       );
     }).toList();
     return widgetList;
+  }
+
+  Widget gridList(List<Widget> widgetList) {
+    List<Widget> rowList = new List<Widget>();
+    for (var current in widgetList) {
+      if (widgetList.indexOf(current) % 2 == 0) {
+        rowList.add(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              current,
+              widgetList.asMap().containsKey(widgetList.indexOf(current) + 1)
+                  ? widgetList[widgetList.indexOf(current) + 1]
+                  : null
+            ],
+          ),
+        );
+      }
+    }
+    return Column(
+      children: rowList,
+    );
   }
 }
 
