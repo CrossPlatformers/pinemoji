@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pinemoji/enums/marker-type-enum.dart';
 import 'package:pinemoji/pages/map_page.dart';
 import 'package:pinemoji/widgets/material-widget.dart';
 
@@ -74,12 +75,15 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
       switch (name) {
         case "Acil Destek":
           currentWidget.color = Color(0xFFF93963);
+          currentWidget.markerType = MarkerType.red;
           break;
         case "Azalıyor !":
           currentWidget.color = Color(0xFFEBEE51);
+          currentWidget.markerType = MarkerType.yellow;
           break;
         case "Yeterli":
           currentWidget.color = Color(0xFF1CABCB);
+          currentWidget.markerType = MarkerType.blue;
           break;
         default:
           currentWidget.color = Colors.white38;

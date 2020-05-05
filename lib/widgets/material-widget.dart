@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:pinemoji/enums/marker-type-enum.dart';
 
 class MaterialStatusModel {
   String emoji;
   String text;
   bool isActive = false;
+  MarkerType markerType;
   Color color;
   MaterialStatusModel(String emoji, String text, Color color) {
     this.emoji = emoji;
