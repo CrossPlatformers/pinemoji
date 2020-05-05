@@ -14,42 +14,44 @@ class RequestRepository {
     LatLngBounds latLngBounds,
   }) async {
     List<Request> requestList = [];
-    CollectionReference query = Firestore.instance.collection(collectionName);
+    var ref = Firestore.instance.collection(collectionName);
+    Query query;
     if (emojiIdList != null && emojiIdList.isNotEmpty) {
-      query = query.where(
+      query = ref.where(
         'emoji',
         whereIn: emojiIdList,
       );
     }
     if (optionList != null && optionList.isNotEmpty) {
-      query = query.where(
+      query = ref.where(
         'option',
         whereIn: optionList,
       );
     }
     if (lastSelectedId != null)
-      query.startAfterDocument(await Firestore.instance
+      query = ref.startAfterDocument(await Firestore.instance
           .collection(collectionName)
           .document(lastSelectedId)
           .get());
     if (latLngBounds != null) {
-      query.where(
-        'location',
-        isGreaterThanOrEqualTo: GeoPoint(
-          latLngBounds.northeast.latitude,
-          latLngBounds.northeast.longitude,
-        ),
-      );
-      query.where(
-        'location',
-        isLessThanOrEqualTo: GeoPoint(
-          latLngBounds.southwest.latitude,
-          latLngBounds.southwest.longitude,
-        ),
-      );
+      query = ref
+          .where(
+            'location',
+            isLessThanOrEqualTo: GeoPoint(
+              latLngBounds.northeast.latitude,
+              latLngBounds.northeast.longitude,
+            ),
+          )
+          .where(
+            'location',
+            isGreaterThanOrEqualTo: GeoPoint(
+              latLngBounds.southwest.latitude,
+              latLngBounds.southwest.longitude,
+            ),
+          );
     }
     if (limit != null) {
-      query.limit(limit);
+      query = ref.limit(limit);
     }
     var querySnapshot = await query.getDocuments();
     if (querySnapshot != null && querySnapshot.documents.isNotEmpty) {
