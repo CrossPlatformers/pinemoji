@@ -3,6 +3,8 @@
 //     final user = userFromJson(jsonString);
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
@@ -19,6 +21,7 @@ class User {
   final String brand;
   final String os;
   final String phoneNumber;
+  final LatLng location;
 
   User({
     this.id,
@@ -28,7 +31,8 @@ class User {
     @required this.model,
     @required this.brand,
     @required this.os,
-    @required this.phoneNumber,
+    @required this.phoneNumber, 
+    @required this.location,
   });
 
   User copyWith({
@@ -40,6 +44,7 @@ class User {
     String brand,
     String os,
     String phoneNumber,
+    LatLng location,
   }) =>
       User(
         id: id ?? this.id,
@@ -50,6 +55,7 @@ class User {
         brand: brand ?? this.brand,
         os: os ?? this.os,
         phoneNumber: phoneNumber ?? this.phoneNumber,
+        location: location ?? this.location,
       );
 
   factory User.fromMap(Map<String, dynamic> json) => User(
@@ -62,6 +68,7 @@ class User {
         brand: json["brand"] == null ? null : json["brand"],
         os: json["os"] == null ? null : json["os"],
         phoneNumber: json["phoneNumber"] == null ? null : json["phoneNumber"],
+        location: json["location"] == null ? null : json["location"],
       );
 
   factory User.fromSnapshot(DocumentSnapshot snapshot) => User(
@@ -78,6 +85,7 @@ class User {
         phoneNumber: snapshot.data["phoneNumber"] == null
             ? null
             : snapshot.data["phoneNumber"],
+        location: LatLng((snapshot.data["location"] as GeoPoint).latitude,(snapshot.data["location"] as GeoPoint).latitude),
       );
 
   Map<String, dynamic> toMap() => {
@@ -89,6 +97,7 @@ class User {
         "brand": brand == null ? null : brand,
         "os": os == null ? null : os,
         "phoneNumber": phoneNumber == null ? null : phoneNumber,
+        "location": location == null ? null : GeoPoint(location.latitude, location.longitude),
       };
 }
 

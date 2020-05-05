@@ -41,7 +41,7 @@ class Request {
   Request copyWith({
     String id,
     String ownerId,
-    String location,
+    LatLng location,
     String companyId,
     String emoji,
     String image,
