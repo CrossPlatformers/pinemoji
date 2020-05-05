@@ -3,6 +3,7 @@
 //     final request = requestFromJson(jsonString);
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
@@ -15,7 +16,7 @@ String requestToJson(Request data) => json.encode(data.toMap());
 class Request {
   String id;
   final String ownerId;
-  final String location;
+  final LatLng location;
   final String companyId;
   final String emoji;
   final String image;
@@ -95,7 +96,7 @@ class Request {
   Map<String, dynamic> toMap() => {
     "id": id == null ? null : id,
     "ownerId": ownerId == null ? null : ownerId,
-    "location": location == null ? null : location,
+    "location": location == null ? null : GeoPoint(location.latitude, location.longitude),
     "companyId": companyId == null ? null : companyId,
     "emoji": emoji == null ? null : emoji,
     "image": image == null ? null : image,

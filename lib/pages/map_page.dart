@@ -5,8 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:location/location.dart' as lc;
+import 'package:pinemoji/models/request.dart';
 import 'package:pinemoji/enums/marker-type-enum.dart';
 import 'package:pinemoji/repositories/map_repository.dart';
+import 'package:pinemoji/repositories/request_repository.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
 
 class MapPage extends StatefulWidget {
@@ -242,6 +244,7 @@ class MapPageState extends State<MapPage> {
   void handleMapIdleRequest(LatLngBounds visibleRegion) {
     var contains = visibleRegion.contains(_lastCameraPosition.target);
     print(contains);
+
   }
 
   Future<void> searchAndGo() async {
@@ -258,6 +261,10 @@ class MapPageState extends State<MapPage> {
     await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 16));
     await Future.delayed(Duration(milliseconds: 400));
     await controller.animateCamera(CameraUpdate.scrollBy(0, -50));
+    RequestRepository requestRepository = RequestRepository();
+    requestRepository.addRequest(Request(
+      location: latLang,
+    ));
   }
 
   void handleLocation() async {
@@ -286,7 +293,7 @@ class MapPageState extends State<MapPage> {
 
 class GradientAppBar extends StatelessWidget {
   final Widget title;
-  final double barHeight = 280.0;
+  final double barHeight = 260.0;
 
   GradientAppBar({this.title});
 
