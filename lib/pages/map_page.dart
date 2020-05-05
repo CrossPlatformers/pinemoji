@@ -245,7 +245,7 @@ class MapPageState extends State<MapPage> {
   Future<void> handleMapIdleRequest(LatLngBounds visibleRegion) async {
     var contains = visibleRegion.contains(_lastCameraPosition.target);
     print(contains);
-    var requestList = await requestRepository.getRequestList();
+    var requestList = await requestRepository.getRequestList(latLngBounds: visibleRegion);
     print(requestList.length);
   }
 
