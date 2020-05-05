@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:pinemoji/enums/marker-type-enum.dart';
-
-
+import 'package:pinemoji/models/request.dart';
+import 'package:pinemoji/repositories/request_repository.dart';
 
 class MapRepository {
   static final GoogleMapsPlaces places =
@@ -39,11 +39,6 @@ class MapRepository {
     return placeDetails;
   }
 
-  static LatLng getLatLngFromPlaceDetails(PlaceDetails placeDetails) {
-    return LatLng(
-        placeDetails.geometry.location.lat, placeDetails.geometry.location.lng);
-  }
-
   static List<PlaceDetails> getPlaceDetails(List<String> queries) {
     List<PlaceDetails> listOfPlaceDetails = [];
     queries.map((query) async {
@@ -65,43 +60,27 @@ class MapRepository {
     ));
   }
 
-  static Future<Uint8List> getBytesFromAsset(
-    String path, {
-    int width = 96,
+  static Future<List<Request>> getCurrentLocationMarkers(
+      LatLngBounds lastLatLngBounds) async {
+    clear();
+    List<Request> requestList = await RequestRepository()
+        .getRequestList(latLngBounds: lastLatLngBounds);
+    requestList.forEach((e) => addMarker(e));
+    return requestList;
+  }
+
+  static clear() {
+    markers.clear();
+  }
+
+  static addMarker(
+    Request request, {
+    MarkerType markerType = MarkerType.blue,
   }) async {
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-        targetWidth: width);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
-        .buffer
-        .asUint8List();
-  }
-
-  static Marker prepareMarker(PlaceDetails placeDetails,
-      {MarkerType markerType = MarkerType.blue}) {
-    return Marker(
-      markerId: MarkerId(
-        placeDetails.placeId,
-      ),
-      position: getLatLngFromPlaceDetails(
-        placeDetails,
-      ),
-      icon: getMarkerIcon(markerType),
-    );
-  }
-
-  static addMarker(PlaceDetails placeDetails,
-      {MarkerType markerType = MarkerType.blue}) async {
     markers.add(prepareMarker(
-      placeDetails,
+      request,
       markerType: markerType,
     ));
-  }
-
-  updateMarker(MarkerId markerId, {MarkerType markerType = MarkerType.red}) {
-    Marker marker = markers
-        .firstWhere((element) => element.markerId.value == markerId.value);
   }
 
   static String getAssetName(MarkerType markerType) {
@@ -126,5 +105,38 @@ class MapRepository {
     } else {
       return red;
     }
+  }
+
+  static Future<Uint8List> getBytesFromAsset(
+    String path, {
+    int width = 96,
+  }) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
+        .buffer
+        .asUint8List();
+  }
+
+  static Marker prepareMarker(Request request,
+      {MarkerType markerType = MarkerType.blue}) {
+    return Marker(
+      markerId: MarkerId(
+        request.id,
+      ),
+      position: getLatLngFromPlaceDetails(
+        request.location,
+      ),
+      icon: getMarkerIcon(markerType),
+    );
+  }
+
+  static LatLng getLatLngFromPlaceDetails(LatLng location) {
+    return LatLng(
+      location.latitude,
+      location.longitude,
+    );
   }
 }

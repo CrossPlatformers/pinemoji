@@ -15,13 +15,14 @@ String requestToJson(Request data) => json.encode(data.toMap());
 
 class Request {
   String id;
-  String ownerId;
-  LatLng location;
-  String companyId;
+  final String ownerId;
+  final LatLng location;
+  final String locationName;
+  final String companyId;
   String emoji;
-  String image;
+  final String image;
   String state;
-  List<Response> responseList;
+  final List<Response> responseList;
   String option;
   DateTime date;
 
@@ -29,6 +30,7 @@ class Request {
     this.id,
     @required this.ownerId,
     @required this.location,
+    @required this.locationName,
     @required this.companyId,
     @required this.emoji,
     @required this.image,
@@ -42,6 +44,7 @@ class Request {
     String id,
     String ownerId,
     LatLng location,
+    String locationName,
     String companyId,
     String emoji,
     String image,
@@ -54,6 +57,7 @@ class Request {
         id: id ?? this.id,
         ownerId: ownerId ?? this.ownerId,
         location: location ?? this.location,
+        locationName: locationName ?? this.locationName,
         companyId: companyId ?? this.companyId,
         emoji: emoji ?? this.emoji,
         image: image ?? this.image,
@@ -67,6 +71,7 @@ class Request {
     id: json["id"] == null ? null : json["id"],
     ownerId: json["ownerId"] == null ? null : json["ownerId"],
     location: json["location"] == null ? null : json["location"],
+    locationName: json["locationName"] == null ? null : json["locationName"],
     companyId: json["companyId"] == null ? null : json["companyId"],
     emoji: json["emoji"] == null ? null : json["emoji"],
     image: json["image"] == null ? null : json["image"],
@@ -81,6 +86,7 @@ class Request {
         id: snapshot.data["id"] ?? snapshot.documentID,
         ownerId: snapshot.data["ownerId"],
         location: LatLng((snapshot.data["location"] as GeoPoint).latitude,(snapshot.data["location"] as GeoPoint).latitude),
+        locationName: snapshot.data["locationName"],
         companyId: snapshot.data["companyId"],
         emoji: snapshot.data["emoji"],
         image: snapshot.data["image"],
@@ -99,6 +105,7 @@ class Request {
     "id": id == null ? null : id,
     "ownerId": ownerId == null ? null : ownerId,
     "location": location == null ? null : GeoPoint(location.latitude, location.longitude),
+    "locationName": locationName == null ? null : locationName,
     "companyId": companyId == null ? null : companyId,
     "emoji": emoji == null ? null : emoji,
     "image": image == null ? null : image,
