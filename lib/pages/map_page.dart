@@ -476,18 +476,15 @@ class _ConditionFilterState extends State<ConditionFilter> {
     ConditionFilterModel(
       text: 'Acil Destek',
       imagePath: 'assets/pins/red.png',
-      pinCount: 50,
       isActive: true,
     ),
     ConditionFilterModel(
       text: 'Azalıyor !',
       imagePath: 'assets/pins/yellow.png',
-      pinCount: 500,
     ),
     ConditionFilterModel(
       text: 'Yeterli',
       imagePath: 'assets/pins/blue.png',
-      pinCount: 100,
     ),
   ];
 
