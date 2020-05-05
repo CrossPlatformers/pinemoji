@@ -12,7 +12,21 @@ void main() => runApp(
       ),
     );
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    AuthenticationService.instance.onAuthStateChanged.listen((event) {
+      // TODO: event'in tipine göre kontrollerle istediğimizi yapabiliriz
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

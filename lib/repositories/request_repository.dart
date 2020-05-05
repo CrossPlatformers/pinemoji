@@ -34,14 +34,14 @@ class RequestRepository {
     if (latLngBounds != null) {
       query.where(
         'location',
-        isLessThanOrEqualTo: GeoPoint(
+        isGreaterThanOrEqualTo: GeoPoint(
           latLngBounds.northeast.latitude,
           latLngBounds.northeast.longitude,
         ),
       );
       query.where(
         'location',
-        isGreaterThanOrEqualTo: GeoPoint(
+        isLessThanOrEqualTo: GeoPoint(
           latLngBounds.southwest.latitude,
           latLngBounds.southwest.longitude,
         ),
