@@ -2,11 +2,11 @@
 //
 //     final request = requestFromJson(jsonString);
 
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
-import 'dart:convert';
-
 import 'package:pinemoji/models/response.dart';
 
 Request requestFromJson(String str) => Request.fromMap(json.decode(str));
@@ -80,12 +80,14 @@ class Request {
       Request(
         id: snapshot.data["id"] ?? snapshot.documentID,
         ownerId: snapshot.data["ownerId"],
-        location: snapshot.data["location"],
+        location: LatLng((snapshot.data["location"] as GeoPoint).latitude,(snapshot.data["location"] as GeoPoint).latitude),
         companyId: snapshot.data["companyId"],
         emoji: snapshot.data["emoji"],
         image: snapshot.data["image"],
         state: snapshot.data["image"],
-        date: (snapshot.data["date"] as Timestamp).toDate(),
+        date: snapshot.data["date"] != null
+            ? (snapshot.data["date"] as Timestamp).toDate()
+            : null,
         option: snapshot.data["option"],
         responseList: snapshot.data["response"] == null
             ? []

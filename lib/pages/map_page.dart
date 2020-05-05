@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:location/location.dart' as lc;
-import 'package:pinemoji/models/request.dart';
 import 'package:pinemoji/enums/marker-type-enum.dart';
+import 'package:pinemoji/models/request.dart';
 import 'package:pinemoji/repositories/map_repository.dart';
 import 'package:pinemoji/repositories/request_repository.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
@@ -33,6 +33,7 @@ class MapPageState extends State<MapPage> {
   lc.Location location;
 
   bool isSearchMode = false;
+  RequestRepository requestRepository = RequestRepository();
 
   @override
   void initState() {
@@ -241,10 +242,11 @@ class MapPageState extends State<MapPage> {
     );
   }
 
-  void handleMapIdleRequest(LatLngBounds visibleRegion) {
+  Future<void> handleMapIdleRequest(LatLngBounds visibleRegion) async {
     var contains = visibleRegion.contains(_lastCameraPosition.target);
     print(contains);
-
+    var requestList = await requestRepository.getRequestList();
+    print(requestList.length);
   }
 
   Future<void> searchAndGo() async {
@@ -261,7 +263,6 @@ class MapPageState extends State<MapPage> {
     await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 16));
     await Future.delayed(Duration(milliseconds: 400));
     await controller.animateCamera(CameraUpdate.scrollBy(0, -50));
-    RequestRepository requestRepository = RequestRepository();
     requestRepository.addRequest(Request(
       location: latLang,
     ));
