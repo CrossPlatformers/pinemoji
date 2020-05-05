@@ -15,15 +15,15 @@ String requestToJson(Request data) => json.encode(data.toMap());
 
 class Request {
   String id;
-  final String ownerId;
-  final LatLng location;
-  final String companyId;
-  final String emoji;
-  final String image;
-  final String state;
-  final List<Response> responseList;
-  final String option;
-  final DateTime date;
+  String ownerId;
+  LatLng location;
+  String companyId;
+  String emoji;
+  String image;
+  String state;
+  List<Response> responseList;
+  String option;
+  DateTime date;
 
   Request({
     this.id,

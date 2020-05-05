@@ -3,14 +3,16 @@ import 'package:pinemoji/enums/marker-type-enum.dart';
 
 class MaterialStatusModel {
   String emoji;
+  String id;
   String text;
   bool isActive = false;
   MarkerType markerType;
   Color color;
-  MaterialStatusModel(String emoji, String text, Color color) {
+  MaterialStatusModel({String emoji, String text, Color color,String id}) {
     this.emoji = emoji;
     this.text = text;
     this.color = color;
+    this.id = id;
   }
 }
 

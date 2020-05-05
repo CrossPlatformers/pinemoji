@@ -84,8 +84,8 @@ class RequestRepository {
       return documentReference;
     } else {
       DocumentReference documentReference =
-          Firestore.instance.collection(collectionName).document();
-      await documentReference.updateData(request.toMap());
+          Firestore.instance.collection(collectionName).document(request.id);
+      await documentReference.setData(request.toMap());
       return documentReference;
     }
   }
