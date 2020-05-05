@@ -25,6 +25,8 @@ class MapPageState extends State<MapPage> {
 
   CameraPosition _lastCameraPosition;
 
+  CameraTargetBounds _cameraTargetBounds;
+
   lc.Location location;
 
   bool isSearchMode = false;
@@ -56,8 +58,18 @@ class MapPageState extends State<MapPage> {
                             myLocationEnabled: true,
                             onCameraMove: (CameraPosition cameraPosition) {
                               _lastCameraPosition = cameraPosition;
+//                              cameraPosition.
+//                              print('northeast : ${_cameraTargetBounds.bounds.northeast.latitude.toString()} ${_cameraTargetBounds.bounds.northeast.longitude.toString()}');
+//                              print('northeast : ${_cameraTargetBounds.bounds.southwest.latitude.toString()} ${_cameraTargetBounds.bounds.southwest.longitude.toString()}');
                             },
-//                        cameraTargetBounds: CameraTargetBounds(LatLngBounds()),
+                            onCameraIdle: () async {
+                              GoogleMapController controller =
+                                  await _controller.future;
+                              LatLngBounds visibleRegion =
+                                  await controller.getVisibleRegion();
+                              handleMapIdleRequest(visibleRegion);
+                            },
+                            cameraTargetBounds: _cameraTargetBounds,
                             mapType: MapType.normal,
                             initialCameraPosition: _lastCameraPosition ??
                                 CameraPosition(
@@ -116,15 +128,15 @@ class MapPageState extends State<MapPage> {
                               ),
                       ),
                     ),
-//                    Positioned(
-//                      right: 8,
-//                      bottom: 50,
-//                      child: FloatingActionButton.extended(
-//                        onPressed: searchAndGo,
-//                        label: Text('To the lake!'),
-//                        icon: Icon(Icons.directions_boat),
-//                      ),
-//                    ),
+                    Positioned(
+                      right: 8,
+                      bottom: 50,
+                      child: FloatingActionButton.extended(
+                        onPressed: searchAndGo,
+                        label: Text('To the lake!'),
+                        icon: Icon(Icons.directions_boat),
+                      ),
+                    ),
                   ],
                   fit: StackFit.expand,
                 ),
@@ -224,6 +236,12 @@ class MapPageState extends State<MapPage> {
         ],
       ),
     );
+  }
+
+  void handleMapIdleRequest(LatLngBounds visibleRegion) {
+     var contains = visibleRegion
+        .contains(_lastCameraPosition.target);
+    print(contains);
   }
 
   Future<void> searchAndGo() async {
