@@ -64,9 +64,7 @@ class RequestRepository {
 
   Future<List<Request>> getMyRequests() async {
     List<Request> requestList = [];
-    CollectionReference query = Firestore.instance.collection(collectionName);
-    query = query.where('ownerId', isEqualTo: AuthenticationService.verifiedUser.id);
-    var querySnapshot = await query.getDocuments();
+    var querySnapshot = await Firestore.instance.collection(collectionName).where('ownerId', isEqualTo: AuthenticationService.verifiedUser.id).getDocuments();
     if (querySnapshot != null && querySnapshot.documents.isNotEmpty) {
       for (DocumentSnapshot snapshot in querySnapshot.documents) {
         requestList.add(Request.fromSnapshot(snapshot));
