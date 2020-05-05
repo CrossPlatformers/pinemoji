@@ -98,6 +98,7 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
                                   ),
                                   hintText: "xx xx xx"),
                               textAlign: TextAlign.end,
+                              maxLength: 6,
                               keyboardType: TextInputType.number,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,

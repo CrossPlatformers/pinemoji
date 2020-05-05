@@ -98,6 +98,7 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
                                     ),
                                   ),
                                   hintText: "05xx xxx xx xx"),
+                              maxLength: 11,
                               style: TextStyle(
                                 fontSize: (height * 0.04).toInt().toDouble(),
                                 fontWeight: FontWeight.bold,
@@ -106,12 +107,7 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
                             ),
                             Container(
                               height: 1,
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [
-                                Theme.of(context).primaryColor,
-                                Theme.of(context).primaryColor,
-                                Colors.white
-                              ])),
+                              decoration: BoxDecoration(gradient: LinearGradient(colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor, Colors.white])),
                             ),
                           ],
                         ),
@@ -141,8 +137,7 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
       setState(() {
         isLoading = true;
       });
-      await AuthenticationService()
-          .verifyPhone('+9' + phoneController.text, context, (status) {
+      await AuthenticationService().verifyPhone('+9' + phoneController.text, context, (status) {
         if (status.authenticationEnum == AuthenticationEnum.smsSent) {
           setState(() {
             isLoading = false;
