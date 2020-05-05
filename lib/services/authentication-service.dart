@@ -3,10 +3,13 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_webservice/geolocation.dart';
 import 'package:pinemoji/enums/authentication-enum.dart';
 import 'package:pinemoji/enums/verification-status-enum.dart';
 import 'package:pinemoji/models/authentication-status.dart';
 import 'package:pinemoji/models/user.dart';
+import 'package:pinemoji/repositories/map_repository.dart';
 import 'package:pinemoji/repositories/user_repository.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,8 +22,11 @@ class AuthenticationService {
     try {
       result = await instance.signInWithCredential(credential);
       if (result != null) {
+        verifiedUser.phoneNumber = result.user.phoneNumber;
+        Geometry g = (await MapRepository.getPlaceDetailsFromName(verifiedUser.extraInfo['location'])).geometry;
+        verifiedUser.location = LatLng(g.location.lat, g.location.lng);
         await UserRepository()
-            .addUser(new User(id: result.user.uid, name: "Çağrı", surname: "AYDIN", extraInfo: null, model: null, brand: null, os: null, phoneNumber: result.user.phoneNumber));
+            .addUser(verifiedUser);
         return VerificationStatusEnum.ok;
       }
     } on PlatformException catch (e) {
@@ -66,6 +72,7 @@ class AuthenticationService {
       if (fUser != null) {
         verifiedUser = await UserRepository().getUser(fUser.uid);
       } else {
+        
         verifiedUser = User(name: user['ad'], surname: user['soyad'], phoneNumber: user['telNo'], extraInfo: {'status': user['yetki'], 'location': user['gorevYeri']});
       }
       return true;

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pinemoji/models/user-info.dart';
 import 'package:pinemoji/models/user.dart';
 
 class UserRepository {
@@ -13,9 +12,12 @@ class UserRepository {
           Firestore.instance.collection(collectionName).document();
       documentReference.setData(user.toMap());
       return documentReference;
+    } else {
+      DocumentReference documentReference =
+          Firestore.instance.collection(collectionName).document(user.id);
+      documentReference.setData(user.toMap());
+      return documentReference;
     }
-    UserInfo().init(user);
-    return null;
   }
 
   Future<bool> isUserNotExist(String phoneNumber) async {

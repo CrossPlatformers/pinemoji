@@ -14,14 +14,14 @@ String userToJson(User data) => json.encode(data.toMap());
 
 class User {
   String id;
-  final String name;
-  final String surname;
-  final Map extraInfo;
-  final String model;
-  final String brand;
-  final String os;
-  final String phoneNumber;
-  final LatLng location;
+  String name;
+  String surname;
+  Map extraInfo;
+  String model;
+  String brand;
+  String os;
+  String phoneNumber;
+  LatLng location;
 
   User({
     this.id,
