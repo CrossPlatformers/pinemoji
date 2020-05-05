@@ -46,25 +46,36 @@ class AuthenticationService {
   signOut() async {
     await instance.signOut();
   }
-  
+
+  Future<bool> checkPhoneNumber(String phoneNo) async {
+    String ttbPhone = phoneNo;
+    ttbPhone = !ttbPhone.startsWith('+') ?? ttbPhone.substring(1);
+    ttbPhone = !ttbPhone.startsWith('9') ?? ttbPhone.substring(1);
+    ttbPhone = !ttbPhone.startsWith('0') ?? ttbPhone.substring(1);
+    http.Response res = await http.get(
+      'http://webapi.ttb.dr.tr:8171/api/user/only-mobile?telNo=' + ttbPhone,
+      headers: {'x-api-key': 'FA872702-6321-45DC-21F0-FC1BE921591B'},
+    );
+    if (res.statusCode == 200) {
+      Map<String, dynamic> user = jsonDecode(Utf8Decoder().convert(res.bodyBytes));
+      verifiedUser = User(name: user['ad'], surname: user['soyad'], phoneNumber: user['telNo'], extraInfo: {
+        'status': user['yetki'],
+        'location': user['gorevYeri']
+      });
+      return true;
+    } else {
+      verifiedUser = null;
+      await signOut();
+      return false;
+    }
+  }
 
   verifyPhone(String phoneNo, BuildContext context, Function callback(AuthenticationStatus authenticationStatus)) async {
     AuthenticationStatus status;
-
-    // String ttbPhone = phoneNo;
-    // ttbPhone = !ttbPhone.startsWith('+') ?? ttbPhone.substring(1);
-    // ttbPhone = !ttbPhone.startsWith('9') ?? ttbPhone.substring(1);
-    // ttbPhone = !ttbPhone.startsWith('0') ?? ttbPhone.substring(1);
-    // http.Response res = await http.get(
-    //   'http://webapi.ttb.dr.tr:8171/api/user/only-mobile?telNo=' + ttbPhone,
-    //   headers: {'x-api-key': 'FA872702-6321-45DC-21F0-FC1BE921591B'},
-    // );
-    // if (res.statusCode == 200) {
-    //   userFromJson(Utf8Decoder().convert(res.bodyBytes));
-    // } else {
-    //   callback(AuthenticationStatus(authenticationEnum: AuthenticationEnum.fail, exceptionCode: res.statusCode.toString()));
-    // }
-
+    await checkPhoneNumber(phoneNo);
+    if (verifiedUser == null) {
+      callback(AuthenticationStatus(authenticationEnum: AuthenticationEnum.fail, exceptionCode: 'Tabipler odasına kayıtlı kullanıcı bulunamadı.'));
+    } 
     final PhoneVerificationCompleted verified = (AuthCredential auth) {
       status = AuthenticationStatus(authenticationEnum: AuthenticationEnum.success);
       callback(status);

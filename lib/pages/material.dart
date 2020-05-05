@@ -1,10 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pinemoji/models/request.dart';
 import 'package:pinemoji/pages/map_page.dart';
+import 'package:pinemoji/services/authentication-service.dart';
 import 'package:pinemoji/widget-controllers/material-widget-controller.dart';
 import 'package:pinemoji/repositories/company_repository.dart';
 import 'package:pinemoji/widgets/material-widget.dart';
 import 'package:pinemoji/widgets/status-title.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
+import 'package:pinemoji/repositories/user_repository.dart';
 
 class MaterialStatus extends StatelessWidget {
   static var emojiList = CompanyRepository().getEmojiList();
@@ -54,8 +58,12 @@ class MaterialStatus extends StatelessWidget {
           ),
           OutcomeButton(
             text: "Durum Bildir",
-            action: () {
+            action: () async {
               var a = materialModelList;
+              FirebaseUser firebaseUser = await AuthenticationService.instance.currentUser();
+              var user = await UserRepository().getUser(firebaseUser.uid);
+              Request request = Request(ownerId: user.id, location: user.location, companyId: user.os, emoji: null, image: null, state: null, responseList: null, option: null, date: null);
+              print(user);
             },
           ),
           SizedBox(
