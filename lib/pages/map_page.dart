@@ -26,6 +26,8 @@ class MapPageState extends State<MapPage> {
 
   CameraPosition _lastCameraPosition;
 
+  CameraTargetBounds _cameraTargetBounds;
+
   lc.Location location;
 
   bool isSearchMode = false;
@@ -53,12 +55,22 @@ class MapPageState extends State<MapPage> {
                         ),
                         Expanded(
                           child: GoogleMap(
-                            myLocationButtonEnabled: true,
+                            myLocationButtonEnabled: false,
                             myLocationEnabled: true,
                             onCameraMove: (CameraPosition cameraPosition) {
                               _lastCameraPosition = cameraPosition;
+//                              cameraPosition.
+//                              print('northeast : ${_cameraTargetBounds.bounds.northeast.latitude.toString()} ${_cameraTargetBounds.bounds.northeast.longitude.toString()}');
+//                              print('northeast : ${_cameraTargetBounds.bounds.southwest.latitude.toString()} ${_cameraTargetBounds.bounds.southwest.longitude.toString()}');
                             },
-//                        cameraTargetBounds: CameraTargetBounds(LatLngBounds()),
+                            onCameraIdle: () async {
+                              GoogleMapController controller =
+                                  await _controller.future;
+                              LatLngBounds visibleRegion =
+                                  await controller.getVisibleRegion();
+                              handleMapIdleRequest(visibleRegion);
+                            },
+                            cameraTargetBounds: _cameraTargetBounds,
                             mapType: MapType.normal,
                             initialCameraPosition: _lastCameraPosition ??
                                 CameraPosition(
@@ -227,6 +239,11 @@ class MapPageState extends State<MapPage> {
     );
   }
 
+  void handleMapIdleRequest(LatLngBounds visibleRegion) {
+    var contains = visibleRegion.contains(_lastCameraPosition.target);
+    print(contains);
+  }
+
   Future<void> searchAndGo() async {
     PlaceDetails placeDetails =
         await MapRepository.getPlaceDetailsFromName(_query);
@@ -277,9 +294,9 @@ class GradientAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final double statusbarHeight = MediaQuery.of(context).padding.top;
 
-    return new Container(
+    return Container(
       padding: EdgeInsets.only(top: statusbarHeight),
-      height: statusbarHeight + barHeight,
+      height: getHeight(statusbarHeight, context),
       alignment: Alignment.topCenter,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -323,6 +340,12 @@ class GradientAppBar extends StatelessWidget {
             tileMode: TileMode.clamp),
       ),
     );
+  }
+
+  double getHeight(double statusbarHeight, BuildContext context) {
+    return MediaQuery.of(context).size.height > 600
+        ? statusbarHeight + barHeight
+        : barHeight - 50;
   }
 }
 
@@ -390,7 +413,9 @@ class StockFilterState extends State<StockFilter> {
           ),
           label: Text(
             filter.name,
-            style: TextStyle(color: isActive ? activeColor() : disabledColor()),
+            style: TextStyle(
+                color: isActive ? activeColor() : disabledColor(),
+                fontSize: 12),
           ),
           elevation: 0,
           pressElevation: 0,
@@ -550,6 +575,7 @@ class ConditionFilterItem extends StatelessWidget {
             Text(
               conditionFilterModel.text,
               style: TextStyle(
+                fontSize: 12,
                 fontStyle: FontStyle.italic,
                 color: Color(0xFFC7CAD1),
               ),
@@ -590,7 +616,7 @@ class HospitalConditionCard extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Card(
         color: Colors.white,
-        elevation: 10,
+        elevation: 5,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
