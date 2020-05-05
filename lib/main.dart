@@ -18,11 +18,21 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
+  bool loggedIn;
   @override
   void initState() {
     AuthenticationService.instance.onAuthStateChanged.listen((event) {
-      // TODO: event'in tipine göre kontrollerle istediğimizi yapabiliriz
+      if (event != null) {
+        AuthenticationService().checkPhoneNumber(event.phoneNumber).then((val) {
+          setState(() {
+            loggedIn = AuthenticationService.verifiedUser == null ? false : true;
+          });
+        });
+      } else {
+        setState(() {
+          loggedIn = false;
+        });
+      }
     });
     super.initState();
   }
@@ -37,17 +47,13 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: customTheme,
       home: Scaffold(
-        body: StreamBuilder(
-            stream: AuthenticationService.instance.onAuthStateChanged,
-            builder: (BuildContext context, snapshot) {
-              if (snapshot.hasData) {
-                // AuthenticationService.instance.signOut();
-                return BottomNavigation(
-                  isAdminUser: true,
-                );
-              }
-              return WelcomePage();
-            }),
+        body: loggedIn == null
+            ? Container()
+            : (loggedIn
+                ? BottomNavigation(
+                    isAdminUser: AuthenticationService.verifiedUser.extraInfo['status'] == 'TTBA',
+                  )
+                : WelcomePage()),
       ),
     );
   }
