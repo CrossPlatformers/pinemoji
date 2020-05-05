@@ -43,6 +43,7 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
                 onFilterChange: (name) {
                   setEmojiBorder(name);
                 },
+                state: getState(),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -54,6 +55,7 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
                 onFilterChange: (name) {
                   setEmojiBorder(name);
                 },
+                state: getState(),
               ),
               SizedBox(
                 height: 50,
