@@ -65,8 +65,10 @@ class MapRepository {
     ));
   }
 
-  static Future<Uint8List> getBytesFromAsset(String path,
-      {int width = 96}) async {
+  static Future<Uint8List> getBytesFromAsset(
+    String path, {
+    int width = 96,
+  }) async {
     ByteData data = await rootBundle.load(path);
     ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
         targetWidth: width);

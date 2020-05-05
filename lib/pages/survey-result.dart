@@ -18,7 +18,9 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
 
   @override
   void initState() {
-    SurveyRepository().getSurveyResult().then((value) => setState(() => result = value));
+    SurveyRepository()
+        .getSurveyResult()
+        .then((value) => setState(() => result = value));
     super.initState();
   }
 
@@ -40,7 +42,10 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
               ),
             ),
             Container(
-              constraints: BoxConstraints(maxHeight: selectedQuestion != null ? MediaQuery.of(context).size.height / 2 - 50 : MediaQuery.of(context).size.height - 50),
+              constraints: BoxConstraints(
+                  maxHeight: selectedQuestion != null
+                      ? MediaQuery.of(context).size.height / 2 - 50
+                      : MediaQuery.of(context).size.height - 50),
               child: GridView.count(
                 crossAxisCount: 2,
                 padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
@@ -50,13 +55,22 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
                 children: [
                   if (result != null)
                     ...result.questionResultList.map((question) {
+                      final GlobalKey _currentQuestionKey = GlobalKey();
                       return GestureDetector(
+                        key: _currentQuestionKey,
                         onTap: () {
                           setState(() {
                             if (selectedQuestion == question) {
                               selectedQuestion = null;
                             } else {
                               selectedQuestion = question;
+                              Scrollable.ensureVisible(
+                                _currentQuestionKey.currentContext,
+                                curve: Curves.easeIn,
+                                duration: Duration(
+                                  milliseconds: 300,
+                                ),
+                              );
                             }
                           });
                         },
@@ -155,7 +169,8 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
       }
       answer.ownerList.forEach((owner, location) {
         if (resultMap[location] == null) {
-          resultMap[answer.answerText][location] = answerFromJson(answerToJson(answer));
+          resultMap[answer.answerText][location] =
+              answerFromJson(answerToJson(answer));
         }
       });
     });

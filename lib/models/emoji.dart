@@ -13,6 +13,7 @@ Emoji emojiFromJson(String str) => Emoji.fromMap(json.decode(str));
 String emojiToJson(Emoji data) => json.encode(data.toMap());
 
 class Emoji {
+  String id;
   final String companyId;
   final String info;
   final String description;
@@ -20,6 +21,7 @@ class Emoji {
   final List<EmojiOption> optionList;
 
   Emoji({
+    this.id,
     @required this.companyId,
     @required this.info,
     @required this.description,
@@ -28,6 +30,7 @@ class Emoji {
   });
 
   Emoji copyWith({
+    String id,
     String companyId,
     String info,
     String description,
@@ -35,6 +38,7 @@ class Emoji {
     List<EmojiOption> optionList,
   }) =>
       Emoji(
+        id: id ?? this.id,
         companyId: companyId ?? this.companyId,
         info: info ?? this.info,
         description: description ?? this.description,
@@ -43,6 +47,7 @@ class Emoji {
       );
 
   factory Emoji.fromMap(Map<String, dynamic> json) => Emoji(
+        id: json["id"] == null ? null : json["id"],
         companyId: json["companyId"] == null ? null : json["companyId"],
         info: json["info"] == null ? null : json["info"],
         description: json["description"] == null ? null : json["description"],
@@ -57,6 +62,7 @@ class Emoji {
       );
 
   Map<String, dynamic> toMap() => {
+        "id": id == null ? null : id,
         "companyId": companyId == null ? null : companyId,
         "info": info == null ? null : info,
         "description": description == null ? null : description,
@@ -70,6 +76,7 @@ class Emoji {
 }
 
 //{
+// "id": "1",
 //"companyId": "id",
 //"info": "info",
 //"description": "info",

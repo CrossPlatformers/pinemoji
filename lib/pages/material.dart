@@ -46,6 +46,7 @@ class MaterialStatus extends StatelessWidget {
                   return MaterialStatusModel(
                     currentElement.info,
                     currentElement.description,
+                    Colors.white38
                   );
                 }).toList(),
               

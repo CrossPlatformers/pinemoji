@@ -12,15 +12,15 @@ class SearchBar extends StatelessWidget {
     return Row(
       children: <Widget>[
         if (backButton)
-          IconButton(
-            icon: Icon(Icons.arrow_back_ios),
-            onPressed: () {
+          GestureDetector(
+            child: Icon(Icons.arrow_back_ios),
+            onTap: () {
               Navigator.pop(context);
             },
           ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(color: Color(0xffC7CAD1).withOpacity(.5)),

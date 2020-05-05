@@ -4,11 +4,14 @@ class MaterialStatusModel {
   String emoji;
   String text;
   bool isActive = false;
-  MaterialStatusModel(String emoji, String text) {
+  Color color;
+  MaterialStatusModel(String emoji, String text, Color color) {
     this.emoji = emoji;
     this.text = text;
+    this.color = color;
   }
 }
+
 class MaterialStatusContent extends StatelessWidget {
   final MaterialStatusModel materialStatusModel;
 
@@ -22,9 +25,8 @@ class MaterialStatusContent extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
-          color: materialStatusModel.isActive
-                  ? Color(0xFFF93963)
-                  : Colors.white38,
+          color:
+              materialStatusModel.color,
         ),
       ),
       height: size.width / 3,
