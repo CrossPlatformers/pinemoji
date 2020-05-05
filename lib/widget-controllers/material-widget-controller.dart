@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pinemoji/enums/marker-type-enum.dart';
+import 'package:pinemoji/models/request.dart';
 import 'package:pinemoji/pages/map_page.dart';
+import 'package:pinemoji/repositories/request_repository.dart';
 import 'package:pinemoji/widgets/material-widget.dart';
 
 class MaterialWidgetController extends StatefulWidget {
   final List<MaterialStatusModel> materialStatusModelList;
-
-  const MaterialWidgetController({Key key, this.materialStatusModelList})
+  List<Request> requestList;
+  MaterialWidgetController({Key key, this.materialStatusModelList,this.requestList})
       : super(key: key);
   @override
   _MaterialWidgetControllerState createState() =>
@@ -15,6 +17,22 @@ class MaterialWidgetController extends StatefulWidget {
 }
 
 class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
+  
+  @override
+  void initState() {
+    super.initState();
+    RequestRepository().getMyRequests().then((requestList) {
+      setState(() {
+        widget.requestList = requestList;
+        for(var request in requestList){
+          var currentWidget = widget.materialStatusModelList.firstWhere((x) => x.id == request.emoji);
+          setRequest(request.option,currentWidget);
+        }
+      });
+    });
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -72,7 +90,11 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
   void setEmojiBorder(name) {
     var currentWidget = widget.materialStatusModelList.elementAt(getIndex());
     setState(() {
-      switch (name) {
+      setRequest(name,currentWidget);
+    });
+  }
+  void setRequest(name,currentWidget){
+    switch (name) {
         case "Acil Destek":
           currentWidget.color = Color(0xFFF93963);
           currentWidget.markerType = MarkerType.red;
@@ -88,7 +110,6 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
         default:
           currentWidget.color = Colors.white38;
       }
-    });
   }
 
   int getIndex() {

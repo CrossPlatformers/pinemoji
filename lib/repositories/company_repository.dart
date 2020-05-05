@@ -21,6 +21,7 @@ class CompanyRepository {
           companyId: "2df77a23-1534-4736-825c-d180566250a3",
           description: " Tıbbi\nMaske",
           info: "😷",
+          id: "1",
           optionList: [
             EmojiOption(name: "Acil Destek", color: "D71773"),
             EmojiOption(name: "Azalıyor", color: "EBEE51"),
@@ -31,6 +32,7 @@ class CompanyRepository {
           companyId: "2df77a23-1534-4736-825c-d180566250a3",
           description: "  N95\nMaske",
           info: "😷",
+          id: "2",
           optionList: [
             EmojiOption(name: "Acil Destek", color: "D71773"),
             EmojiOption(name: "Azalıyor", color: "EBEE51"),
@@ -41,6 +43,7 @@ class CompanyRepository {
           companyId: "2df77a23-1534-4736-825c-d180566250a3",
           description: "Siperlik /\n Gözlük",
           info: "🥽",
+          id: "3",
           optionList: [
             EmojiOption(name: "Acil Destek", color: "D71773"),
             EmojiOption(name: "Azalıyor", color: "EBEE51"),
@@ -51,6 +54,7 @@ class CompanyRepository {
           companyId: "2df77a23-1534-4736-825c-d180566250a3",
           description: "Eldiven",
           info: "🧤",
+          id: "4",
           optionList: [
             EmojiOption(name: "Acil Destek", color: "D71773"),
             EmojiOption(name: "Azalıyor", color: "EBEE51"),
@@ -61,6 +65,7 @@ class CompanyRepository {
           companyId: "2df77a23-1534-4736-825c-d180566250a3",
           description: "Önlük",
           info: "🥼",
+          id: "5",
           optionList: [
             EmojiOption(name: "Acil Destek", color: "D71773"),
             EmojiOption(name: "Azalıyor", color: "EBEE51"),
@@ -71,6 +76,7 @@ class CompanyRepository {
           companyId: "2df77a23-1534-4736-825c-d180566250a3",
           description: "Solunum\n  Cihazı",
           info: "⚗",
+          id: "6",
           optionList: [
             EmojiOption(name: "Acil Destek", color: "D71773"),
             EmojiOption(name: "Azalıyor", color: "EBEE51"),
