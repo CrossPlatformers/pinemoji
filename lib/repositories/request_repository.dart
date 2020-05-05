@@ -23,14 +23,23 @@ class RequestRepository {
         whereIn: optionList,
       );
     }
-    if (lastSelectedId != null)
-      query.startAfterDocument(await Firestore.instance
-          .collection(collectionName)
-          .document(lastSelectedId)
-          .get());
+    if (lastSelectedId != null) query.startAfterDocument(await Firestore.instance.collection(collectionName).document(lastSelectedId).get());
     if (limit != null) {
       query.limit(limit);
     }
+    var querySnapshot = await query.getDocuments();
+    if (querySnapshot != null && querySnapshot.documents.isNotEmpty) {
+      for (DocumentSnapshot snapshot in querySnapshot.documents) {
+        requestList.add(Request.fromSnapshot(snapshot));
+      }
+    }
+    return requestList;
+  }
+
+  Future<List<Request>> getMyRequests() async {
+    List<Request> requestList = [];
+    CollectionReference query = Firestore.instance.collection(collectionName);
+    query = query.where('ownerId');
     var querySnapshot = await query.getDocuments();
     if (querySnapshot != null && querySnapshot.documents.isNotEmpty) {
       for (DocumentSnapshot snapshot in querySnapshot.documents) {
@@ -44,14 +53,12 @@ class RequestRepository {
     Request request,
   ) async {
     if (request.id != null) {
-      DocumentReference documentReference =
-          Firestore.instance.collection(collectionName).document();
+      DocumentReference documentReference = Firestore.instance.collection(collectionName).document();
       request.id = documentReference.documentID;
       documentReference.setData(request.toMap());
       return documentReference;
     } else {
-      DocumentReference documentReference =
-          Firestore.instance.collection(collectionName).document();
+      DocumentReference documentReference = Firestore.instance.collection(collectionName).document();
       documentReference.updateData(request.toMap());
       return documentReference;
     }
