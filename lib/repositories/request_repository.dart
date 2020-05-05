@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pinemoji/models/request.dart';
 
 class RequestRepository {
   final String collectionName = 'request';
+
   Future<List<Request>> getRequestList({
     List<String> emojiIdList,
     List<String> optionList,
     String lastSelectedId,
     int limit,
+    LatLngBounds latLngBounds,
   }) async {
     List<Request> requestList = [];
     CollectionReference query = Firestore.instance.collection(collectionName);
@@ -23,7 +26,27 @@ class RequestRepository {
         whereIn: optionList,
       );
     }
-    if (lastSelectedId != null) query.startAfterDocument(await Firestore.instance.collection(collectionName).document(lastSelectedId).get());
+    if (lastSelectedId != null)
+      query.startAfterDocument(await Firestore.instance
+          .collection(collectionName)
+          .document(lastSelectedId)
+          .get());
+    if (latLngBounds != null) {
+      query.where(
+        'location',
+        isLessThanOrEqualTo: GeoPoint(
+          latLngBounds.northeast.latitude,
+          latLngBounds.northeast.longitude,
+        ),
+      );
+      query.where(
+        'location',
+        isGreaterThanOrEqualTo: GeoPoint(
+          latLngBounds.southwest.latitude,
+          latLngBounds.southwest.longitude,
+        ),
+      );
+    }
     if (limit != null) {
       query.limit(limit);
     }
@@ -52,14 +75,16 @@ class RequestRepository {
   Future<DocumentReference> addRequest(
     Request request,
   ) async {
-    if (request.id != null) {
-      DocumentReference documentReference = Firestore.instance.collection(collectionName).document();
+    if (request.id == null) {
+      DocumentReference documentReference =
+          Firestore.instance.collection(collectionName).document();
       request.id = documentReference.documentID;
-      documentReference.setData(request.toMap());
+      await documentReference.setData(request.toMap());
       return documentReference;
     } else {
-      DocumentReference documentReference = Firestore.instance.collection(collectionName).document();
-      documentReference.updateData(request.toMap());
+      DocumentReference documentReference =
+          Firestore.instance.collection(collectionName).document();
+      await documentReference.updateData(request.toMap());
       return documentReference;
     }
   }

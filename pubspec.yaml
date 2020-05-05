@@ -20,8 +20,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_launcher_icons: 0.7.5
-  flutter_native_splash: ^0.1.9
+
+  location: ^3.0.0
 
   google_maps_flutter: ^0.5.26+4
   google_maps_webservice: ^0.0.16
@@ -41,6 +41,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_launcher_icons: 0.7.5
+  flutter_native_splash: ^0.1.9
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
