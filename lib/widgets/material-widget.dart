@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 
-class MaterialStatusContent extends StatelessWidget {
-  MaterialStatusContent({
-    @required this.emoji,
-    @required this.text,
-    this.isActive = false,
-    this.disabledColor = const Color(0xFFC7CAD1),
-    this.activeColor = const Color(0xffD71773),
-  });
+class MaterialStatusModel {
+  String emoji;
+  String text;
+  bool isActive = false;
+  Color color;
+  MaterialStatusModel(String emoji, String text, Color color) {
+    this.emoji = emoji;
+    this.text = text;
+    this.color = color;
+  }
+}
 
-  final String emoji;
-  final String text;
-  final bool isActive;
-  final Color disabledColor;
-  final Color activeColor;
+class MaterialStatusContent extends StatelessWidget {
+  final MaterialStatusModel materialStatusModel;
+
+  const MaterialStatusContent({Key key, this.materialStatusModel})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,8 @@ class MaterialStatusContent extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
-          color: isActive ? Color(0xffD71773) : Color(0xFFC7CAD1),
+          color:
+              materialStatusModel.color,
         ),
       ),
       height: size.width / 3,
@@ -32,14 +36,14 @@ class MaterialStatusContent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            emoji,
+            materialStatusModel.emoji,
             style: TextStyle(fontSize: size.height / 18),
           ),
           SizedBox(
             height: 5,
           ),
           Text(
-            text,
+            materialStatusModel.text,
             style: TextStyle(
               fontSize: size.height / 45,
               fontStyle: FontStyle.italic,

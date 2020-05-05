@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pinemoji/pages/map_page.dart';
+import 'package:pinemoji/widget-controllers/material-widget-controller.dart';
 import 'package:pinemoji/repositories/company_repository.dart';
 import 'package:pinemoji/widgets/material-widget.dart';
 import 'package:pinemoji/widgets/status-title.dart';
@@ -40,19 +41,15 @@ class MaterialStatus extends StatelessWidget {
               ),
             ],
           ),
-          Expanded(
-            child: Container(
-              child: GridView.count(
-                crossAxisCount: 2,
-                padding: EdgeInsets.fromLTRB(50, 55, 50, 55),
-                children: emojiList.map((currentElement) {
-                  return MaterialStatusContent(
-                    emoji: currentElement.info,
-                    text: currentElement.description,
+          MaterialWidgetController(
+            materialStatusModelList: emojiList.map((currentElement) {
+                  return MaterialStatusModel(
+                    currentElement.info,
+                    currentElement.description,
+                    Colors.white38
                   );
                 }).toList(),
-              ),
-            ),
+              
           ),
           OutcomeButton(
             text: "Durum Bildir",
