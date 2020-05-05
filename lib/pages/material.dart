@@ -60,28 +60,33 @@ class MaterialStatus extends StatelessWidget {
           OutcomeButton(
             text: "Durum Bildir",
             action: () async {
-              List<Request> requestList = await RequestRepository().getMyRequests().then((requestList) {
+              List<Request> requestList =
+                  await RequestRepository().getMyRequests().then((requestList) {
                 return requestList;
               });
-              FirebaseUser firebaseUser = await AuthenticationService.instance.currentUser();
+              FirebaseUser firebaseUser =
+                  await AuthenticationService.instance.currentUser();
               var user = await UserRepository().getUser(firebaseUser.uid);
-              
+
               for (var materialModel in materialModelList) {
-                if (materialModel.markerType != null){
-                  var req = requestList.where((x) => x.emoji == materialModel.id);
-                  if (req.length > 0 ) {
+                if (materialModel.markerType != null) {
+                  var req =
+                      requestList.where((x) => x.emoji == materialModel.id);
+                  if (req.length > 0) {
                     req.first.emoji = materialModel.id;
                     req.first.option = getOption(materialModel.markerType);
-                    req.first.date =  DateTime.now();
-                  }
-                  else
+                    req.first.date = DateTime.now();
+                    req.first.locationName = user.extraInfo["location"];
+                  } else
                     requestList.add(Request(
                       ownerId: user.id,
                       location: user.location,
                       companyId: CompanyRepository().getCompany().id,
                       emoji: materialModel.id,
                       option: getOption(materialModel.markerType),
-                      date: DateTime.now()));
+                      date: DateTime.now(),
+                      locationName: user.extraInfo["location"],
+                    ));
                 }
               }
               RequestRepository().addRequestList(requestList);
