@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_webservice/places.dart';
 import 'package:location/location.dart' as lc;
-import 'package:pinemoji/enums/marker-type-enum.dart';
+import 'package:pinemoji/models/emoji.dart';
 import 'package:pinemoji/models/request.dart';
+import 'package:pinemoji/repositories/company_repository.dart';
 import 'package:pinemoji/repositories/map_repository.dart';
 import 'package:pinemoji/repositories/request_repository.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
@@ -33,12 +33,20 @@ class MapPageState extends State<MapPage> {
   lc.Location location;
 
   bool isSearchMode = false;
+
   RequestRepository requestRepository = RequestRepository();
+
+  LatLngBounds lastLatLngBounds;
+
+  double _mapButtonVisibility = 1;
+
+  List<Request> lastRequestList = [];
 
   @override
   void initState() {
     super.initState();
     handleLocation();
+    handleMapIdleRequest();
   }
 
   @override
@@ -69,9 +77,9 @@ class MapPageState extends State<MapPage> {
                             onCameraIdle: () async {
                               GoogleMapController controller =
                                   await _controller.future;
-                              LatLngBounds visibleRegion =
+                              lastLatLngBounds =
                                   await controller.getVisibleRegion();
-                              handleMapIdleRequest(visibleRegion);
+                              handleMapIdleRequest();
                             },
                             cameraTargetBounds: _cameraTargetBounds,
                             mapType: MapType.normal,
@@ -134,11 +142,17 @@ class MapPageState extends State<MapPage> {
                     ),
                     Positioned(
                       right: 8,
-                      bottom: 50,
-                      child: FloatingActionButton.extended(
-                        onPressed: searchAndGo,
-                        label: Text('To the lake!'),
-                        icon: Icon(Icons.directions_boat),
+                      bottom: 100,
+                      child: AnimatedOpacity(
+                        opacity: _mapButtonVisibility,
+                        duration: Duration(milliseconds: 800),
+                        child: FloatingActionButton.extended(
+                          onPressed: () {
+                            getCurrentLocationMarkers();
+                          },
+                          label: Text('Search This Area!'),
+                          icon: Icon(Icons.search),
+                        ),
                       ),
                     ),
                   ],
@@ -223,11 +237,22 @@ class MapPageState extends State<MapPage> {
                     Expanded(
                       child: ListView.builder(
                         padding: EdgeInsets.all(0),
+                        itemCount: lastRequestList.length,
                         itemBuilder: (context, index) {
+                          Request request = lastRequestList.elementAt(index);
+                          Emoji emoji = CompanyRepository()
+                              .getEmojiList()
+                              .firstWhere((element) {
+                            return element.id == request.emoji;
+                          }, orElse: () {
+                            print('No matching element.');
+                            return null;
+                          });
                           return HospitalConditionCard(
-                            hospitalName: 'DokuzEylül',
-                            emoji: '😷',
-                            emojiDescription: 'N95 Maske',
+                            hospitalName:
+                                request.locationName ?? 'print locationName',
+                            emoji: emoji.info ?? 'info',
+                            emojiDescription: emoji.description ?? 'description',
                           );
                         },
                       ),
@@ -242,30 +267,43 @@ class MapPageState extends State<MapPage> {
     );
   }
 
-  Future<void> handleMapIdleRequest(LatLngBounds visibleRegion) async {
-    var contains = visibleRegion.contains(_lastCameraPosition.target);
-    print(contains);
-    var requestList = await requestRepository.getRequestList(latLngBounds: visibleRegion);
-    print(requestList.length);
+  Future<void> handleMapIdleRequest() async {
+    if (_mapButtonVisibility == 0 && mounted) {
+      setState(() {
+        _mapButtonVisibility = 1;
+      });
+    }
+    await Future.delayed(Duration(milliseconds: 6000));
+    if (_mapButtonVisibility == 1 && mounted) {
+      setState(() {
+        _mapButtonVisibility = 0;
+      });
+    }
   }
 
-  Future<void> searchAndGo() async {
-    PlaceDetails placeDetails =
-        await MapRepository.getPlaceDetailsFromName(_query);
-    LatLng latLang = MapRepository.getLatLngFromPlaceDetails(placeDetails);
-    var list = MarkerType.values.toList();
-    list.shuffle();
-    setState(() {
-      MapRepository.addMarker(placeDetails, markerType: list.first);
-    });
-    final GoogleMapController controller = await _controller.future;
-//    LatLng(37.43296265331129, -122.08832357078792)
-    await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 16));
-    await Future.delayed(Duration(milliseconds: 400));
-    await controller.animateCamera(CameraUpdate.scrollBy(0, -50));
-    requestRepository.addRequest(Request(
-      location: latLang,
-    ));
+//  Future<void> searchAndGo() async {
+//    PlaceDetails placeDetails =
+//        await MapRepository.getPlaceDetailsFromName(_query);
+//    LatLng latLang = MapRepository.getLatLngFromPlaceDetails(placeDetails);
+//    var list = MarkerType.values.toList();
+//    list.shuffle();
+//    setState(() {
+//      MapRepository.addMarker(placeDetails, markerType: list.first);
+//    });
+//    final GoogleMapController controller = await _controller.future;
+////    LatLng(37.43296265331129, -122.08832357078792)
+//    await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 16));
+//    await Future.delayed(Duration(milliseconds: 400));
+//    await controller.animateCamera(CameraUpdate.scrollBy(0, -50));
+//    requestRepository.addRequest(Request(
+//      location: latLang,
+//    ));
+//  }
+
+  getCurrentLocationMarkers() async {
+    lastRequestList =
+        await MapRepository.getCurrentLocationMarkers(lastLatLngBounds);
+    setState(() {});
   }
 
   void handleLocation() async {
@@ -275,11 +313,11 @@ class MapPageState extends State<MapPage> {
       lc.LocationData locationData = await location.getLocation();
       _lastCameraPosition = CameraPosition(
         target: LatLng(locationData.latitude, locationData.longitude),
-        zoom: 15,
+        zoom: 10,
       );
       final GoogleMapController controller = await _controller.future;
       await controller.animateCamera(
-          CameraUpdate.newLatLngZoom(_lastCameraPosition.target, 11));
+          CameraUpdate.newLatLngZoom(_lastCameraPosition.target, 10));
       await Future.delayed(Duration(milliseconds: 400));
       await controller.animateCamera(CameraUpdate.scrollBy(0, -50));
     } else {
