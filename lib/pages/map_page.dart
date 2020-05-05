@@ -52,7 +52,7 @@ class MapPageState extends State<MapPage> {
                         ),
                         Expanded(
                           child: GoogleMap(
-                            myLocationButtonEnabled: true,
+                            myLocationButtonEnabled: false,
                             myLocationEnabled: true,
                             onCameraMove: (CameraPosition cameraPosition) {
                               _lastCameraPosition = cameraPosition;
@@ -116,15 +116,15 @@ class MapPageState extends State<MapPage> {
                               ),
                       ),
                     ),
-                    Positioned(
-                      right: 8,
-                      bottom: 50,
-                      child: FloatingActionButton.extended(
-                        onPressed: searchAndGo,
-                        label: Text('To the lake!'),
-                        icon: Icon(Icons.directions_boat),
-                      ),
-                    ),
+//                    Positioned(
+//                      right: 8,
+//                      bottom: 50,
+//                      child: FloatingActionButton.extended(
+//                        onPressed: searchAndGo,
+//                        label: Text('To the lake!'),
+//                        icon: Icon(Icons.directions_boat),
+//                      ),
+//                    ),
                   ],
                   fit: StackFit.expand,
                 ),
@@ -276,9 +276,9 @@ class GradientAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final double statusbarHeight = MediaQuery.of(context).padding.top;
 
-    return new Container(
+    return Container(
       padding: EdgeInsets.only(top: statusbarHeight),
-      height: statusbarHeight + barHeight,
+      height: getHeight(statusbarHeight, context),
       alignment: Alignment.topCenter,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -322,6 +322,12 @@ class GradientAppBar extends StatelessWidget {
             tileMode: TileMode.clamp),
       ),
     );
+  }
+
+  double getHeight(double statusbarHeight, BuildContext context) {
+    return MediaQuery.of(context).size.height > 600
+        ? statusbarHeight + barHeight
+        : barHeight - 50;
   }
 }
 
@@ -389,7 +395,9 @@ class StockFilterState extends State<StockFilter> {
           ),
           label: Text(
             filter.name,
-            style: TextStyle(color: isActive ? activeColor() : disabledColor()),
+            style: TextStyle(
+                color: isActive ? activeColor() : disabledColor(),
+                fontSize: 12),
           ),
           elevation: 0,
           pressElevation: 0,
@@ -526,9 +534,17 @@ class ConditionFilterItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Expanded(
+                child: Image.asset(
+              conditionFilterModel.imagePath,
+            )),
+            SizedBox(
+              height: 5,
+            ),
             Text(
               conditionFilterModel.text,
               style: TextStyle(
+                fontSize: 12,
                 fontStyle: FontStyle.italic,
                 color: Color(0xFFC7CAD1),
               ),
@@ -536,17 +552,11 @@ class ConditionFilterItem extends StatelessWidget {
             Text(
               conditionFilterModel.pinCount.toString(),
               style: TextStyle(
+                fontSize: 12,
                 fontStyle: FontStyle.italic,
                 color: Color(0xFFC7CAD1),
               ),
             ),
-            SizedBox(
-              height: 5,
-            ),
-            Expanded(
-                child: Image.asset(
-              conditionFilterModel.imagePath,
-            )),
           ],
         ),
       ),
@@ -571,10 +581,10 @@ class HospitalConditionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8,4,8,4),
+      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Card(
         color: Colors.white,
-        elevation: 10,
+        elevation: 5,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
