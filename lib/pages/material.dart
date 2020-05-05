@@ -8,6 +8,13 @@ import 'package:pinemoji/widgets/outcome-button.dart';
 
 class MaterialStatus extends StatelessWidget {
   static var emojiList = CompanyRepository().getEmojiList();
+  static var materialModelList = emojiList.map((currentElement) {
+                  return MaterialStatusModel(
+                    currentElement.info,
+                    currentElement.description,
+                    Colors.white38
+                  );
+                }).toList();
 
   const MaterialStatus({
     Key key,
@@ -42,18 +49,14 @@ class MaterialStatus extends StatelessWidget {
             ],
           ),
           MaterialWidgetController(
-            materialStatusModelList: emojiList.map((currentElement) {
-                  return MaterialStatusModel(
-                    currentElement.info,
-                    currentElement.description,
-                    Colors.white38
-                  );
-                }).toList(),
+            materialStatusModelList: materialModelList,
               
           ),
           OutcomeButton(
             text: "Durum Bildir",
-            action: () {},
+            action: () {
+              var a = materialModelList;
+            },
           ),
           SizedBox(
             height: 50,
