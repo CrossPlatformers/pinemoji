@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pinemoji/models/request.dart';
+import 'package:pinemoji/services/authentication-service.dart';
 
 class RequestRepository {
   final String collectionName = 'request';
@@ -62,7 +63,7 @@ class RequestRepository {
   Future<List<Request>> getMyRequests() async {
     List<Request> requestList = [];
     CollectionReference query = Firestore.instance.collection(collectionName);
-    query = query.where('ownerId');
+    query = query.where('ownerId', isEqualTo: AuthenticationService.verifiedUser.id);
     var querySnapshot = await query.getDocuments();
     if (querySnapshot != null && querySnapshot.documents.isNotEmpty) {
       for (DocumentSnapshot snapshot in querySnapshot.documents) {
