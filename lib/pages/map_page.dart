@@ -303,7 +303,9 @@ class MapPageState extends State<MapPage> {
   getCurrentLocationMarkers() async {
     lastRequestList =
         await MapRepository.getCurrentLocationMarkers(lastLatLngBounds);
-    setState(() {});
+    setState(() {
+      lastRequestList.length;
+    });
   }
 
   void handleLocation() async {
