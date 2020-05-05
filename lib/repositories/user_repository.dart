@@ -46,4 +46,16 @@ class UserRepository {
     }
     return null;
   }
+
+  Future<User> getUserByPhone(String phoneNo) async {
+    var query = await Firestore.instance
+        .collection(collectionName)
+        .where("phoneNumber", isEqualTo: phoneNo)
+        .getDocuments();
+    if (query.documents.length > 0) {
+      var querySnapshot = query.documents.first;
+      return User.fromSnapshot(querySnapshot);
+    }
+    return null;
+  }
 }
