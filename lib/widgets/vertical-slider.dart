@@ -22,7 +22,7 @@ class VerticalSlider extends StatelessWidget {
         ),
         items: survey.questionList
             .map((question) => Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.fromLTRB(4, 45, 4, 4),
                   child: SingleChildScrollView(
                     child: Container(
                       decoration: BoxDecoration(
@@ -38,10 +38,11 @@ class VerticalSlider extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.fromLTRB(18, 15, 18, 18),
                             child: Text(
                               question.description,
-                              style: TextStyle(color: Colors.white, fontSize: 20),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
                             ),
                           ),
                           SingleChildScrollView(
@@ -49,11 +50,14 @@ class VerticalSlider extends StatelessWidget {
                               questionId: question.id,
                               resultMap: result,
                               healthStatusModelList: [
-                                ...question.answerList.map((answer) => HealthStatusModel(
-                                      question.emojiList[question.answerList.indexOf(answer)],
-                                      answer,
-                                    )),
-                                if (question.type == "TEXT" && question.answerList.isNotEmpty)
+                                ...question.answerList
+                                    .map((answer) => HealthStatusModel(
+                                          question.emojiList[question.answerList
+                                              .indexOf(answer)],
+                                          answer,
+                                        )),
+                                if (question.type == "TEXT" &&
+                                    question.answerList.isNotEmpty)
                                   HealthStatusModel(
                                     "😶",
                                     "Diğer",

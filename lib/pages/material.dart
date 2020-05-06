@@ -7,6 +7,7 @@ import 'package:pinemoji/repositories/request_repository.dart';
 import 'package:pinemoji/services/authentication-service.dart';
 import 'package:pinemoji/widget-controllers/material-widget-controller.dart';
 import 'package:pinemoji/repositories/company_repository.dart';
+import 'package:pinemoji/widgets/header-widget.dart';
 import 'package:pinemoji/widgets/material-widget.dart';
 import 'package:pinemoji/widgets/status-title.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
@@ -48,9 +49,15 @@ class _MaterialStatusState extends State<MaterialStatus> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                StatusTitle(
-                  "Malzeme Durumu",
-                  210,
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, top: 20),
+                  child: Container(
+                    width: 210,
+                    child: HeaderWidget(
+                      title: "Malzeme Durumu",
+                      isDarkTeheme: true,
+                    ),
+                  ),
                 ),
                 GestureDetector(
                   onTap: () => Navigator.push(context,
@@ -71,13 +78,16 @@ class _MaterialStatusState extends State<MaterialStatus> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CircularProgressIndicator(),
+                          CircularProgressIndicator(
+                            backgroundColor: Colors.white70,
+                          ),
                           SizedBox(
                             height: 20,
                           ),
                           Text(
                             "Durum Bildiriliyor...",
                             style: TextStyle(
+                              color: Colors.white,
                               fontSize: 24,
                             ),
                           )
@@ -155,7 +165,12 @@ class _MaterialStatusState extends State<MaterialStatus> {
   showWarning(String text) {
     _scaffOldState.currentState.showSnackBar(
       SnackBar(
-        content: Text(text),
+        content: Text(
+          text,
+          style: TextStyle(color: Theme.of(context).primaryColorDark),
+        ),
+        backgroundColor: Colors.white,
+        duration: Duration(milliseconds: 1500),
       ),
     );
   }
