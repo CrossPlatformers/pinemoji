@@ -64,7 +64,10 @@ class RequestRepository {
 
   Future<List<Request>> getMyRequests() async {
     List<Request> requestList = [];
-    var querySnapshot = await Firestore.instance.collection(collectionName).where('ownerId', isEqualTo: AuthenticationService.verifiedUser.id).getDocuments();
+    var querySnapshot = await Firestore.instance
+        .collection(collectionName)
+        .where('ownerId', isEqualTo: AuthenticationService.verifiedUser.id)
+        .getDocuments();
     if (querySnapshot != null && querySnapshot.documents.isNotEmpty) {
       for (DocumentSnapshot snapshot in querySnapshot.documents) {
         requestList.add(Request.fromSnapshot(snapshot));
@@ -90,13 +93,13 @@ class RequestRepository {
     }
   }
 
-  Future<List<DocumentReference>> addRequestList(
+  Future<bool> addRequestList(
     List<Request> requestList,
   ) async {
     List<DocumentReference> resultList = [];
     for (Request r in requestList) {
       resultList.add(await addRequest(r));
     }
-    return resultList;
+    return resultList.length > 0;
   }
 }

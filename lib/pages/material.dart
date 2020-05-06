@@ -12,7 +12,7 @@ import 'package:pinemoji/widgets/status-title.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
 import 'package:pinemoji/repositories/user_repository.dart';
 
-class MaterialStatus extends StatelessWidget {
+class MaterialStatus extends StatefulWidget {
   static var emojiList = CompanyRepository().getEmojiList();
   static var materialModelList = emojiList.map((currentElement) {
     return MaterialStatusModel(
@@ -22,80 +22,140 @@ class MaterialStatus extends StatelessWidget {
       id: currentElement.id,
     );
   }).toList();
-  const MaterialStatus({
+  MaterialStatus({
     Key key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              StatusTitle(
-                "Malzeme Durumu",
-                210,
-              ),
-              GestureDetector(
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) {
-                  return MapPage();
-                })),
-                child: Image.asset(
-                  "assets/map.png",
-                  width: 90,
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ],
-          ),
-          MaterialWidgetController(
-            materialStatusModelList: materialModelList,
-          ),
-          OutcomeButton(
-            text: "Durum Bildir",
-            action: () async {
-              List<Request> requestList =
-                  await RequestRepository().getMyRequests().then((requestList) {
-                return requestList;
-              });
-              FirebaseUser firebaseUser =
-                  await AuthenticationService.instance.currentUser();
-              var user = await UserRepository().getUser(firebaseUser.uid);
+  _MaterialStatusState createState() => _MaterialStatusState();
+}
 
-              for (var materialModel in materialModelList) {
-                if (materialModel.markerType != null) {
-                  var req =
-                      requestList.where((x) => x.emoji == materialModel.id);
-                  if (req.length > 0) {
-                    req.first.emoji = materialModel.id;
-                    req.first.option = getOption(materialModel.markerType);
-                    req.first.date = DateTime.now();
-                    req.first.locationName = user.extraInfo["location"];
-                  } else
-                    requestList.add(Request(
-                      ownerId: user.id,
-                      location: user.location,
-                      companyId: CompanyRepository().getCompany().id,
-                      emoji: materialModel.id,
-                      option: getOption(materialModel.markerType),
-                      date: DateTime.now(),
-                      locationName: user.extraInfo["location"],
-                    ));
-                }
-              }
-              RequestRepository().addRequestList(requestList);
-            },
-          ),
-          SizedBox(
-            height: 50,
-          )
-        ],
+class _MaterialStatusState extends State<MaterialStatus> {
+  final _scaffOldState = GlobalKey<ScaffoldState>();
+  bool hasLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffOldState,
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                StatusTitle(
+                  "Malzeme Durumu",
+                  210,
+                ),
+                GestureDetector(
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) {
+                    return MapPage();
+                  })),
+                  child: Image.asset(
+                    "assets/map.png",
+                    width: 90,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ],
+            ),
+            hasLoading
+                ? Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            "Durum Bildiriliyor...",
+                            style: TextStyle(
+                              fontSize: 24,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                : MaterialWidgetController(
+                    materialStatusModelList: MaterialStatus.materialModelList,
+                  ),
+            !hasLoading
+                ? OutcomeButton(
+                    text: "Durum Bildir",
+                    action: () async {
+                      setState(() {
+                        hasLoading = true;
+                      });
+                      List<Request> requestList = await RequestRepository()
+                          .getMyRequests()
+                          .then((requestList) {
+                        return requestList;
+                      });
+                      FirebaseUser firebaseUser =
+                          await AuthenticationService.instance.currentUser();
+                      var user =
+                          await UserRepository().getUser(firebaseUser.uid);
+
+                      for (var materialModel
+                          in MaterialStatus.materialModelList) {
+                        if (materialModel.markerType != null) {
+                          var req = requestList
+                              .where((x) => x.emoji == materialModel.id);
+                          if (req.length > 0) {
+                            req.first.emoji = materialModel.id;
+                            req.first.option =
+                                getOption(materialModel.markerType);
+                            req.first.date = DateTime.now();
+                            req.first.locationName = user.extraInfo["location"];
+                          } else
+                            requestList.add(Request(
+                              ownerId: user.id,
+                              location: user.location,
+                              companyId: CompanyRepository().getCompany().id,
+                              emoji: materialModel.id,
+                              option: getOption(materialModel.markerType),
+                              date: DateTime.now(),
+                              locationName: user.extraInfo["location"],
+                            ));
+                        }
+                      }
+                      bool status =
+                          await RequestRepository().addRequestList(requestList);
+                      setState(() {
+                        hasLoading = false;
+                      });
+                      if (status) {
+                        showWarning(
+                            "Durum bildirme işleminiz başarıyla kaydedildi");
+                      } else {
+                        showWarning(
+                            "İşlem sırasında hata oluştu, lütfen tekrar deneyiniz");
+                      }
+                    },
+                  )
+                : Container(),
+            SizedBox(
+              height: 50,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  showWarning(String text) {
+    _scaffOldState.currentState.showSnackBar(
+      SnackBar(
+        content: Text(text),
       ),
     );
   }
