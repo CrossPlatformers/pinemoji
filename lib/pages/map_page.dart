@@ -39,6 +39,9 @@ class MapPageState extends State<MapPage> {
 
   List<String> lastEmojiIdList;
 
+  Timer _debounce;
+  Timer _debounceNested;
+
   @override
   void initState() {
     super.initState();
@@ -267,18 +270,23 @@ class MapPageState extends State<MapPage> {
     );
   }
 
-  Future<void> handleMapIdleRequest() async {
-    if (_mapButtonVisibility == 0 && mounted) {
-      setState(() {
-        _mapButtonVisibility = 1;
+  void handleMapIdleRequest() {
+    if (_debounce?.isActive ?? false) _debounce.cancel();
+    _debounce = Timer(const Duration(milliseconds: 600), () {
+      if (_mapButtonVisibility == 0 && mounted) {
+        setState(() {
+          _mapButtonVisibility = 1;
+        });
+      }
+      if (_debounceNested?.isActive ?? false) _debounceNested.cancel();
+      _debounceNested = Timer(const Duration(milliseconds: 5000), () {
+        if (_mapButtonVisibility == 1 && mounted) {
+          setState(() {
+            _mapButtonVisibility = 0;
+          });
+        }
       });
-    }
-    await Future.delayed(Duration(milliseconds: 3000));
-    if (_mapButtonVisibility == 1 && mounted) {
-      setState(() {
-        _mapButtonVisibility = 0;
-      });
-    }
+    });
   }
 
 //  Future<void> searchAndGo() async {
