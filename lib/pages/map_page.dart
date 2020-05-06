@@ -77,7 +77,7 @@ class MapPageState extends State<MapPage> {
                     Column(
                       children: <Widget>[
                         Container(
-                          height: MediaQuery.of(context).size.height / 5,
+                          height: MediaQuery.of(context).size.height / 8,
                         ),
                         Expanded(
                           child: GoogleMap(
