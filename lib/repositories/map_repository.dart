@@ -201,4 +201,14 @@ class MapRepository {
       location.longitude,
     );
   }
+
+  static Marker getMarker(String id) {
+    Marker marker;
+    markers.forEach((element) {
+      if(element.markerId.value == id) {
+        marker = element;
+      }
+    });
+    return marker;
+  }
 }

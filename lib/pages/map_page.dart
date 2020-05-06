@@ -263,10 +263,18 @@ class MapPageState extends State<MapPage> {
                             print('No matching element.');
                             return null;
                           });
-                          return HospitalConditionCard(
-                            hospitalName: request.locationName ?? 'print locationName',
-                            emoji: emoji.info ?? 'info',
-                            emojiDescription: emoji.description ?? 'description',
+                          return GestureDetector(
+                            onTap:(){
+                              Marker marker = MapRepository.getMarker(request.id);
+                              animateCamera(marker.position);
+                            },
+                            child: HospitalConditionCard(
+                              hospitalName:
+                                  request.locationName ?? 'print locationName',
+                              emoji: emoji.info ?? 'info',
+                              emojiDescription:
+                                  emoji.description ?? 'description',
+                            ),
                           );
                         },
                       ),
@@ -365,6 +373,13 @@ class MapPageState extends State<MapPage> {
   onPinChange(String currentPin) {
 //    print(currentPin.toString());
     getCurrentLocationMarkers(emojiIdList: lastEmojiIdList, option: currentPin);
+  }
+
+  void animateCamera(LatLng latLang) async {
+    final GoogleMapController controller = await _controller.future;
+    await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 16));
+    await Future.delayed(Duration(milliseconds: 400));
+    await controller.animateCamera(CameraUpdate.scrollBy(0, -50));
   }
 }
 
