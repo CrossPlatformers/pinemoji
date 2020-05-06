@@ -32,9 +32,9 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 20),
             child: Container(
-              width: 120,
+              width: 200,
               child: HeaderWidget(
-                title: "Anketler",
+                title: "Anket Sonuçları",
                 isDarkTeheme: true,
               ),
             ),

@@ -24,9 +24,8 @@ class HealthStatusContent extends StatelessWidget {
       children: <Widget>[
         Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              width: 3,
               color: healthStatusModel.isActive
                   ? Color(0xFFF93963)
                   : Colors.transparent,
@@ -49,7 +48,7 @@ class HealthStatusContent extends StatelessWidget {
                 ),
                 Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(4.0, 0, 4.0, 0),
+                    padding: const EdgeInsets.fromLTRB(10.0, 0, 4.0, 0),
                     child: Text(
                       healthStatusModel.text,
                       textAlign: TextAlign.left,
@@ -68,16 +67,15 @@ class HealthStatusContent extends StatelessWidget {
         Visibility(
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                width: 3,
                 color: Colors.white38,
               ),
             ),
             width: size.width,
             margin: EdgeInsets.all(10),
             child: Padding(
-              padding: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.fromLTRB(10, 4, 0, 4),
               child: TextField(
                 style: TextStyle(
                   fontSize: 16,

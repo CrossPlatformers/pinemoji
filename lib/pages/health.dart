@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pinemoji/models/survey.dart';
 import 'package:pinemoji/repositories/company_repository.dart';
 import 'package:pinemoji/repositories/survey_repository.dart';
+import 'package:pinemoji/widgets/header-widget.dart';
 import 'package:pinemoji/widgets/status-title.dart';
 import 'package:pinemoji/widgets/vertical-slider.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
@@ -39,9 +40,15 @@ class _HealthStatusState extends State<HealthStatus> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            StatusTitle(
-              HealthStatus.survey.info,
-              180,
+            Padding(
+              padding: const EdgeInsets.only(left: 20, top: 20),
+              child: Container(
+                width: 180,
+                child: HeaderWidget(
+                  title: "Sağlık Durumu",
+                  isDarkTeheme: true,
+                ),
+              ),
             ),
             hasLoading
                 ? Expanded(
@@ -49,13 +56,16 @@ class _HealthStatusState extends State<HealthStatus> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CircularProgressIndicator(),
+                          CircularProgressIndicator(
+                            backgroundColor: Colors.white70,
+                          ),
                           SizedBox(
                             height: 20,
                           ),
                           Text(
                             "Anket Gönderiliyor...",
                             style: TextStyle(
+                              color: Colors.white,
                               fontSize: 24,
                             ),
                           )
@@ -100,7 +110,12 @@ class _HealthStatusState extends State<HealthStatus> {
   showWarning(String text) {
     _scaffOldState.currentState.showSnackBar(
       SnackBar(
-        content: Text(text),
+        content: Text(
+          text,
+          style: TextStyle(color: Theme.of(context).primaryColorDark),
+        ),
+        backgroundColor: Colors.white,
+        duration: Duration(milliseconds: 1500),
       ),
     );
   }
