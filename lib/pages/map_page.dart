@@ -9,6 +9,7 @@ import 'package:pinemoji/models/request.dart';
 import 'package:pinemoji/repositories/company_repository.dart';
 import 'package:pinemoji/repositories/map_repository.dart';
 import 'package:pinemoji/repositories/request_repository.dart';
+import 'package:pinemoji/services/authentication-service.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
 
 class MapPage extends StatefulWidget {
@@ -43,6 +44,8 @@ class MapPageState extends State<MapPage> {
 
   Timer _debounce;
   Timer _debounceNested;
+  bool closeList = true;
+  bool showHeader = true;
 
   @override
   void initState() {
@@ -71,7 +74,7 @@ class MapPageState extends State<MapPage> {
                     Column(
                       children: <Widget>[
                         Container(
-                          height: 100,
+                          height: MediaQuery.of(context).size.height / 5,
                         ),
                         Expanded(
                           child: GoogleMap(
@@ -84,21 +87,15 @@ class MapPageState extends State<MapPage> {
 //                              print('northeast : ${_cameraTargetBounds.bounds.southwest.latitude.toString()} ${_cameraTargetBounds.bounds.southwest.longitude.toString()}');
                             },
                             onCameraIdle: () async {
-                              GoogleMapController controller =
-                                  await _controller.future;
-                              lastLatLngBounds =
-                                  await controller.getVisibleRegion();
+                              GoogleMapController controller = await _controller.future;
+                              lastLatLngBounds = await controller.getVisibleRegion();
                               handleMapIdleRequest();
                             },
                             cameraTargetBounds: _cameraTargetBounds,
                             mapType: MapType.normal,
-                            initialCameraPosition: _lastCameraPosition ??
-                                CameraPosition(
-                                    target: LatLng(38.9637, 35.2433), zoom: 5),
-                            onMapCreated:
-                                (GoogleMapController controller) async {
-                              String mapStyle = await rootBundle
-                                  .loadString('assets/map_style/standart.json');
+                            initialCameraPosition: _lastCameraPosition ?? CameraPosition(target: AuthenticationService.verifiedUser.location, zoom: 10),
+                            onMapCreated: (GoogleMapController controller) async {
+                              String mapStyle = await rootBundle.loadString('assets/map_style/standart.json');
                               controller.setMapStyle(mapStyle);
                               _controller.complete(controller);
                             },
@@ -116,8 +113,7 @@ class MapPageState extends State<MapPage> {
                         title: !isSearchMode
                             ? Row(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -177,15 +173,16 @@ class MapPageState extends State<MapPage> {
                 ),
               ),
               Container(
-                height: MediaQuery.of(context).size.height / 3,
+                height: 70,
                 width: MediaQuery.of(context).size.width,
               ),
             ],
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
-              height: MediaQuery.of(context).size.height / 2.3,
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 200),
+              height: closeList ? 90 : MediaQuery.of(context).size.height / 2.3,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -198,36 +195,39 @@ class MapPageState extends State<MapPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Malzeme Stok Durumu',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Color(0xff26315F),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 10),
-                            height: 1,
-                            width: 170,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Theme.of(context).primaryColor,
-                                  Theme.of(context).primaryColor,
-                                  Colors.white
-                                ],
+                    GestureDetector(
+                      onTap: () => setState(() {
+                        closeList = !closeList;
+                        Future.delayed(Duration(milliseconds: 100)).then((val) => setState(() => {showHeader = closeList}));
+                      }),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Malzeme Stok Durumu',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Color(0xff26315F),
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                          )
-                        ],
+                            Container(
+                              margin: EdgeInsets.only(top: 10),
+                              height: 1,
+                              width: 170,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor, Colors.white],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
+                    if(!showHeader)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -257,20 +257,16 @@ class MapPageState extends State<MapPage> {
                         itemCount: lastRequestList.length,
                         itemBuilder: (context, index) {
                           Request request = lastRequestList.elementAt(index);
-                          Emoji emoji = CompanyRepository()
-                              .getEmojiList()
-                              .firstWhere((element) {
+                          Emoji emoji = CompanyRepository().getEmojiList().firstWhere((element) {
                             return element.id == request.emoji;
                           }, orElse: () {
                             print('No matching element.');
                             return null;
                           });
                           return HospitalConditionCard(
-                            hospitalName:
-                                request.locationName ?? 'print locationName',
+                            hospitalName: request.locationName ?? 'print locationName',
                             emoji: emoji.info ?? 'info',
-                            emojiDescription:
-                                emoji.description ?? 'description',
+                            emojiDescription: emoji.description ?? 'description',
                           );
                         },
                       ),
@@ -349,13 +345,11 @@ class MapPageState extends State<MapPage> {
         zoom: 10,
       );
       final GoogleMapController controller = await _controller.future;
-      await controller.animateCamera(
-          CameraUpdate.newLatLngZoom(_lastCameraPosition.target, 10));
+      await controller.animateCamera(CameraUpdate.newLatLngZoom(_lastCameraPosition.target, 10));
       await Future.delayed(Duration(milliseconds: 400));
       await controller.animateCamera(CameraUpdate.scrollBy(0, -50));
     } else {
-      lc.PermissionStatus requestPermission =
-          await location.requestPermission();
+      lc.PermissionStatus requestPermission = await location.requestPermission();
       if (requestPermission == lc.PermissionStatus.granted) {
         handleLocation();
       }
@@ -401,7 +395,7 @@ class GradientAppBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              if(!fromRoot)
+              if (!fromRoot)
                 IconButton(
                   icon: Icon(Icons.arrow_back_ios),
                   onPressed: () {
@@ -443,9 +437,7 @@ class GradientAppBar extends StatelessWidget {
   }
 
   double getHeight(double statusbarHeight, BuildContext context) {
-    return MediaQuery.of(context).size.height > 600
-        ? statusbarHeight + barHeight
-        : barHeight - 50;
+    return MediaQuery.of(context).size.height > 600 ? statusbarHeight + barHeight : barHeight - 50;
   }
 }
 
@@ -501,9 +493,7 @@ class StockFilterState extends State<StockFilter> {
         data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
         child: FilterChip(
           backgroundColor: Colors.transparent,
-          shape: StadiumBorder(
-              side: BorderSide(
-                  color: isActive ? activeColor() : disabledColor())),
+          shape: StadiumBorder(side: BorderSide(color: isActive ? activeColor() : disabledColor())),
           avatar: CircleAvatar(
             child: Text(
               filter.emoji,
@@ -514,9 +504,7 @@ class StockFilterState extends State<StockFilter> {
           ),
           label: Text(
             filter.name,
-            style: TextStyle(
-                color: isActive ? activeColor() : disabledColor(),
-                fontSize: 12),
+            style: TextStyle(color: isActive ? activeColor() : disabledColor(), fontSize: 12),
           ),
           elevation: 0,
           pressElevation: 0,
@@ -566,8 +554,7 @@ class ConditionFilter extends StatefulWidget {
   final Function(String) onPinChange;
   final String state;
 
-  const ConditionFilter({Key key, this.onPinChange, this.state})
-      : super(key: key);
+  const ConditionFilter({Key key, this.onPinChange, this.state}) : super(key: key);
 
   @override
   _ConditionFilterState createState() => _ConditionFilterState();
