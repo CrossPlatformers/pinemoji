@@ -85,7 +85,7 @@ class User {
         phoneNumber: snapshot.data["phoneNumber"] == null
             ? null
             : snapshot.data["phoneNumber"],
-        location: snapshot.data["location"] != null ? LatLng((snapshot.data["location"] as GeoPoint).latitude,(snapshot.data["location"] as GeoPoint).latitude) : null,
+        location: snapshot.data["location"] != null ? LatLng((snapshot.data["location"] as GeoPoint).latitude,(snapshot.data["location"] as GeoPoint).longitude) : null,
       );
 
   Map<String, dynamic> toMap() => {

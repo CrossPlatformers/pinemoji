@@ -85,7 +85,7 @@ class Request {
       Request(
         id: snapshot.data["id"] ?? snapshot.documentID,
         ownerId: snapshot.data["ownerId"],
-        location: LatLng((snapshot.data["location"] as GeoPoint).latitude,(snapshot.data["location"] as GeoPoint).latitude),
+        location: LatLng((snapshot.data["location"] as GeoPoint).latitude,(snapshot.data["location"] as GeoPoint).longitude),
         locationName: snapshot.data["locationName"],
         companyId: snapshot.data["companyId"],
         emoji: snapshot.data["emoji"],

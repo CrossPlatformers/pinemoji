@@ -125,6 +125,7 @@ class _MaterialStatusState extends State<MaterialStatus> {
                             req.first.option =
                                 getOption(materialModel.markerType);
                             req.first.date = DateTime.now();
+                            req.first.location = user.location;
                             req.first.locationName = user.extraInfo["location"];
                           } else
                             requestList.add(Request(
