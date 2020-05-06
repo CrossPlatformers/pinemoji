@@ -88,6 +88,7 @@ class _MaterialStatusState extends State<MaterialStatus> {
                             "Durum Bildiriliyor...",
                             style: TextStyle(
                               color: Colors.white,
+                              fontStyle: FontStyle.italic,
                               fontSize: 24,
                             ),
                           )
