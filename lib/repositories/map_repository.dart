@@ -1,16 +1,18 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:pinemoji/enums/marker-type-enum.dart';
+import 'package:pinemoji/models/hospital.dart';
 import 'package:pinemoji/models/request.dart';
 import 'package:pinemoji/repositories/request_repository.dart';
+import 'package:location/location.dart' as lc;
 
 class MapRepository {
-  static final GoogleMapsPlaces places =
-      GoogleMapsPlaces(apiKey: 'AIzaSyCl9rJExNnfjE4Qd3AcZ5ONJYEpfah1GTg');
+  static final GoogleMapsPlaces places = GoogleMapsPlaces(apiKey: 'AIzaSyCl9rJExNnfjE4Qd3AcZ5ONJYEpfah1GTg');
 
   static Set<Marker> markers = {};
 
@@ -20,29 +22,56 @@ class MapRepository {
 
   static BitmapDescriptor red;
 
+  static String collectionName = 'hospital';
+
   MapRepository();
 
-  static Future<PlaceDetails> getPlaceDetailsFromName(String query) async {
-    PlacesAutocompleteResponse autocompleteResponse =
-        await places.autocomplete(query, language: 'TR');
+  static Future<Hospital> getPlaceDetailsFromName(String query) async {
+    var result = await Firestore.instance.collection(collectionName).where("name", isEqualTo: query).getDocuments();
+    if (result.documents.length > 0) {
+      return Hospital.fromSnapshot(result.documents.first);
+    }
+    PlacesAutocompleteResponse autocompleteResponse = await places.autocomplete(query, language: 'TR');
     //TODO: find a good solution for not coming predictions
+    Hospital h;
     if (autocompleteResponse.predictions.length == 0) {
       print('COULDNT FIND PREDICTION');
-      //sometimes predictions comes empty so that I'm calling it again
-//      return getPlaceDetailsFromName(query);
-
+      lc.Location location = lc.Location();
+      lc.PermissionStatus hasPermission = await location.hasPermission();
+      h = Hospital(
+        address: "",
+        phoneNumber: "",
+        name: query,
+        mapName: "",
+      );
+      if (hasPermission == lc.PermissionStatus.granted) {
+        lc.LocationData locationData = await location.getLocation();
+        h.location = LatLng(locationData.latitude, locationData.longitude);
+      } else {}
+    } else {
+      Prediction prediction = autocompleteResponse.predictions.first;
+      PlacesDetailsResponse detailsByPlaceId = await places.getDetailsByPlaceId(prediction.placeId);
+      PlaceDetails placeDetails = detailsByPlaceId.result;
+      h = Hospital(
+        location: LatLng(
+          placeDetails.geometry.location.lat,
+          placeDetails.geometry.location.lng,
+        ),
+        address: placeDetails.formattedAddress,
+        phoneNumber: placeDetails.formattedPhoneNumber,
+        name: query,
+        mapName: placeDetails.name,
+        id: placeDetails.placeId,
+      );
     }
-    Prediction prediction = autocompleteResponse.predictions.first;
-    PlacesDetailsResponse detailsByPlaceId =
-        await places.getDetailsByPlaceId(prediction.placeId);
-    PlaceDetails placeDetails = detailsByPlaceId.result;
-    return placeDetails;
+    Firestore.instance.collection(collectionName).document().setData(h.toMap());
+    return h;
   }
 
-  static List<PlaceDetails> getPlaceDetails(List<String> queries) {
-    List<PlaceDetails> listOfPlaceDetails = [];
+  static List<Hospital> getPlaceDetails(List<String> queries) {
+    List<Hospital> listOfPlaceDetails = [];
     queries.map((query) async {
-      PlaceDetails placeDetails = await getPlaceDetailsFromName(query);
+      Hospital placeDetails = await getPlaceDetailsFromName(query);
       listOfPlaceDetails.add(placeDetails);
     });
     return listOfPlaceDetails;
@@ -60,11 +89,9 @@ class MapRepository {
     ));
   }
 
-  static Future<List<Request>> getCurrentLocationMarkers(
-      LatLngBounds lastLatLngBounds) async {
+  static Future<List<Request>> getCurrentLocationMarkers(LatLngBounds lastLatLngBounds) async {
     clear();
-    List<Request> requestList = await RequestRepository()
-        .getRequestList(latLngBounds: lastLatLngBounds);
+    List<Request> requestList = await RequestRepository().getRequestList(latLngBounds: lastLatLngBounds);
     requestList.forEach((e) => addMarker(e));
     return requestList;
   }
@@ -112,16 +139,12 @@ class MapRepository {
     int width = 96,
   }) async {
     ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-        targetWidth: width);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
     ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
-        .buffer
-        .asUint8List();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png)).buffer.asUint8List();
   }
 
-  static Marker prepareMarker(Request request,
-      {MarkerType markerType = MarkerType.blue}) {
+  static Marker prepareMarker(Request request, {MarkerType markerType = MarkerType.blue}) {
     return Marker(
       markerId: MarkerId(
         request.id,
