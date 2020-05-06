@@ -23,10 +23,8 @@ class AuthenticationService {
       result = await instance.signInWithCredential(credential);
       if (result != null) {
         verifiedUser.phoneNumber = result.user.phoneNumber;
-        Geometry g = (await MapRepository.getPlaceDetailsFromName(verifiedUser.extraInfo['location'])).geometry;
-        verifiedUser.location = LatLng(g.location.lat, g.location.lng);
-        await UserRepository()
-            .addUser(verifiedUser);
+        verifiedUser.location = (await MapRepository.getPlaceDetailsFromName(verifiedUser.extraInfo['location'])).location;
+        await UserRepository().addUser(verifiedUser);
         return VerificationStatusEnum.ok;
       }
     } on PlatformException catch (e) {
@@ -72,7 +70,6 @@ class AuthenticationService {
       if (fUser != null) {
         verifiedUser = await UserRepository().getUser(fUser.uid);
       } else {
-        
         verifiedUser = User(name: user['ad'], surname: user['soyad'], phoneNumber: user['telNo'], extraInfo: {'status': user['yetki'], 'location': user['gorevYeri']});
       }
       return true;
