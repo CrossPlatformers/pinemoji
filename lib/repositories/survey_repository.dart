@@ -48,7 +48,7 @@ class SurveyRepository {
                           (answerText) => Answer(
                             answerText: answerText,
                             emojiText: q.emojiList[q.answerList.indexOf(answerText)],
-                            ownerList: {user.uid: "9 Eylül Üniversitesi Hastanesi"},
+                            ownerList: {user.uid: AuthenticationService.verifiedUser.extraInfo['location']},
                           ),
                         )
                         .toList(),
@@ -60,7 +60,7 @@ class SurveyRepository {
       result.questionResultList.forEach((res) => res.answerList.forEach((a) => a.ownerList.remove(user.uid)));
       result.questionResultList.forEach((res) => {
             if (questionAnswerMap[res.questionId] != null)
-              res.answerList.firstWhere((a) => a.answerText == questionAnswerMap[res.questionId]).ownerList[user.uid] = "9 Eylül Üniversitesi Hastanesi"
+              res.answerList.firstWhere((a) => a.answerText == questionAnswerMap[res.questionId]).ownerList[user.uid] = AuthenticationService.verifiedUser.extraInfo['location']
           });
       await Firestore.instance.collection(collectionName).document(snapshot.documentID).setData(result.toMap());
     }
