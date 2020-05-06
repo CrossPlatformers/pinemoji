@@ -89,9 +89,18 @@ class MapRepository {
     ));
   }
 
-  static Future<List<Request>> getCurrentLocationMarkers(LatLngBounds lastLatLngBounds) async {
+  static Future<List<Request>> getCurrentLocationMarkers({
+    List<String> emojiIdList,
+    String option,
+    String lastSelectedId,
+    int limit,
+    LatLngBounds latLngBounds,
+  }) async {
     clear();
-    List<Request> requestList = await RequestRepository().getRequestList(latLngBounds: lastLatLngBounds);
+    List<Request> requestList = await RequestRepository().getRequestList(
+        latLngBounds: latLngBounds,
+        emojiIdList: emojiIdList,
+        option: option);
     requestList.forEach((e) => addMarker(e));
     return requestList;
   }

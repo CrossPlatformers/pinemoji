@@ -30,12 +30,12 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
         }
       });
     });
-    
+
   }
 
   @override
   Widget build(BuildContext context) {
-    
+
         return Expanded(
           child: SingleChildScrollView(
             child: Container(
@@ -146,12 +146,12 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
             }
             setState(() {
               materialModelWidget.isActive = !materialModelWidget.isActive;
-              
+
             });
             await Future.delayed(Duration(milliseconds: 100));
             setState(() {
               timeout = true;
-            }); 
+            });
           },
           child: MaterialStatusContent(
             materialStatusModel: materialModelWidget,
@@ -200,7 +200,7 @@ class VisibilityCondition extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ConditionFilter(onFilterChange: onFilterChange, state: state),
+          ConditionFilter(onPinChange: onFilterChange, state: state),
         ],
       ),
     );

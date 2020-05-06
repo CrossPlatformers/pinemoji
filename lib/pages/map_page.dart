@@ -19,11 +19,6 @@ class MapPage extends StatefulWidget {
 class MapPageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
-
   String _query = 'dokuz eylül hastanesi izmir';
 
   CameraPosition _lastCameraPosition;
@@ -41,6 +36,8 @@ class MapPageState extends State<MapPage> {
   double _mapButtonVisibility = 1;
 
   List<Request> lastRequestList = [];
+
+  List<String> lastEmojiIdList;
 
   @override
   void initState() {
@@ -101,6 +98,8 @@ class MapPageState extends State<MapPage> {
                     Align(
                       alignment: Alignment.topCenter,
                       child: GradientAppBar(
+                        onPinChange: onPinChange,
+                        onFilterChange: onFilterChange,
                         title: !isSearchMode
                             ? Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -252,7 +251,8 @@ class MapPageState extends State<MapPage> {
                             hospitalName:
                                 request.locationName ?? 'print locationName',
                             emoji: emoji.info ?? 'info',
-                            emojiDescription: emoji.description ?? 'description',
+                            emojiDescription:
+                                emoji.description ?? 'description',
                           );
                         },
                       ),
@@ -273,7 +273,7 @@ class MapPageState extends State<MapPage> {
         _mapButtonVisibility = 1;
       });
     }
-    await Future.delayed(Duration(milliseconds: 6000));
+    await Future.delayed(Duration(milliseconds: 3000));
     if (_mapButtonVisibility == 1 && mounted) {
       setState(() {
         _mapButtonVisibility = 0;
@@ -300,12 +300,20 @@ class MapPageState extends State<MapPage> {
 //    ));
 //  }
 
-  getCurrentLocationMarkers() async {
-    lastRequestList =
-        await MapRepository.getCurrentLocationMarkers(lastLatLngBounds);
+  getCurrentLocationMarkers({
+    List<String> emojiIdList,
+    String option,
+  }) async {
+    lastRequestList = await MapRepository.getCurrentLocationMarkers(
+      latLngBounds: lastLatLngBounds,
+      option: option,
+      emojiIdList: emojiIdList,
+    );
     setState(() {
       lastRequestList.length;
     });
+    print(lastRequestList.length);
+    print(MapRepository.markers.length);
   }
 
   void handleLocation() async {
@@ -330,13 +338,28 @@ class MapPageState extends State<MapPage> {
       }
     }
   }
+
+  Function onFilterChange(List<String> filters) {
+    print(filters.toString());
+    lastEmojiIdList = filters;
+    getCurrentLocationMarkers(emojiIdList: lastEmojiIdList);
+  }
+
+  onPinChange(String currentPin) {
+    print(currentPin.toString());
+    getCurrentLocationMarkers(emojiIdList: lastEmojiIdList, option: currentPin);
+  }
 }
 
 class GradientAppBar extends StatelessWidget {
   final Widget title;
   final double barHeight = 260.0;
 
-  GradientAppBar({this.title});
+  final GetFilters onFilterChange;
+
+  final Function(String) onPinChange;
+
+  GradientAppBar({this.title, this.onFilterChange, this.onPinChange});
 
   @override
   Widget build(BuildContext context) {
@@ -366,11 +389,15 @@ class GradientAppBar extends StatelessWidget {
           SizedBox(
             height: 8,
           ),
-          ConditionFilter(),
+          ConditionFilter(
+            onPinChange: onPinChange,
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: StockFilter(),
+              child: StockFilter(
+                onFilterChange: onFilterChange,
+              ),
             ),
           ),
         ],
@@ -398,10 +425,11 @@ class GradientAppBar extends StatelessWidget {
 }
 
 class FilterEntry {
-  const FilterEntry(this.name, this.emoji);
+  const FilterEntry(this.name, this.emoji, this.id);
 
   final String name;
   final String emoji;
+  final String id;
 }
 
 typedef Function GetFilters(List<String> filters);
@@ -417,12 +445,12 @@ class StockFilter extends StatefulWidget {
 
 class StockFilterState extends State<StockFilter> {
   final List<FilterEntry> _cast = <FilterEntry>[
-    const FilterEntry('Tıbbi Maske', '😷'),
-    const FilterEntry('N95 Maske', '😷'),
-    const FilterEntry('Siperlik / Gözlük', '🥽'),
-    const FilterEntry('Eldiven', '🧤'),
-    const FilterEntry('Önlük', '🥼'),
-    const FilterEntry('Solunum Cihazı', '⚗'),
+    const FilterEntry('Tıbbi Maske', '😷', "1"),
+    const FilterEntry('N95 Maske', '😷', "2"),
+    const FilterEntry('Siperlik / Gözlük', '🥽', "3"),
+    const FilterEntry('Eldiven', '🧤', "4"),
+    const FilterEntry('Önlük', '🥼', "5"),
+    const FilterEntry('Solunum Cihazı', '⚗', "6"),
   ];
 
   List<String> _filters = <String>[];
@@ -441,7 +469,7 @@ class StockFilterState extends State<StockFilter> {
   }
 
   Widget buildFilterChips(FilterEntry filter) {
-    final bool isActive = _filters.contains(filter.name);
+    final bool isActive = _filters.contains(filter.id);
     return Padding(
       padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
       child: Theme(
@@ -473,17 +501,18 @@ class StockFilterState extends State<StockFilter> {
           disabledColor: Colors.transparent,
           showCheckmark: false,
           shadowColor: Colors.transparent,
-          selected: _filters.contains(filter.name),
+          selected: _filters.contains(filter.id),
           onSelected: (bool value) {
             setState(() {
               if (value) {
-                _filters.add(filter.name);
+                _filters.add(filter.id);
               } else {
                 _filters.removeWhere((String name) {
-                  return name == filter.name;
+                  return name == filter.id;
                 });
               }
             });
+            getFilters();
           },
         ),
       ),
@@ -509,10 +538,10 @@ class StockFilterState extends State<StockFilter> {
 }
 
 class ConditionFilter extends StatefulWidget {
-  final Function(String) onFilterChange;
+  final Function(String) onPinChange;
   final String state;
 
-  const ConditionFilter({Key key, this.onFilterChange, this.state})
+  const ConditionFilter({Key key, this.onPinChange, this.state})
       : super(key: key);
 
   @override
@@ -561,8 +590,8 @@ class _ConditionFilterState extends State<ConditionFilter> {
             setState(() {
               current.isActive = true;
             });
-            if (widget.onFilterChange != null) {
-              widget.onFilterChange(current.text);
+            if (widget.onPinChange != null) {
+              widget.onPinChange(current.text);
             }
           },
           child: ConditionFilterItem(
@@ -666,7 +695,7 @@ class HospitalConditionCard extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: <Widget>[

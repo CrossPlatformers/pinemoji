@@ -8,33 +8,32 @@ class RequestRepository {
 
   Future<List<Request>> getRequestList({
     List<String> emojiIdList,
-    List<String> optionList,
+    String option,
     String lastSelectedId,
     int limit,
     LatLngBounds latLngBounds,
   }) async {
     List<Request> requestList = [];
-    var ref = Firestore.instance.collection(collectionName);
-    Query query;
+    Query query = Firestore.instance.collection(collectionName).limit(40);
     if (emojiIdList != null && emojiIdList.isNotEmpty) {
-      query = ref.where(
+      query = query.where(
         'emoji',
         whereIn: emojiIdList,
       );
     }
-    if (optionList != null && optionList.isNotEmpty) {
-      query = ref.where(
+    if (option != null) {
+      query = query.where(
         'option',
-        whereIn: optionList,
+        isEqualTo: option,
       );
     }
     if (lastSelectedId != null)
-      query = ref.startAfterDocument(await Firestore.instance
+      query = query.startAfterDocument(await Firestore.instance
           .collection(collectionName)
           .document(lastSelectedId)
           .get());
     if (latLngBounds != null) {
-      query = ref
+      query = query
           .where(
             'location',
             isLessThanOrEqualTo: GeoPoint(
@@ -49,9 +48,6 @@ class RequestRepository {
               latLngBounds.southwest.longitude,
             ),
           );
-    }
-    if (limit != null) {
-      query = ref.limit(limit);
     }
     var querySnapshot = await query.getDocuments();
     if (querySnapshot != null && querySnapshot.documents.isNotEmpty) {
