@@ -45,6 +45,8 @@ class MapPageState extends State<MapPage> {
 
   List<String> lastEmojiIdList;
 
+  String lastSelectedPin;
+
   Timer _debounce;
   Timer _debounceNested;
   bool closeList = true;
@@ -351,14 +353,11 @@ class MapPageState extends State<MapPage> {
 //    ));
 //  }
 
-  getCurrentLocationMarkers({
-    List<String> emojiIdList,
-    String option,
-  }) async {
+  getCurrentLocationMarkers() async {
     lastRequestList = await MapRepository.getCurrentLocationMarkers(
       latLngBounds: lastLatLngBounds,
-      option: option,
-      emojiIdList: emojiIdList,
+      option: lastSelectedPin,
+      emojiIdList: lastEmojiIdList,
     );
     setState(() {
       lastRequestList.length;
@@ -398,12 +397,14 @@ class MapPageState extends State<MapPage> {
   Function onFilterChange(List<String> filters) {
 //    print(filters.toString());
     lastEmojiIdList = filters;
-    getCurrentLocationMarkers(emojiIdList: lastEmojiIdList);
+    getCurrentLocationMarkers();
   }
+
 
   onPinChange(String currentPin) {
 //    print(currentPin.toString());
-    getCurrentLocationMarkers(emojiIdList: lastEmojiIdList, option: currentPin);
+    lastSelectedPin = currentPin;
+    getCurrentLocationMarkers();
   }
 
   void animateCamera(LatLng latLang) async {
