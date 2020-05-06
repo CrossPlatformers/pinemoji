@@ -139,15 +139,25 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
         padding: const EdgeInsets.all(0),
         child: GestureDetector(
           onTap: () async {
-            if (!materialModelWidget.isActive) {
-              for (var current in widget.materialStatusModelList) {
+            for (var current in widget.materialStatusModelList) {
+              if (!materialModelWidget.isActive) {
                 current.isActive = false;
                 timeout = false;
+                setState(() {
+                  current.isBlur = true;
+                  materialModelWidget.isBlur = false;
+                });
+              } else {
+                setState(() {
+                  current.isBlur = false;
+                });
               }
             }
+
             setState(() {
               materialModelWidget.isActive = !materialModelWidget.isActive;
             });
+
             await Future.delayed(Duration(milliseconds: 125));
             setState(() {
               timeout = true;

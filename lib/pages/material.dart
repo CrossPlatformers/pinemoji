@@ -150,6 +150,10 @@ class _MaterialStatusState extends State<MaterialStatus> {
                         showWarning(
                             "İşlem sırasında hata oluştu, lütfen tekrar deneyiniz");
                       }
+                      for (var current in MaterialStatus.materialModelList) {
+                        current.isBlur = false;
+                      }
+                      setState(() {});
                     },
                   )
                 : Container(),
