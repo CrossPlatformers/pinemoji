@@ -91,7 +91,7 @@ class MapRepository {
 //            BitmapDescriptor.fromBytes(await getBytesFromAsset(path));
       });
     });
-    print(bitmapDescriptorMap.toString());
+//    print(bitmapDescriptorMap.toString());
   }
 
   static Future handleForEach(
@@ -104,7 +104,7 @@ class MapRepository {
 //        ImageConfiguration(size: Size(8, 8),devicePixelRatio: 2), path);
     bitmapDescriptorMap.putIfAbsent(path, () => current);
     //        await print(bitmapDescriptorMap.toString());
-    await print(bitmapDescriptorMap.keys);
+//    print(bitmapDescriptorMap.keys);
   }
 
   static Future<List<Request>> getCurrentLocationMarkers({

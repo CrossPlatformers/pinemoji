@@ -97,11 +97,7 @@ class MapPageState extends State<MapPage> {
                             },
                             cameraTargetBounds: _cameraTargetBounds,
                             mapType: MapType.normal,
-                            initialCameraPosition: _lastCameraPosition ??
-                                CameraPosition(
-                                    target: AuthenticationService
-                                        .verifiedUser.location,
-                                    zoom: 10),
+                            initialCameraPosition: _lastCameraPosition,
                             onMapCreated:
                                 (GoogleMapController controller) async {
                               String mapStyle = await rootBundle
@@ -212,10 +208,11 @@ class MapPageState extends State<MapPage> {
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
                         setState(() {
-                        closeList = !closeList;
-                        Future.delayed(Duration(milliseconds: 100)).then(
-                            (val) => setState(() => {showHeader = closeList}));
-                      });
+                          closeList = !closeList;
+                          Future.delayed(Duration(milliseconds: 100)).then(
+                              (val) =>
+                                  setState(() => {showHeader = closeList}));
+                        });
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -372,6 +369,11 @@ class MapPageState extends State<MapPage> {
   }
 
   void handleLocation() async {
+    if (AuthenticationService.verifiedUser.location != null) {
+      _lastCameraPosition = CameraPosition(
+          target: AuthenticationService.verifiedUser.location, zoom: 12);
+      return;
+    }
     location = lc.Location();
     lc.PermissionStatus hasPermission = await location.hasPermission();
     if (hasPermission == lc.PermissionStatus.granted) {
@@ -455,6 +457,7 @@ class GradientAppBar extends StatelessWidget {
             height: 8,
           ),
           ConditionFilter(
+            state: "Acil Destek",
             onPinChange: onPinChange,
           ),
           Expanded(
@@ -589,6 +592,12 @@ class StockFilterState extends State<StockFilter> {
   Color activeColor() => Color(0xffF93963);
 
   @override
+  void initState() {
+    super.initState();
+    _filters.add(_cast.first.id);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -618,7 +627,6 @@ class _ConditionFilterState extends State<ConditionFilter> {
     ConditionFilterModel(
       text: 'Acil Destek',
       imagePath: 'assets/pins/red.png',
-      isActive: true,
     ),
     ConditionFilterModel(
       text: 'Azalıyor !',
