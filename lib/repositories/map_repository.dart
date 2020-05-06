@@ -97,10 +97,40 @@ class MapRepository {
     LatLngBounds latLngBounds,
   }) async {
     clear();
-    List<Request> requestList = await RequestRepository().getRequestList(
-        latLngBounds: latLngBounds,
-        emojiIdList: emojiIdList,
-        option: option);
+    List<Request> requestList = await RequestRepository().getRequestList(latLngBounds: latLngBounds, emojiIdList: emojiIdList, option: option);
+    Map<LatLng, List<Request>> locationMap = {};
+    requestList.forEach((m) => locationMap.containsKey(m.location) ? locationMap[m.location].add(m) : locationMap[m.location] = [m]);
+    locationMap.forEach((loc, mapList) {
+      if (mapList.length == 2) {
+        mapList.elementAt(0).location = LatLng(mapList.elementAt(0).location.latitude, mapList.elementAt(0).location.longitude - 0.000015);
+        mapList.elementAt(1).location = LatLng(mapList.elementAt(0).location.latitude, mapList.elementAt(0).location.longitude + 0.000015);
+      }
+      if (mapList.length == 3) {
+        mapList.elementAt(0).location = LatLng(mapList.elementAt(0).location.latitude + 0.000015, mapList.elementAt(0).location.longitude);
+        mapList.elementAt(1).location = LatLng(mapList.elementAt(0).location.latitude - 0.000015, mapList.elementAt(0).location.longitude - 0.000015);
+        mapList.elementAt(2).location = LatLng(mapList.elementAt(0).location.latitude - 0.000015, mapList.elementAt(0).location.longitude + 0.000015);
+      }
+      if (mapList.length == 4) {
+        mapList.elementAt(0).location = LatLng(mapList.elementAt(0).location.latitude + 0.000015, mapList.elementAt(0).location.longitude - 0.000015);
+        mapList.elementAt(1).location = LatLng(mapList.elementAt(0).location.latitude + 0.000015, mapList.elementAt(0).location.longitude + 0.000015);
+        mapList.elementAt(2).location = LatLng(mapList.elementAt(0).location.latitude - 0.000015, mapList.elementAt(0).location.longitude - 0.000015);
+        mapList.elementAt(3).location = LatLng(mapList.elementAt(0).location.latitude - 0.000015, mapList.elementAt(0).location.longitude + 0.000015);
+      }
+      if (mapList.length == 5) {
+        mapList.elementAt(0).location = LatLng(mapList.elementAt(0).location.latitude + 0.00002, mapList.elementAt(0).location.longitude - 0.00002);
+        mapList.elementAt(1).location = LatLng(mapList.elementAt(0).location.latitude + 0.00002, mapList.elementAt(0).location.longitude + 0.00002);
+        mapList.elementAt(2).location = LatLng(mapList.elementAt(0).location.latitude - 0.00002, mapList.elementAt(0).location.longitude - 0.00002);
+        mapList.elementAt(3).location = LatLng(mapList.elementAt(0).location.latitude - 0.00002, mapList.elementAt(0).location.longitude + 0.00002);
+      }
+      if (mapList.length == 6) {
+        mapList.elementAt(0).location = LatLng(mapList.elementAt(0).location.latitude + 0.000025, mapList.elementAt(0).location.longitude - 0.000015);
+        mapList.elementAt(1).location = LatLng(mapList.elementAt(0).location.latitude + 0.000025, mapList.elementAt(0).location.longitude + 0.000015);
+        mapList.elementAt(2).location = LatLng(mapList.elementAt(0).location.latitude, mapList.elementAt(0).location.longitude - 0.000025);
+        mapList.elementAt(3).location = LatLng(mapList.elementAt(0).location.latitude, mapList.elementAt(0).location.longitude + 0.000025);
+        mapList.elementAt(4).location = LatLng(mapList.elementAt(0).location.latitude - 0.000025, mapList.elementAt(0).location.longitude + 0.000015);
+        mapList.elementAt(5).location = LatLng(mapList.elementAt(0).location.latitude - 0.000025, mapList.elementAt(0).location.longitude + 0.000015);
+      }
+    });
     requestList.forEach((e) => addMarker(e));
     return requestList;
   }
