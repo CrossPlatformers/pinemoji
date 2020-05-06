@@ -17,7 +17,7 @@ class MaterialWidgetController extends StatefulWidget {
 }
 
 class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
-  
+  bool timeout = false;
   @override
   void initState() {
     super.initState();
@@ -35,30 +35,31 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: materialList(
-                    widget.materialStatusModelList.take(2).toList()),
-              ),
-              VisibilityCondition(
-                isVisible: getIndex() == 0 || getIndex() == 1,
-                onFilterChange: (name) {
-                  setEmojiBorder(name);
-                },
-                state: getState(),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: materialList(
-                    widget.materialStatusModelList.skip(2).take(2).toList()),
-              ),
-              VisibilityCondition(
-                isVisible: getIndex() == 2 || getIndex() == 3,
+    
+        return Expanded(
+          child: SingleChildScrollView(
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: materialList(
+                        widget.materialStatusModelList.take(2).toList()),
+                  ),
+                  VisibilityCondition(
+                    isVisible: (getIndex() == 0 || getIndex() == 1) && timeout,
+                    onFilterChange: (name) {
+                      setEmojiBorder(name);
+                    },
+                    state: getState(),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: materialList(
+                        widget.materialStatusModelList.skip(2).take(2).toList()),
+                  ),
+                  VisibilityCondition(
+                    isVisible: (getIndex() == 2 || getIndex() == 3) && timeout,
                 onFilterChange: (name) {
                   setEmojiBorder(name);
                 },
@@ -70,7 +71,7 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
                     widget.materialStatusModelList.skip(4).take(2).toList()),
               ),
               VisibilityCondition(
-                isVisible: getIndex() == 4 || getIndex() == 5,
+                isVisible: (getIndex() == 4 || getIndex() == 5) && timeout,
                 onFilterChange: (name) {
                   setEmojiBorder(name);
                 },
@@ -136,14 +137,21 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
       return Padding(
         padding: const EdgeInsets.all(0),
         child: GestureDetector(
-          onTap: () {
+          onTap: () async {
             if (!materialModelWidget.isActive) {
-              for (var current in widget.materialStatusModelList)
+              for (var current in widget.materialStatusModelList){
                 current.isActive = false;
+                timeout = false;
+              }
             }
             setState(() {
               materialModelWidget.isActive = !materialModelWidget.isActive;
+              
             });
+            await Future.delayed(Duration(milliseconds: 100));
+            setState(() {
+              timeout = true;
+            }); 
           },
           child: MaterialStatusContent(
             materialStatusModel: materialModelWidget,
