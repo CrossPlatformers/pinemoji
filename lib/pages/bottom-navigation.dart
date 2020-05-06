@@ -99,7 +99,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                     )
                   : MaterialStatus(),
               AuthenticationService.verifiedUser.extraInfo['status'] == "TTBA"
-                  ? SurveyResultPage()
+                  ? HealthStatus()
                   : HealthStatus(),
             ],
           ),

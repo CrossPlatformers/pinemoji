@@ -26,13 +26,13 @@ class SurveyRepository {
   }
 
   Future<bool> sendSurvey(
-    String surveyId,
+    Survey survey,
     Map<String, String> questionAnswerMap,
   ) async {
     FirebaseUser user = await AuthenticationService.instance.currentUser();
     List<DocumentSnapshot> resultList = (await Firestore.instance
             .collection(collectionName)
-            .where("surveyId", isEqualTo: surveyId)
+            .where("surveyId", isEqualTo: survey.id)
             .getDocuments())
         .documents;
     DocumentSnapshot snapshot;
@@ -41,22 +41,26 @@ class SurveyRepository {
     }
     DocumentReference documentReference =
         Firestore.instance.collection(collectionName).document();
-    storeOwnData(surveyId, questionAnswerMap);
+    storeOwnData(survey.id, questionAnswerMap);
     Result result;
     if (snapshot == null || !snapshot.exists) {
       Survey survey = CompanyRepository().getSurvey();
       result = Result(
-          surveyId: surveyId,
+          surveyId: survey.id,
           questionResultList: survey.questionList
               .map((q) => QuestionResult(
                     questionId: q.id,
                     questionText: q.description,
                     answerList: q.answerList
                         .map(
-                          (answerText) => Answer(
-                            answerText: answerText,
-                            emojiText: q.emojiList[q.answerList.indexOf(answerText)],
-                            ownerList: {user.uid: AuthenticationService.verifiedUser.extraInfo['location']},
+                          (answer) => Answer(
+                            answerText: answer.answerText,
+                            emojiText: answer.emojiText,
+                            otherInfo: survey.questionList.firstWhere((x) => x.id == q.id).answerList.last.otherInfo,
+                            ownerList: {
+                              user.uid: AuthenticationService
+                                  .verifiedUser.extraInfo['location']
+                            },
                           ),
                         )
                         .toList(),
@@ -67,10 +71,13 @@ class SurveyRepository {
       result = Result.fromMap(snapshot.data);
       result.questionResultList.forEach(
           (res) => res.answerList.forEach((a) => a.ownerList.remove(user.uid)));
-      result.questionResultList.forEach((res) => {
-            if (questionAnswerMap[res.questionId] != null)
-              res.answerList.firstWhere((a) => a.answerText == questionAnswerMap[res.questionId]).ownerList[user.uid] = AuthenticationService.verifiedUser.extraInfo['location']
-          });
+      for(var res in result.questionResultList){
+        if (questionAnswerMap[res.questionId] != null){
+          var answer = res.answerList.firstWhere((a) => a.answerText == questionAnswerMap[res.questionId]);
+          answer.ownerList[user.uid] = AuthenticationService.verifiedUser.extraInfo['location'];
+          answer.otherInfo = survey.questionList.firstWhere((x) => x.id == res.questionId).answerList.last.otherInfo;
+        }
+      }
       await Firestore.instance
           .collection(collectionName)
           .document(snapshot.documentID)

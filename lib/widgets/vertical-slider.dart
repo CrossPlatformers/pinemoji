@@ -50,19 +50,16 @@ class VerticalSlider extends StatelessWidget {
                               questionId: question.id,
                               resultMap: result,
                               healthStatusModelList: [
-                                ...question.answerList
-                                    .map((answer) => HealthStatusModel(
-                                          question.emojiList[question.answerList
-                                              .indexOf(answer)],
-                                          answer,
-                                        )),
-                                if (question.type == "TEXT" &&
-                                    question.answerList.isNotEmpty)
-                                  HealthStatusModel(
-                                    "😶",
-                                    "Diğer",
-                                    isOther: true,
-                                  )
+                                ...question.answerList.map(
+                                  (answer) => HealthStatusModel(
+                                    emoji: answer.emojiText,
+                                    text: answer.answerText,
+                                    isOther: question.type == "TEXT" && answer.answerText == "Diğer",
+                                    onChanged: (text) {
+                                      answer.otherInfo = text;
+                                    }
+                                  ),
+                                ),
                               ],
                             ),
                           ),

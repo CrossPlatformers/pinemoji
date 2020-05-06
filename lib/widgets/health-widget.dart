@@ -3,13 +3,10 @@ import 'package:flutter/material.dart';
 class HealthStatusModel {
   String emoji;
   String text;
+  final Function(String) onChanged;
   bool isOther = false;
   bool isActive = false;
-  HealthStatusModel(String emoji, String text, {bool isOther = false}) {
-    this.emoji = emoji;
-    this.text = text;
-    this.isOther = isOther;
-  }
+  HealthStatusModel({this.emoji, this.text,this.onChanged, this.isOther});
 }
 
 class HealthStatusContent extends StatelessWidget {
@@ -77,6 +74,7 @@ class HealthStatusContent extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 4, 0, 4),
               child: TextField(
+                onChanged: healthStatusModel.onChanged,
                 style: TextStyle(
                   fontSize: 16,
                   fontStyle: FontStyle.italic,

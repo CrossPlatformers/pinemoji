@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pinemoji/models/answer.dart';
 import 'package:pinemoji/models/company.dart';
 import 'package:pinemoji/models/emoji.dart';
 import 'package:pinemoji/models/emoji_option.dart';
@@ -101,48 +102,32 @@ class CompanyRepository {
               description: "Şu ana kadar COVID-19 tanısı aldınız mı?",
               type: "TEXT",
               answerList: [
-                "Hayır",
-                "Evet, test sonucum pozitif çıktı",
-                "Evet test negatifti ama BT sonucuma göre",
-              ],
-              emojiList: [
-                "😊",
-                "😒",
-                "😐",
+                Answer(answerText: "Hayır" ,emojiText: "😊",),
+                Answer(answerText: "Evet, test sonucum pozitif çıktı" ,emojiText: "😒",),
+                Answer(answerText: "Evet test negatifti ama BT sonucuma göre" , emojiText: "😐",),
+                Answer(answerText: "Diğer" ,emojiText: "😶",),
               ]),
           Question(
               id: "22d61d18-da9a-48ac-a88f-b24af8dcba73",
               description: "COVID-19 nedeniyle uygulanan tedavi",
               type: "TEXT",
               answerList: [
-                "Tanı almadım",
-                "Hastalığı evde ilaç alarak geçirdim",
-                "Serviste yatarak tedavi gördüm",
-                "Yoğun bakımda yatarak tedavi gördüm",
-                "Entübe edildim",
-              ],
-              emojiList: [
-                "😊",
-                "😷",
-                "🤒",
-                "😶",
-                "🤢",
+                Answer(answerText: "Tanı almadım", emojiText: "😊",),
+                Answer(answerText: "Hastalığı evde ilaç alarak geçirdim", emojiText: "😷",),
+                Answer(answerText: "Serviste yatarak tedavi gördüm", emojiText: "🤒",),
+                Answer(answerText: "Yoğun bakımda yatarak tedavi gördüm", emojiText: "😶",),
+                Answer(answerText: "Entübe edildim", emojiText: "🤢",),
+                Answer(answerText: "Diğer", emojiText: "😶",),    
               ]),
           Question(
               id: "c7706328-7dc4-488b-9ab4-f5ad18466b4d",
               description: "Riskli COVID 19 temasınız oldu mu?",
               type: "SELECT",
               answerList: [
-                "Hayır",
-                "Evet düşük riskli",
-                "Evet orta riskli",
-                "Evet yüksek riskli",
-              ],
-              emojiList: [
-                "😊",
-                "😐",
-                "🙁",
-                "😰",
+                Answer(answerText: "Hayır", emojiText: "😊",),
+                Answer(answerText: "Evet düşük riskli", emojiText: "😐",),
+                Answer(answerText: "Evet orta riskli", emojiText:"🙁",),
+                Answer(answerText: "Evet yüksek riskli", emojiText: "😰",),
               ]),
           Question(
               id: "268feb88-38ee-4abd-8a04-57a9fe5ff805",
@@ -150,16 +135,11 @@ class CompanyRepository {
                   "Temas sonrası SB riskli temas algoritması uygun bir şekilde uygulandı mı?",
               type: "TEXT",
               answerList: [
-                "Hayır, protokol uygulanmadı ve çalışmaya zorlandım",
-                "Evet, yüksek riskliydim hidroksiklorin tedavisiyle beş gün istirahat sonrasında testim negatif çıktı işe başladım",
-                "Evet orta riskliydim maskeyle çalıştım ve beş gün sonra test yapıldı",
-                "Evet düşük riskliydim, maske ile çalıştım, semptom takibim yapıldı ve yedinci günde test yapıldı",
-              ],
-              emojiList: [
-                "😓",
-                "🤢",
-                "😷",
-                "😷",
+                Answer(answerText: "Hayır, protokol uygulanmadı ve çalışmaya zorlandım", emojiText: "😓",),
+                Answer(answerText: "Evet, yüksek riskliydim hidroksiklorin tedavisiyle beş gün istirahat sonrasında testim negatif çıktı işe başladım", emojiText: "🤢",),
+                Answer(answerText: "Evet orta riskliydim maskeyle çalıştım ve beş gün sonra test yapıldı", emojiText: "😷",),
+                Answer(answerText: "Evet düşük riskliydim, maske ile çalıştım, semptom takibim yapıldı ve yedinci günde test yapıldı", emojiText: "😷",),
+                Answer(answerText: "Diğer", emojiText: "😶",),
               ])
         ]);
   }

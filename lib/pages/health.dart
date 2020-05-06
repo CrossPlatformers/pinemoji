@@ -88,7 +88,7 @@ class _HealthStatusState extends State<HealthStatus> {
                           hasLoading = true;
                         });
                         var status = await SurveyRepository()
-                            .sendSurvey(HealthStatus.survey.id, resultMap);
+                            .sendSurvey(HealthStatus.survey, resultMap);
                         setState(() {
                           hasLoading = false;
                         });
