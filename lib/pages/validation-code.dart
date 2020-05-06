@@ -90,6 +90,7 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
                             TextField(
                               controller: codeController,
                               decoration: InputDecoration(
+                                  counterText: "",
                                   border: UnderlineInputBorder(
                                     borderSide: BorderSide(
                                       width: 0,
@@ -132,7 +133,28 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
               ),
             )
           : Center(
-              child: CircularProgressIndicator(),
+              child: Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(
+                        backgroundColor: Colors.white70,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Giriş Yapılıyor...",
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontSize: 24,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ),
     );
   }

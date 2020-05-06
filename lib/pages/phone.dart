@@ -91,6 +91,7 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
                             TextField(
                               controller: phoneController,
                               decoration: InputDecoration(
+                                  counterText: "",
                                   border: UnderlineInputBorder(
                                     borderSide: BorderSide(
                                       width: 0,
@@ -107,7 +108,12 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
                             ),
                             Container(
                               height: 1,
-                              decoration: BoxDecoration(gradient: LinearGradient(colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor, Colors.white])),
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(colors: [
+                                Theme.of(context).primaryColor,
+                                Theme.of(context).primaryColor,
+                                Colors.white
+                              ])),
                             ),
                           ],
                         ),
@@ -127,7 +133,28 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
               ),
             )
           : Center(
-              child: CircularProgressIndicator(),
+              child: Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(
+                        backgroundColor: Colors.white70,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Kod Gönderiliyor...",
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontSize: 24,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ),
     );
   }
@@ -137,7 +164,8 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
       setState(() {
         isLoading = true;
       });
-      await AuthenticationService().verifyPhone('+9' + phoneController.text, context, (status) {
+      await AuthenticationService()
+          .verifyPhone('+9' + phoneController.text, context, (status) {
         if (status.authenticationEnum == AuthenticationEnum.smsSent) {
           setState(() {
             isLoading = false;

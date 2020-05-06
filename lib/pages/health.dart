@@ -66,6 +66,7 @@ class _HealthStatusState extends State<HealthStatus> {
                             "Anket Gönderiliyor...",
                             style: TextStyle(
                               color: Colors.white,
+                              fontStyle: FontStyle.italic,
                               fontSize: 24,
                             ),
                           )
