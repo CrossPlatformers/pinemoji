@@ -14,7 +14,9 @@ import 'package:pinemoji/widgets/search_bar.dart';
 
 class MapPage extends StatefulWidget {
   final bool fromRoot;
+
   MapPage({this.fromRoot = false});
+
   @override
   State<MapPage> createState() => MapPageState();
 }
@@ -87,15 +89,23 @@ class MapPageState extends State<MapPage> {
 //                              print('northeast : ${_cameraTargetBounds.bounds.southwest.latitude.toString()} ${_cameraTargetBounds.bounds.southwest.longitude.toString()}');
                             },
                             onCameraIdle: () async {
-                              GoogleMapController controller = await _controller.future;
-                              lastLatLngBounds = await controller.getVisibleRegion();
+                              GoogleMapController controller =
+                                  await _controller.future;
+                              lastLatLngBounds =
+                                  await controller.getVisibleRegion();
                               handleMapIdleRequest();
                             },
                             cameraTargetBounds: _cameraTargetBounds,
                             mapType: MapType.normal,
-                            initialCameraPosition: _lastCameraPosition ?? CameraPosition(target: AuthenticationService.verifiedUser.location, zoom: 10),
-                            onMapCreated: (GoogleMapController controller) async {
-                              String mapStyle = await rootBundle.loadString('assets/map_style/standart.json');
+                            initialCameraPosition: _lastCameraPosition ??
+                                CameraPosition(
+                                    target: AuthenticationService
+                                        .verifiedUser.location,
+                                    zoom: 10),
+                            onMapCreated:
+                                (GoogleMapController controller) async {
+                              String mapStyle = await rootBundle
+                                  .loadString('assets/map_style/standart.json');
                               controller.setMapStyle(mapStyle);
                               _controller.complete(controller);
                             },
@@ -113,7 +123,8 @@ class MapPageState extends State<MapPage> {
                         title: !isSearchMode
                             ? Row(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -150,7 +161,7 @@ class MapPageState extends State<MapPage> {
                     ),
                     Positioned(
                       right: 8,
-                      bottom: 100,
+                      bottom: closeList ? 60 : 90,
                       child: AnimatedOpacity(
                         opacity: _mapButtonVisibility,
                         duration: Duration(milliseconds: 800),
@@ -173,7 +184,9 @@ class MapPageState extends State<MapPage> {
                 ),
               ),
               Container(
-                height: 70,
+                height: closeList
+                    ? 50
+                    : MediaQuery.of(context).size.height / 2.3 - 70,
                 width: MediaQuery.of(context).size.width,
               ),
             ],
@@ -181,7 +194,7 @@ class MapPageState extends State<MapPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: AnimatedContainer(
-              duration: Duration(milliseconds: 200),
+              duration: Duration(milliseconds: 400),
               height: closeList ? 90 : MediaQuery.of(context).size.height / 2.3,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
@@ -196,10 +209,14 @@ class MapPageState extends State<MapPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     GestureDetector(
-                      onTap: () => setState(() {
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        setState(() {
                         closeList = !closeList;
-                        Future.delayed(Duration(milliseconds: 100)).then((val) => setState(() => {showHeader = closeList}));
-                      }),
+                        Future.delayed(Duration(milliseconds: 100)).then(
+                            (val) => setState(() => {showHeader = closeList}));
+                      });
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
@@ -219,7 +236,11 @@ class MapPageState extends State<MapPage> {
                               width: 170,
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: [Theme.of(context).primaryColor, Theme.of(context).primaryColor, Colors.white],
+                                  colors: [
+                                    Theme.of(context).primaryColor,
+                                    Theme.of(context).primaryColor,
+                                    Colors.white
+                                  ],
                                 ),
                               ),
                             )
@@ -227,62 +248,65 @@ class MapPageState extends State<MapPage> {
                         ),
                       ),
                     ),
-                    if(!showHeader)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            'Hastane',
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              fontSize: 18,
-                              color: Color(0xff26315F).withOpacity(.6),
-                              fontWeight: FontWeight.bold,
+                    if (!showHeader)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              'Hastane',
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                fontSize: 18,
+                                color: Color(0xff26315F).withOpacity(.6),
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'Malzeme',
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              fontSize: 18,
-                              color: Color(0xff26315F).withOpacity(.6),
-                              fontWeight: FontWeight.bold,
+                            Text(
+                              'Malzeme',
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                fontSize: 18,
+                                color: Color(0xff26315F).withOpacity(.6),
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    if(!showHeader)
-                    Expanded(
-                      child: ListView.builder(
-                        padding: EdgeInsets.all(0),
-                        itemCount: lastRequestList.length,
-                        itemBuilder: (context, index) {
-                          Request request = lastRequestList.elementAt(index);
-                          Emoji emoji = CompanyRepository().getEmojiList().firstWhere((element) {
-                            return element.id == request.emoji;
-                          }, orElse: () {
-                            print('No matching element.');
-                            return null;
-                          });
-                          return GestureDetector(
-                            onTap:(){
-                              Marker marker = MapRepository.getMarker(request.id);
-                              animateCamera(marker.position);
-                            },
-                            child: HospitalConditionCard(
-                              hospitalName:
-                                  request.locationName ?? 'print locationName',
-                              emoji: emoji.info ?? 'info',
-                              emojiDescription:
-                                  emoji.description ?? 'description',
-                            ),
-                          );
-                        },
+                    if (!showHeader)
+                      Expanded(
+                        child: ListView.builder(
+                          padding: EdgeInsets.all(0),
+                          itemCount: lastRequestList.length,
+                          itemBuilder: (context, index) {
+                            Request request = lastRequestList.elementAt(index);
+                            Emoji emoji = CompanyRepository()
+                                .getEmojiList()
+                                .firstWhere((element) {
+                              return element.id == request.emoji;
+                            }, orElse: () {
+                              print('No matching element.');
+                              return null;
+                            });
+                            return GestureDetector(
+                              onTap: () {
+                                Marker marker =
+                                    MapRepository.getMarker(request.id);
+                                animateCamera(marker.position);
+                              },
+                              child: HospitalConditionCard(
+                                hospitalName: request.locationName ??
+                                    'print locationName',
+                                emoji: emoji.info ?? 'info',
+                                emojiDescription:
+                                    emoji.description ?? 'description',
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -357,11 +381,13 @@ class MapPageState extends State<MapPage> {
         zoom: 10,
       );
       final GoogleMapController controller = await _controller.future;
-      await controller.animateCamera(CameraUpdate.newLatLngZoom(_lastCameraPosition.target, 10));
+      await controller.animateCamera(
+          CameraUpdate.newLatLngZoom(_lastCameraPosition.target, 10));
       await Future.delayed(Duration(milliseconds: 400));
       await controller.animateCamera(CameraUpdate.scrollBy(0, -50));
     } else {
-      lc.PermissionStatus requestPermission = await location.requestPermission();
+      lc.PermissionStatus requestPermission =
+          await location.requestPermission();
       if (requestPermission == lc.PermissionStatus.granted) {
         handleLocation();
       }
@@ -396,7 +422,8 @@ class GradientAppBar extends StatelessWidget {
 
   final Function(String) onPinChange;
 
-  GradientAppBar({this.title, this.onFilterChange, this.onPinChange, this.fromRoot});
+  GradientAppBar(
+      {this.title, this.onFilterChange, this.onPinChange, this.fromRoot});
 
   @override
   Widget build(BuildContext context) {
@@ -456,7 +483,9 @@ class GradientAppBar extends StatelessWidget {
   }
 
   double getHeight(double statusbarHeight, BuildContext context) {
-    return MediaQuery.of(context).size.height > 600 ? statusbarHeight + barHeight : barHeight - 50;
+    return MediaQuery.of(context).size.height > 600
+        ? statusbarHeight + barHeight
+        : barHeight - 50;
   }
 }
 
@@ -512,7 +541,9 @@ class StockFilterState extends State<StockFilter> {
         data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
         child: FilterChip(
           backgroundColor: Colors.transparent,
-          shape: StadiumBorder(side: BorderSide(color: isActive ? activeColor() : disabledColor())),
+          shape: StadiumBorder(
+              side: BorderSide(
+                  color: isActive ? activeColor() : disabledColor())),
           avatar: CircleAvatar(
             child: Text(
               filter.emoji,
@@ -523,7 +554,9 @@ class StockFilterState extends State<StockFilter> {
           ),
           label: Text(
             filter.name,
-            style: TextStyle(color: isActive ? activeColor() : disabledColor(), fontSize: 12),
+            style: TextStyle(
+                color: isActive ? activeColor() : disabledColor(),
+                fontSize: 12),
           ),
           elevation: 0,
           pressElevation: 0,
@@ -573,7 +606,8 @@ class ConditionFilter extends StatefulWidget {
   final Function(String) onPinChange;
   final String state;
 
-  const ConditionFilter({Key key, this.onPinChange, this.state}) : super(key: key);
+  const ConditionFilter({Key key, this.onPinChange, this.state})
+      : super(key: key);
 
   @override
   _ConditionFilterState createState() => _ConditionFilterState();
