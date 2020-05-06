@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     // AuthenticationService().signOut();
-    listen();
+    listenConnection();
     AuthenticationService.instance.onAuthStateChanged.listen((event) {
       if (event != null) {
         AuthenticationService().checkPhoneNumber(event.phoneNumber).then((val) {
@@ -44,9 +44,15 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  void listen() async {
+  Future<bool> hasInternet() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    return connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi;
+  }
+
+  void listenConnection() async {
+    // hasConnection = await this.hasInternet();
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      print("Connection Status has Changed");
       if (result == ConnectivityResult.mobile ||
           result == ConnectivityResult.wifi) {
         setState(() {
@@ -66,11 +72,13 @@ class _MyAppState extends State<MyApp> {
             ? Container()
             : (loggedIn ? BottomNavigation() : WelcomePage())
         : Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.white70,
+                ),
               ),
               SizedBox(
                 height: 20,
@@ -78,7 +86,7 @@ class _MyAppState extends State<MyApp> {
               Text(
                 "Lütfen bağlantınızı kontrol ediniz...",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   fontStyle: FontStyle.italic,
                 ),
               )
