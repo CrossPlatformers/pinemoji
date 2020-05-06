@@ -51,9 +51,7 @@ class _MyAppState extends State<MyApp> {
         body: loggedIn == null
             ? Container()
             : (loggedIn
-                ? BottomNavigation(
-                    isAdminUser: AuthenticationService.verifiedUser.extraInfo['status'] == 'TTBA',
-                  )
+                ? BottomNavigation()
                 : WelcomePage()),
       ),
     );

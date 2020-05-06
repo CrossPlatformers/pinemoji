@@ -12,6 +12,8 @@ import 'package:pinemoji/repositories/request_repository.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
 
 class MapPage extends StatefulWidget {
+  final bool fromRoot;
+  MapPage({this.fromRoot = false});
   @override
   State<MapPage> createState() => MapPageState();
 }
@@ -108,6 +110,7 @@ class MapPageState extends State<MapPage> {
                     Align(
                       alignment: Alignment.topCenter,
                       child: GradientAppBar(
+                        fromRoot: widget.fromRoot,
                         onPinChange: onPinChange,
                         onFilterChange: onFilterChange,
                         title: !isSearchMode
@@ -374,12 +377,13 @@ class MapPageState extends State<MapPage> {
 class GradientAppBar extends StatelessWidget {
   final Widget title;
   final double barHeight = 260.0;
+  final bool fromRoot;
 
   final GetFilters onFilterChange;
 
   final Function(String) onPinChange;
 
-  GradientAppBar({this.title, this.onFilterChange, this.onPinChange});
+  GradientAppBar({this.title, this.onFilterChange, this.onPinChange, this.fromRoot});
 
   @override
   Widget build(BuildContext context) {
@@ -397,12 +401,13 @@ class GradientAppBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.arrow_back_ios),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
+              if(!fromRoot)
+                IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               Expanded(child: title),
             ],
           ),

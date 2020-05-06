@@ -17,7 +17,7 @@ class SurveyCard extends StatelessWidget {
       opacity: selectedQuestion == null || question == selectedQuestion ? 1 : 0.4,
       child: Card(
         elevation: 5,
-        color: Theme.of(context).cardColor,
+        color: Theme.of(context).primaryColorLight,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
           side: BorderSide(
@@ -40,7 +40,7 @@ class SurveyCard extends StatelessWidget {
                     .toString(),
                 style: TextStyle(
                   fontSize: 30,
-                  color: Theme.of(context).primaryColorLight,
+                  color: Theme.of(context).primaryColorDark,
                   shadows: [
                     Shadow(
                       color: Theme.of(context).highlightColor,
@@ -54,7 +54,7 @@ class SurveyCard extends StatelessWidget {
                 "Doktor Yanıtladı.",
                 style: TextStyle(
                   fontSize: 12,
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).primaryColorDark,
                   shadows: [
                     Shadow(
                       color: Theme.of(context).highlightColor,
@@ -74,7 +74,7 @@ class SurveyCard extends StatelessWidget {
                     question.questionText,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        color: Theme.of(context).primaryColorLight,
+                        color: Theme.of(context).cardColor,
                         fontSize: 12),
                   ),
                 ],

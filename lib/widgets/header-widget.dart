@@ -33,10 +33,10 @@ class HeaderWidget extends StatelessWidget {
             gradient: LinearGradient(
               colors: [
                 isDarkTeheme
-                    ? Theme.of(context).primaryColorDark
+                    ? Theme.of(context).primaryColorLight
                     : Theme.of(context).primaryColor,
                 isDarkTeheme
-                    ? Theme.of(context).primaryColorDark
+                    ? Theme.of(context).primaryColorLight
                     : Theme.of(context).primaryColor,
                 isDarkTeheme ? Colors.transparent : Colors.white
               ],

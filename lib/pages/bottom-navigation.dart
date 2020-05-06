@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:pinemoji/pages/map_page.dart';
 import 'package:pinemoji/repositories/map_repository.dart';
 import 'package:pinemoji/pages/health.dart';
 import 'package:pinemoji/pages/survey-result.dart';
+import 'package:pinemoji/services/authentication-service.dart';
 import 'package:pinemoji/shared/noti_icons_icons.dart';
 import 'package:pinemoji/widgets/bottom.navi.bar.dart';
 
 import 'material.dart';
 
 class BottomNavigation extends StatefulWidget {
-  final bool isAdminUser;
-  BottomNavigation({this.isAdminUser = false});
   @override
   _BottomNavigationState createState() => _BottomNavigationState();
 }
@@ -54,30 +54,29 @@ class _BottomNavigationState extends State<BottomNavigation> {
           ),
         ),
         child: Scaffold(
-          backgroundColor: !widget.isAdminUser || _selectedIndex == 0 ? Colors.transparent : Theme.of(context).primaryColorLight,
+          backgroundColor: Colors.transparent,
           bottomNavigationBar: BottomNavyBar(
             selectedIndex: _selectedIndex,
             backgroundColor: Colors.transparent,
-            shadowColor: !widget.isAdminUser || _selectedIndex == 0 ? Colors.white38 : Theme.of(context).primaryColor,
+            shadowColor: Colors.white38,
             showElevation: true,
             // use this to remove appBar's elevation
             onItemSelected: (index) => setState(() {
               _selectedIndex = index;
-              _pageController.animateToPage(index,
-                  duration: Duration(milliseconds: 300), curve: Curves.ease);
+              _pageController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.ease);
             }),
             items: [
               BottomNavyBarItem(
                   icon: Icon(NotiIcons.compass_1),
                   title: Text("Malzeme\nDurumu"),
                   activeColor: Theme.of(context).primaryColorDark,
-                  inactiveColor: !widget.isAdminUser || _selectedIndex == 0 ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
+                  inactiveColor: Theme.of(context).primaryColorLight,
                   textAlign: TextAlign.center),
               BottomNavyBarItem(
                   icon: Icon(Icons.error_outline),
                   title: Text("Sağlık\nDurumu"),
                   activeColor: Theme.of(context).primaryColorDark,
-                  inactiveColor: !widget.isAdminUser || _selectedIndex == 0 ? Theme.of(context).primaryColorLight : Theme.of(context).primaryColor,
+                  inactiveColor: Theme.of(context).primaryColorLight,
                   textAlign: TextAlign.center),
             ],
           ),
@@ -87,8 +86,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
               setState(() => _selectedIndex = index);
             },
             children: <Widget>[
-              MaterialStatus(),
-              widget.isAdminUser ? SurveyResultPage() : HealthStatus(),
+              ["TTBA", "PD"].contains(AuthenticationService.verifiedUser.extraInfo['status']) ? MapPage(fromRoot: true,) : MaterialStatus(),
+              AuthenticationService.verifiedUser.extraInfo['status'] == "TTBA"  ? SurveyResultPage() : HealthStatus(),
             ],
           ),
         ),

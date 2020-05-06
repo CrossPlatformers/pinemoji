@@ -174,9 +174,7 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
       context,
       MaterialPageRoute(
         builder: (BuildContext context) {
-          return BottomNavigation(
-            isAdminUser: AuthenticationService.verifiedUser.extraInfo['status'] == 'TTBA',
-          );
+          return BottomNavigation();
         },
       ),
       (Route<dynamic> route) => false,
