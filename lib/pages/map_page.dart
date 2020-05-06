@@ -45,7 +45,7 @@ class MapPageState extends State<MapPage> {
 
   List<String> lastEmojiIdList;
 
-  String lastSelectedPin;
+  String lastSelectedPin = "Acil Destek";
 
   Timer _debounce;
   Timer _debounceNested;
@@ -399,7 +399,6 @@ class MapPageState extends State<MapPage> {
     lastEmojiIdList = filters;
     getCurrentLocationMarkers();
   }
-
 
   onPinChange(String currentPin) {
 //    print(currentPin.toString());
