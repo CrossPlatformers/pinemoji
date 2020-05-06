@@ -153,6 +153,7 @@ class _MaterialStatusState extends State<MaterialStatus> {
                       }
                       for (var current in MaterialStatus.materialModelList) {
                         current.isBlur = false;
+                        current.hasBorder = true;
                       }
                       setState(() {});
                     },
