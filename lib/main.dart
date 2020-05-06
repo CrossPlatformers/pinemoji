@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void listenConnection() async {
-    // hasConnection = await this.hasInternet();
+    hasConnection = await this.hasInternet();
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if (result == ConnectivityResult.mobile ||
           result == ConnectivityResult.wifi) {
