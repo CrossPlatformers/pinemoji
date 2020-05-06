@@ -133,18 +133,18 @@ class MapPageState extends State<MapPage> {
                                       ),
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () => setState(() {
-                                      isSearchMode = true;
-                                    }),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        Icons.search,
-                                        color: Color(0xffC7CAD1),
-                                      ),
-                                    ),
-                                  ),
+                                  // GestureDetector(
+                                  //   onTap: () => setState(() {
+                                  //     isSearchMode = true;
+                                  //   }),
+                                  //   child: Padding(
+                                  //     padding: const EdgeInsets.all(8.0),
+                                  //     child: Icon(
+                                  //       Icons.search,
+                                  //       color: Color(0xffC7CAD1),
+                                  //     ),
+                                  //   ),
+                                  // ),
                                 ],
                               )
                             : SearchBar(
