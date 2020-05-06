@@ -47,6 +47,13 @@ class MapPageState extends State<MapPage> {
     super.initState();
     handleLocation();
     handleMapIdleRequest();
+    getCurrentLocationMarkers();
+  }
+
+  @override
+  void dispose() {
+    MapRepository.clear();
+    super.dispose();
   }
 
   @override
@@ -151,6 +158,11 @@ class MapPageState extends State<MapPage> {
                         child: FloatingActionButton.extended(
                           onPressed: () {
                             getCurrentLocationMarkers();
+                            if (_mapButtonVisibility == 1 && mounted) {
+                              setState(() {
+                                _mapButtonVisibility = 0;
+                              });
+                            }
                           },
                           label: Text('Search This Area!'),
                           icon: Icon(Icons.search),
@@ -320,8 +332,8 @@ class MapPageState extends State<MapPage> {
     setState(() {
       lastRequestList.length;
     });
-    print(lastRequestList.length);
-    print(MapRepository.markers.length);
+//    print(lastRequestList.length);
+//    print(MapRepository.markers.length);
   }
 
   void handleLocation() async {
@@ -348,13 +360,13 @@ class MapPageState extends State<MapPage> {
   }
 
   Function onFilterChange(List<String> filters) {
-    print(filters.toString());
+//    print(filters.toString());
     lastEmojiIdList = filters;
     getCurrentLocationMarkers(emojiIdList: lastEmojiIdList);
   }
 
   onPinChange(String currentPin) {
-    print(currentPin.toString());
+//    print(currentPin.toString());
     getCurrentLocationMarkers(emojiIdList: lastEmojiIdList, option: currentPin);
   }
 }
