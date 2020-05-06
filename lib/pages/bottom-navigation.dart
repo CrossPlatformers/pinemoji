@@ -63,20 +63,23 @@ class _BottomNavigationState extends State<BottomNavigation> {
             // use this to remove appBar's elevation
             onItemSelected: (index) => setState(() {
               _selectedIndex = index;
-              _pageController.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.ease);
+              _pageController.animateToPage(index,
+                  duration: Duration(milliseconds: 300), curve: Curves.ease);
             }),
             items: [
               BottomNavyBarItem(
                   icon: Icon(NotiIcons.compass_1),
                   title: Text("Malzeme\nDurumu"),
                   activeColor: Theme.of(context).primaryColorDark,
-                  inactiveColor: Theme.of(context).primaryColorLight,
+                  inactiveColor:
+                      Theme.of(context).primaryColorLight.withOpacity(.5),
                   textAlign: TextAlign.center),
               BottomNavyBarItem(
                   icon: Icon(Icons.error_outline),
                   title: Text("Sağlık\nDurumu"),
                   activeColor: Theme.of(context).primaryColorDark,
-                  inactiveColor: Theme.of(context).primaryColorLight,
+                  inactiveColor:
+                      Theme.of(context).primaryColorLight.withOpacity(.5),
                   textAlign: TextAlign.center),
             ],
           ),
@@ -87,8 +90,17 @@ class _BottomNavigationState extends State<BottomNavigation> {
               setState(() => _selectedIndex = index);
             },
             children: <Widget>[
-              ["TTBA", "PD"].contains(AuthenticationService.verifiedUser.extraInfo['status']) ? MapPage(fromRoot: true,) : MaterialStatus(),
-              AuthenticationService.verifiedUser.extraInfo['status'] == "TTBA"  ? SurveyResultPage() : HealthStatus(),
+              [
+                "TTBA",
+                "PD"
+              ].contains(AuthenticationService.verifiedUser.extraInfo['status'])
+                  ? MapPage(
+                      fromRoot: true,
+                    )
+                  : MaterialStatus(),
+              AuthenticationService.verifiedUser.extraInfo['status'] == "TTBA"
+                  ? SurveyResultPage()
+                  : HealthStatus(),
             ],
           ),
         ),
