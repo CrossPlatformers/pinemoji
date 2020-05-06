@@ -409,7 +409,7 @@ class MapPageState extends State<MapPage> {
   void animateCamera(LatLng latLang) async {
     final GoogleMapController controller = await _controller.future;
     await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 20));
-    await Future.delayed(Duration(milliseconds: 400));
+    await Future.delayed(Duration(milliseconds: 600));
     await controller.animateCamera(CameraUpdate.scrollBy(0, -25));
   }
 }
@@ -654,6 +654,7 @@ class _ConditionFilterState extends State<ConditionFilter> {
       });
     } else {
       conditionFilterModels.first.isActive = true;
+      if (widget.onPinChange != null) widget.onPinChange(conditionFilterModels.first.text);
     }
   }
 
