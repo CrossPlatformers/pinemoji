@@ -9,7 +9,8 @@ import 'package:pinemoji/widgets/material-widget.dart';
 class MaterialWidgetController extends StatefulWidget {
   final List<MaterialStatusModel> materialStatusModelList;
   List<Request> requestList;
-  MaterialWidgetController({Key key, this.materialStatusModelList,this.requestList})
+  MaterialWidgetController(
+      {Key key, this.materialStatusModelList, this.requestList})
       : super(key: key);
   @override
   _MaterialWidgetControllerState createState() =>
@@ -24,42 +25,41 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
     RequestRepository().getMyRequests().then((requestList) {
       setState(() {
         widget.requestList = requestList;
-        for(var request in requestList){
-          var currentWidget = widget.materialStatusModelList.firstWhere((x) => x.id == request.emoji);
-          setRequest(request.option,currentWidget);
+        for (var request in requestList) {
+          var currentWidget = widget.materialStatusModelList
+              .firstWhere((x) => x.id == request.emoji);
+          setRequest(request.option, currentWidget);
         }
       });
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
-
-        return Expanded(
-          child: SingleChildScrollView(
-            child: Container(
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: materialList(
-                        widget.materialStatusModelList.take(2).toList()),
-                  ),
-                  VisibilityCondition(
-                    isVisible: (getIndex() == 0 || getIndex() == 1) && timeout,
-                    onFilterChange: (name) {
-                      setEmojiBorder(name);
-                    },
-                    state: getState(),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: materialList(
-                        widget.materialStatusModelList.skip(2).take(2).toList()),
-                  ),
-                  VisibilityCondition(
-                    isVisible: (getIndex() == 2 || getIndex() == 3) && timeout,
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: materialList(
+                    widget.materialStatusModelList.take(2).toList()),
+              ),
+              VisibilityCondition(
+                isVisible: (getIndex() == 0 || getIndex() == 1) && timeout,
+                onFilterChange: (name) {
+                  setEmojiBorder(name);
+                },
+                state: getState(),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: materialList(
+                    widget.materialStatusModelList.skip(2).take(2).toList()),
+              ),
+              VisibilityCondition(
+                isVisible: (getIndex() == 2 || getIndex() == 3) && timeout,
                 onFilterChange: (name) {
                   setEmojiBorder(name);
                 },
@@ -91,26 +91,27 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
   void setEmojiBorder(name) {
     var currentWidget = widget.materialStatusModelList.elementAt(getIndex());
     setState(() {
-      setRequest(name,currentWidget);
+      setRequest(name, currentWidget);
     });
   }
-  void setRequest(name,currentWidget){
+
+  void setRequest(name, currentWidget) {
     switch (name) {
-        case "Acil Destek":
-          currentWidget.color = Color(0xFFF93963);
-          currentWidget.markerType = MarkerType.red;
-          break;
-        case "Azalıyor !":
-          currentWidget.color = Color(0xFFEBEE51);
-          currentWidget.markerType = MarkerType.yellow;
-          break;
-        case "Yeterli":
-          currentWidget.color = Color(0xFF1CABCB);
-          currentWidget.markerType = MarkerType.blue;
-          break;
-        default:
-          currentWidget.color = Colors.white38;
-      }
+      case "Acil Destek":
+        currentWidget.color = Color(0xFFF93963);
+        currentWidget.markerType = MarkerType.red;
+        break;
+      case "Azalıyor !":
+        currentWidget.color = Color(0xFFEBEE51);
+        currentWidget.markerType = MarkerType.yellow;
+        break;
+      case "Yeterli":
+        currentWidget.color = Color(0xFF1CABCB);
+        currentWidget.markerType = MarkerType.blue;
+        break;
+      default:
+        currentWidget.color = Colors.white38;
+    }
   }
 
   int getIndex() {
@@ -139,16 +140,15 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
         child: GestureDetector(
           onTap: () async {
             if (!materialModelWidget.isActive) {
-              for (var current in widget.materialStatusModelList){
+              for (var current in widget.materialStatusModelList) {
                 current.isActive = false;
                 timeout = false;
               }
             }
             setState(() {
               materialModelWidget.isActive = !materialModelWidget.isActive;
-
             });
-            await Future.delayed(Duration(milliseconds: 100));
+            await Future.delayed(Duration(milliseconds: 125));
             setState(() {
               timeout = true;
             });
