@@ -124,8 +124,7 @@ class MapPageState extends State<MapPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.only(top: 8),
+                                    padding: const EdgeInsets.only(top: 8),
                                     child: Container(
                                       width: 150,
                                       child: HeaderWidget(
@@ -409,9 +408,9 @@ class MapPageState extends State<MapPage> {
 
   void animateCamera(LatLng latLang) async {
     final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 16));
-    await Future.delayed(Duration(milliseconds: 400));
-    await controller.animateCamera(CameraUpdate.scrollBy(0, -50));
+    await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 20));
+    await Future.delayed(Duration(milliseconds: 200));
+    await controller.animateCamera(CameraUpdate.scrollBy(0, -25));
   }
 }
 
@@ -595,6 +594,9 @@ class StockFilterState extends State<StockFilter> {
   void initState() {
     super.initState();
     _filters.add(_cast.first.id);
+    if (widget.onFilterChange != null) {
+      widget.onFilterChange(_filters);
+    }
   }
 
   @override
@@ -643,8 +645,15 @@ class _ConditionFilterState extends State<ConditionFilter> {
     super.initState();
     if (widget.state != null) {
       conditionFilterModels.forEach((element) {
-        element.isActive = widget.state == element.text ? true : false;
+        if (widget.state == element.text) {
+          element.isActive = true;
+          if (widget.onPinChange != null) widget.onPinChange(element.text);
+        } else {
+          element.isActive = false;
+        }
       });
+    } else {
+      conditionFilterModels.first.isActive = true;
     }
   }
 
