@@ -145,10 +145,13 @@ class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
                 timeout = false;
                 setState(() {
                   current.isBlur = true;
+                  current.hasBorder = false;
+                  materialModelWidget.hasBorder = true;
                   materialModelWidget.isBlur = false;
                 });
               } else {
                 setState(() {
+                  current.hasBorder = true;
                   current.isBlur = false;
                 });
               }
