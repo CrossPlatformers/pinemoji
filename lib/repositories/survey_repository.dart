@@ -62,7 +62,7 @@ class SurveyRepository {
             if (questionAnswerMap[res.questionId] != null)
               res.answerList.firstWhere((a) => a.answerText == questionAnswerMap[res.questionId]).ownerList[user.uid] = "9 Eylül Üniversitesi Hastanesi"
           });
-      await documentReference.updateData(result.toMap());
+      await Firestore.instance.collection(collectionName).document(snapshot.documentID).setData(result.toMap());
     }
   }
 

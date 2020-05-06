@@ -15,14 +15,14 @@ String requestToJson(Request data) => json.encode(data.toMap());
 
 class Request {
   String id;
-  final String ownerId;
-  final LatLng location;
-  final String locationName;
-  final String companyId;
+  String ownerId;
+  LatLng location;
+  String locationName;
+  String companyId;
   String emoji;
-  final String image;
+  String image;
   String state;
-  final List<Response> responseList;
+  List<Response> responseList;
   String option;
   DateTime date;
 
