@@ -647,14 +647,14 @@ class _ConditionFilterState extends State<ConditionFilter> {
       conditionFilterModels.forEach((element) {
         if (widget.state == element.text) {
           element.isActive = true;
-          if (widget.onPinChange != null) widget.onPinChange(element.text);
+          // if (widget.onPinChange != null) widget.onPinChange(element.text);
         } else {
           element.isActive = false;
         }
       });
     } else {
       conditionFilterModels.first.isActive = true;
-      if (widget.onPinChange != null) widget.onPinChange(conditionFilterModels.first.text);
+      // if (widget.onPinChange != null) widget.onPinChange(conditionFilterModels.first.text);
     }
   }
 
