@@ -10,6 +10,7 @@ import 'package:pinemoji/repositories/company_repository.dart';
 import 'package:pinemoji/repositories/map_repository.dart';
 import 'package:pinemoji/repositories/request_repository.dart';
 import 'package:pinemoji/services/authentication-service.dart';
+import 'package:pinemoji/widgets/header-widget.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
 
 class MapPage extends StatefulWidget {
@@ -123,14 +124,13 @@ class MapPageState extends State<MapPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Malzemeler',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        decoration: TextDecoration.underline,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                    padding:
+                                        const EdgeInsets.only(top: 8),
+                                    child: Container(
+                                      width: 150,
+                                      child: HeaderWidget(
+                                        title: "Malzemeler",
+                                        isDarkTeheme: true,
                                       ),
                                     ),
                                   ),
