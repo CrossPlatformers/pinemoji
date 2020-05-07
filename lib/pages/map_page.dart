@@ -172,8 +172,15 @@ class MapPageState extends State<MapPage> {
                               });
                             }
                           },
-                          label: Text('Search This Area!'),
-                          icon: Icon(Icons.search),
+                          label: Text(
+                            'Bu Bölgede Ara',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          icon: Icon(
+                            Icons.search,
+                            size: 20,
+                          ),
+                          backgroundColor: Theme.of(context).primaryColorDark,
                         ),
                       ),
                     ),
@@ -193,7 +200,8 @@ class MapPageState extends State<MapPage> {
             alignment: Alignment.bottomCenter,
             child: AnimatedContainer(
               duration: Duration(milliseconds: 400),
-              height: closeList ? 100 : MediaQuery.of(context).size.height / 2.3,
+              height:
+                  closeList ? 100 : MediaQuery.of(context).size.height / 2.3,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   color: Colors.white,
