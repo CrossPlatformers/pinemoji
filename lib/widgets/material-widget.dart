@@ -10,6 +10,7 @@ class MaterialStatusModel {
   String text;
   bool isActive = false;
   bool isBlur = false;
+  bool hasBorder = true;
   MarkerType markerType;
   Color color;
   MaterialStatusModel({String emoji, String text, Color color, String id}) {
@@ -32,9 +33,11 @@ class MaterialStatusContent extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(
-          color: materialStatusModel.color,
-        ),
+        border: materialStatusModel.hasBorder
+            ? Border.all(
+                color: materialStatusModel.color,
+              )
+            : Border.fromBorderSide(BorderSide.none),
       ),
       height: size.width / 3,
       width: size.width / 3,

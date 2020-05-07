@@ -10,6 +10,7 @@ import 'package:pinemoji/repositories/company_repository.dart';
 import 'package:pinemoji/repositories/map_repository.dart';
 import 'package:pinemoji/repositories/request_repository.dart';
 import 'package:pinemoji/services/authentication-service.dart';
+import 'package:pinemoji/widgets/header-widget.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
 
 class MapPage extends StatefulWidget {
@@ -44,6 +45,8 @@ class MapPageState extends State<MapPage> {
 
   List<String> lastEmojiIdList;
 
+  String lastSelectedPin = "Acil Destek";
+
   Timer _debounce;
   Timer _debounceNested;
   bool closeList = true;
@@ -76,12 +79,13 @@ class MapPageState extends State<MapPage> {
                     Column(
                       children: <Widget>[
                         Container(
-                          height: MediaQuery.of(context).size.height / 5,
+                          height: MediaQuery.of(context).size.height / 8,
                         ),
                         Expanded(
                           child: GoogleMap(
                             myLocationButtonEnabled: false,
                             myLocationEnabled: true,
+                            zoomControlsEnabled: false,
                             onCameraMove: (CameraPosition cameraPosition) {
                               _lastCameraPosition = cameraPosition;
 //                              cameraPosition.
@@ -97,11 +101,7 @@ class MapPageState extends State<MapPage> {
                             },
                             cameraTargetBounds: _cameraTargetBounds,
                             mapType: MapType.normal,
-                            initialCameraPosition: _lastCameraPosition ??
-                                CameraPosition(
-                                    target: AuthenticationService
-                                        .verifiedUser.location,
-                                    zoom: 10),
+                            initialCameraPosition: _lastCameraPosition,
                             onMapCreated:
                                 (GoogleMapController controller) async {
                               String mapStyle = await rootBundle
@@ -127,29 +127,27 @@ class MapPageState extends State<MapPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Malzemeler',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        decoration: TextDecoration.underline,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                    padding: const EdgeInsets.only(top: 8),
+                                    child: Container(
+                                      width: 150,
+                                      child: HeaderWidget(
+                                        title: "Malzemeler",
+                                        isDarkTeheme: true,
                                       ),
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () => setState(() {
-                                      isSearchMode = true;
-                                    }),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        Icons.search,
-                                        color: Color(0xffC7CAD1),
-                                      ),
-                                    ),
-                                  ),
+                                  // GestureDetector(
+                                  //   onTap: () => setState(() {
+                                  //     isSearchMode = true;
+                                  //   }),
+                                  //   child: Padding(
+                                  //     padding: const EdgeInsets.all(8.0),
+                                  //     child: Icon(
+                                  //       Icons.search,
+                                  //       color: Color(0xffC7CAD1),
+                                  //     ),
+                                  //   ),
+                                  // ),
                                 ],
                               )
                             : SearchBar(
@@ -195,7 +193,7 @@ class MapPageState extends State<MapPage> {
             alignment: Alignment.bottomCenter,
             child: AnimatedContainer(
               duration: Duration(milliseconds: 400),
-              height: closeList ? 90 : MediaQuery.of(context).size.height / 2.3,
+              height: closeList ? 100 : MediaQuery.of(context).size.height / 2.3,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -212,10 +210,11 @@ class MapPageState extends State<MapPage> {
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
                         setState(() {
-                        closeList = !closeList;
-                        Future.delayed(Duration(milliseconds: 100)).then(
-                            (val) => setState(() => {showHeader = closeList}));
-                      });
+                          closeList = !closeList;
+                          Future.delayed(Duration(milliseconds: 100)).then(
+                              (val) =>
+                                  setState(() => {showHeader = closeList}));
+                        });
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -355,14 +354,11 @@ class MapPageState extends State<MapPage> {
 //    ));
 //  }
 
-  getCurrentLocationMarkers({
-    List<String> emojiIdList,
-    String option,
-  }) async {
+  getCurrentLocationMarkers() async {
     lastRequestList = await MapRepository.getCurrentLocationMarkers(
       latLngBounds: lastLatLngBounds,
-      option: option,
-      emojiIdList: emojiIdList,
+      option: lastSelectedPin,
+      emojiIdList: lastEmojiIdList,
     );
     setState(() {
       lastRequestList.length;
@@ -372,6 +368,11 @@ class MapPageState extends State<MapPage> {
   }
 
   void handleLocation() async {
+    if (AuthenticationService.verifiedUser.location != null) {
+      _lastCameraPosition = CameraPosition(
+          target: AuthenticationService.verifiedUser.location, zoom: 12);
+      return;
+    }
     location = lc.Location();
     lc.PermissionStatus hasPermission = await location.hasPermission();
     if (hasPermission == lc.PermissionStatus.granted) {
@@ -397,19 +398,20 @@ class MapPageState extends State<MapPage> {
   Function onFilterChange(List<String> filters) {
 //    print(filters.toString());
     lastEmojiIdList = filters;
-    getCurrentLocationMarkers(emojiIdList: lastEmojiIdList);
+    getCurrentLocationMarkers();
   }
 
   onPinChange(String currentPin) {
 //    print(currentPin.toString());
-    getCurrentLocationMarkers(emojiIdList: lastEmojiIdList, option: currentPin);
+    lastSelectedPin = currentPin;
+    getCurrentLocationMarkers();
   }
 
   void animateCamera(LatLng latLang) async {
     final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 16));
-    await Future.delayed(Duration(milliseconds: 400));
-    await controller.animateCamera(CameraUpdate.scrollBy(0, -50));
+    await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 20));
+    await Future.delayed(Duration(milliseconds: 600));
+    await controller.animateCamera(CameraUpdate.scrollBy(0, -25));
   }
 }
 
@@ -455,6 +457,7 @@ class GradientAppBar extends StatelessWidget {
             height: 8,
           ),
           ConditionFilter(
+            state: "Acil Destek",
             onPinChange: onPinChange,
           ),
           Expanded(
@@ -589,6 +592,15 @@ class StockFilterState extends State<StockFilter> {
   Color activeColor() => Color(0xffF93963);
 
   @override
+  void initState() {
+    super.initState();
+    _filters.add(_cast.first.id);
+    if (widget.onFilterChange != null) {
+      widget.onFilterChange(_filters);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -618,7 +630,6 @@ class _ConditionFilterState extends State<ConditionFilter> {
     ConditionFilterModel(
       text: 'Acil Destek',
       imagePath: 'assets/pins/red.png',
-      isActive: true,
     ),
     ConditionFilterModel(
       text: 'Azalıyor !',
@@ -635,8 +646,16 @@ class _ConditionFilterState extends State<ConditionFilter> {
     super.initState();
     if (widget.state != null) {
       conditionFilterModels.forEach((element) {
-        element.isActive = widget.state == element.text ? true : false;
+        if (widget.state == element.text) {
+          element.isActive = true;
+          // if (widget.onPinChange != null) widget.onPinChange(element.text);
+        } else {
+          element.isActive = false;
+        }
       });
+    } else {
+      conditionFilterModels.first.isActive = true;
+      // if (widget.onPinChange != null) widget.onPinChange(conditionFilterModels.first.text);
     }
   }
 

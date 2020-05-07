@@ -37,71 +37,75 @@ class _HealthStatusState extends State<HealthStatus> {
       key: _scaffOldState,
       backgroundColor: Colors.transparent,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 20, top: 20),
-              child: Container(
-                width: 180,
-                child: HeaderWidget(
-                  title: "Sağlık Durumu",
-                  isDarkTeheme: true,
+        child: GestureDetector(
+          onTap: ()=> FocusScope.of(context).requestFocus(FocusNode()),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 20, top: 20),
+                child: Container(
+                  width: 180,
+                  child: HeaderWidget(
+                    title: "Sağlık Durumu",
+                    isDarkTeheme: true,
+                  ),
                 ),
               ),
-            ),
-            hasLoading
-                ? Expanded(
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircularProgressIndicator(
-                            backgroundColor: Colors.white70,
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            "Anket Gönderiliyor...",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
+              hasLoading
+                  ? Expanded(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(
+                              backgroundColor: Colors.white70,
                             ),
-                          )
-                        ],
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              "Anket Gönderiliyor...",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontStyle: FontStyle.italic,
+                                fontSize: 24,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
+                    )
+                  : VerticalSlider(
+                      survey: HealthStatus.survey,
+                      result: resultMap,
                     ),
-                  )
-                : VerticalSlider(
-                    survey: HealthStatus.survey,
-                    result: resultMap,
-                  ),
-            !hasLoading
-                ? OutcomeButton(
-                    text: "Durum Bildir",
-                    action: () async {
-                      setState(() {
-                        hasLoading = true;
-                      });
-                      var status = await SurveyRepository()
-                          .sendSurvey(HealthStatus.survey.id, resultMap);
-                      setState(() {
-                        hasLoading = false;
-                      });
-                      if (status) {
-                        showWarning("Anket başarıyla gönderildi");
-                      } else {
-                        showWarning(
-                            "İşlem sırasında hata oluştu, lütfen tekrar deneyiniz");
-                      }
-                    },
-                  )
-                : Container(),
-            SizedBox(
-              height: 40,
-            ),
-          ],
+              !hasLoading
+                  ? OutcomeButton(
+                      text: "Durum Bildir",
+                      action: () async {
+                        setState(() {
+                          hasLoading = true;
+                        });
+                        var status = await SurveyRepository()
+                            .sendSurvey(HealthStatus.survey.id, resultMap);
+                        setState(() {
+                          hasLoading = false;
+                        });
+                        if (status) {
+                          showWarning("Anket başarıyla gönderildi");
+                        } else {
+                          showWarning(
+                              "İşlem sırasında hata oluştu, lütfen tekrar deneyiniz");
+                        }
+                      },
+                    )
+                  : Container(),
+              SizedBox(
+                height: 40,
+              ),
+            ],
+          ),
         ),
       ),
     );
