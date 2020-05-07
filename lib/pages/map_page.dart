@@ -127,7 +127,8 @@ class MapPageState extends State<MapPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 8),
+                                    padding:
+                                        const EdgeInsets.only(top: 8, left: 8),
                                     child: Container(
                                       width: 150,
                                       child: HeaderWidget(
@@ -401,7 +402,7 @@ class MapPageState extends State<MapPage> {
         handleLocation();
       }
     }
-    if(_lastCameraPosition == null){
+    if (_lastCameraPosition == null) {
       //40.0903484,30.4452252,6z
       _lastCameraPosition = CameraPosition(
         target: LatLng(40.0903484, 30.4452252),
