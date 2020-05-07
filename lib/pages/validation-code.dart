@@ -6,6 +6,7 @@ import 'package:pinemoji/widgets/outcome-button.dart';
 
 class ValidationCodePage extends StatefulWidget {
   String verificationId;
+
   ValidationCodePage({this.verificationId});
 
   @override
@@ -17,6 +18,9 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
   bool hasLoading = false;
 
   final TextEditingController codeController = new TextEditingController();
+
+  ScrollController _controller = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -25,113 +29,133 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
+    final size = MediaQuery.of(context).size;
+    final mediaQuery = MediaQuery.of(context);
+    final double width = size.width;
+    final double height = size.height;
+    final bodyHeight =
+        height - (mediaQuery.padding.bottom + mediaQuery.padding.top);
     return Scaffold(
       key: _scaffOldState,
       body: !hasLoading
           ? GestureDetector(
               onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
               child: SafeArea(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            "assets/welcome-left.png",
-                            height: double.infinity,
-                            fit: BoxFit.fill,
-                            width: width - height * 0.1,
-                          ),
-                          SizedBox(
-                            width: height * 0.1,
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: height * 0.25,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(left: 30),
-                            child: Container(
-                              child: Text(
-                                "Telefonunuza\nGönderdiğimiz Kodu\nGiriniz.",
-                                style: TextStyle(
-                                  fontSize: (height * 0.04).toInt().toDouble(),
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).primaryColorDark,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
+                child: SingleChildScrollView(
+                  controller: _controller,
+                  child: Container(
+                    height: bodyHeight,
+                    width: width,
+                    child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Container(
-                          width: height * 0.22,
-                          padding: EdgeInsets.only(right: 20),
-                          child: Column(
-                            children: <Widget>[
+                        Expanded(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Image.asset(
+                                "assets/welcome-left.png",
+                                height: double.infinity,
+                                fit: BoxFit.fill,
+                                width: width - height * 0.1,
+                              ),
                               SizedBox(
-                                height: height * 0.022,
-                              ),
-                              TextField(
-                                controller: codeController,
-                                decoration: InputDecoration(
-                                    counterText: "",
-                                    border: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        width: 0,
-                                        style: BorderStyle.none,
-                                      ),
-                                    ),
-                                    hintText: "xx xx xx"),
-                                textAlign: TextAlign.end,
-                                maxLength: 6,
-                                keyboardType: TextInputType.number,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: (height * 0.04).toInt().toDouble(),
-                                ),
-                              ),
-                              Container(
-                                height: 1,
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(colors: [
-                                  Theme.of(context).primaryColor,
-                                  Theme.of(context).primaryColor,
-                                  Colors.white
-                                ])),
+                                width: height * 0.1,
                               )
                             ],
                           ),
                         ),
+                        Container(
+                          height: height * 0.25,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: Container(
+                                  child: Text(
+                                    "Telefonunuza\nGönderdiğimiz Kodu\nGiriniz.",
+                                    style: TextStyle(
+                                      fontSize:
+                                          (height * 0.04).toInt().toDouble(),
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).primaryColorDark,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Container(
+                              width: height * 0.22,
+                              padding: EdgeInsets.only(right: 20),
+                              child: Column(
+                                children: <Widget>[
+                                  SizedBox(
+                                    height: height * 0.022,
+                                  ),
+                                  TextField(
+                                    controller: codeController,
+                                    onTap: () async {
+                                      await Future.delayed(Duration(milliseconds: 400));
+                                      _controller.animateTo(
+                                          _controller.position.maxScrollExtent,
+                                          duration: Duration(milliseconds: 250),
+                                          curve: Curves.ease);
+                                    },
+                                    decoration: InputDecoration(
+                                        counterText: "",
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            width: 0,
+                                            style: BorderStyle.none,
+                                          ),
+                                        ),
+                                        hintText: "xx xx xx"),
+                                    textAlign: TextAlign.end,
+                                    maxLength: 6,
+                                    keyboardType: TextInputType.number,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          (height * 0.04).toInt().toDouble(),
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 1,
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(colors: [
+                                      Theme.of(context).primaryColor,
+                                      Theme.of(context).primaryColor,
+                                      Colors.white
+                                    ])),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
+                          child: OutcomeButton(
+                            text: "Giriş Yap",
+                            action: () {
+                              signInWithPhoneNumber(context);
+                            },
+                          ),
+                        )
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
-                      child: OutcomeButton(
-                        text: "Giriş Yap",
-                        action: () {
-                          signInWithPhoneNumber(context);
-                        },
-                      ),
-                    )
-                  ],
+                  ),
                 ),
               ),
             )
