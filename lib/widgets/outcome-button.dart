@@ -3,7 +3,7 @@ import 'package:pinemoji/shared/custom-box-shadow.dart';
 
 class OutcomeButton extends StatelessWidget {
   const OutcomeButton({
-    Key key,
+    GlobalKey key,
     @required this.text,
     @required this.action,
   }) : super(key: key);

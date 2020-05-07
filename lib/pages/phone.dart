@@ -17,6 +17,7 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
   final _scaffOldState = GlobalKey<ScaffoldState>();
 
   final TextEditingController phoneController = new TextEditingController();
+  GlobalKey buttonKey = GlobalKey();
 
   @override
   void initState() {
@@ -34,104 +35,131 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
           ? GestureDetector(
               onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
               child: SafeArea(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          SizedBox(
-                            width: height * 0.1,
-                          ),
-                          Image.asset(
-                            "assets/welcome-right.png",
-                            height: double.infinity,
-                            fit: BoxFit.fill,
-                            width: width - height * 0.1,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: height * 0.25,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(left: 30),
-                            child: Container(
-                              child: Text(
-                                "Odamız İle\nPaylaşmış\nOlduğunuz Cep\nTelefonu Numaranızı\nGiriniz.",
-                                style: TextStyle(
-                                  fontSize: (height * 0.04).toInt().toDouble(),
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).primaryColorDark,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
+                child: SingleChildScrollView(
+                  child: Container(
+                    height: height,
+                    width: width,
+                    child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Container(
-                          width: height * 0.33,
-                          padding: EdgeInsets.only(right: 20),
-                          child: Column(
-                            children: <Widget>[
+                        Expanded(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
                               SizedBox(
-                                height: height * 0.022,
+                                width: height * 0.1,
                               ),
-                              TextField(
-                                controller: phoneController,
-                                decoration: InputDecoration(
-                                    counterText: "",
-                                    border: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        width: 0,
-                                        style: BorderStyle.none,
-                                      ),
-                                    ),
-                                    hintText: "05xx xxx xx xx"),
-                                maxLength: 11,
-                                style: TextStyle(
-                                  fontSize: (height * 0.04).toInt().toDouble(),
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                keyboardType: TextInputType.phone,
-                              ),
-                              Container(
-                                height: 1,
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(colors: [
-                                  Theme.of(context).primaryColor,
-                                  Theme.of(context).primaryColor,
-                                  Colors.white
-                                ])),
+                              Image.asset(
+                                "assets/welcome-right.png",
+                                height: double.infinity,
+                                fit: BoxFit.fill,
+                                width: width - height * 0.1,
                               ),
                             ],
                           ),
                         ),
+                        Container(
+                          height: height * 0.25,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: Container(
+                                  child: Text(
+                                    "Odamız İle\nPaylaşmış\nOlduğunuz Cep\nTelefonu Numaranızı\nGiriniz.",
+                                    style: TextStyle(
+                                      fontSize:
+                                          (height * 0.04).toInt().toDouble(),
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).primaryColorDark,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Container(
+                              width: height * 0.33,
+                              padding: EdgeInsets.only(right: 20),
+                              child: Column(
+                                children: <Widget>[
+                                  SizedBox(
+                                    height: height * 0.022,
+                                  ),
+                                  TextField(
+                                    onTap: () async {
+                                      await Future.delayed(
+                                          Duration(milliseconds: 300));
+                                      Scrollable.ensureVisible(
+                                        buttonKey.currentContext,
+                                        curve: Curves.easeIn,
+                                        duration: Duration(
+                                          milliseconds: 300,
+                                        ),
+                                      );
+                                    },
+                                    controller: phoneController,
+                                    decoration: InputDecoration(
+                                        counterText: "",
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            width: 0,
+                                            style: BorderStyle.none,
+                                          ),
+                                        ),
+                                        hintText: "05xx xxx xx xx"),
+                                    maxLength: 11,
+                                    style: TextStyle(
+                                      fontSize:
+                                          (height * 0.04).toInt().toDouble(),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    keyboardType: TextInputType.phone,
+                                  ),
+                                  Container(
+                                    height: 1,
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(colors: [
+                                      Theme.of(context).primaryColor,
+                                      Theme.of(context).primaryColor,
+                                      Colors.white
+                                    ])),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
+                          child: Column(
+                            children: <Widget>[
+                              OutcomeButton(
+                                text: "İlerle",
+                                action: () {
+                                  verifyPhone(context);
+                                },
+                              ),
+                              Container(
+                                key: buttonKey,
+                                height: 5,
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
-                      child: OutcomeButton(
-                        text: "İlerle",
-                        action: () {
-                          verifyPhone(context);
-                        },
-                      ),
-                    )
-                  ],
+                  ),
                 ),
               ),
             )

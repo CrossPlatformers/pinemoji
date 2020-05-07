@@ -6,6 +6,7 @@ import 'package:pinemoji/widgets/outcome-button.dart';
 
 class ValidationCodePage extends StatefulWidget {
   String verificationId;
+
   ValidationCodePage({this.verificationId});
 
   @override
@@ -17,6 +18,9 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
   bool hasLoading = false;
 
   final TextEditingController codeController = new TextEditingController();
+
+  GlobalKey buttonKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -33,105 +37,121 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
           ? GestureDetector(
               onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
               child: SafeArea(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            "assets/welcome-left.png",
-                            height: double.infinity,
-                            fit: BoxFit.fill,
-                            width: width - height * 0.1,
-                          ),
-                          SizedBox(
-                            width: height * 0.1,
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: height * 0.25,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(left: 30),
-                            child: Container(
-                              child: Text(
-                                "Telefonunuza\nGönderdiğimiz Kodu\nGiriniz.",
-                                style: TextStyle(
-                                  fontSize: (height * 0.04).toInt().toDouble(),
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).primaryColorDark,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
+                child: SingleChildScrollView(
+                  child: Container(
+                    height: height,
+                    width: width,
+                    child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Container(
-                          width: height * 0.22,
-                          padding: EdgeInsets.only(right: 20),
-                          child: Column(
-                            children: <Widget>[
+                        Expanded(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Image.asset(
+                                "assets/welcome-left.png",
+                                height: double.infinity,
+                                fit: BoxFit.fill,
+                                width: width - height * 0.1,
+                              ),
                               SizedBox(
-                                height: height * 0.022,
-                              ),
-                              TextField(
-                                controller: codeController,
-                                decoration: InputDecoration(
-                                    counterText: "",
-                                    border: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        width: 0,
-                                        style: BorderStyle.none,
-                                      ),
-                                    ),
-                                    hintText: "xx xx xx"),
-                                textAlign: TextAlign.end,
-                                maxLength: 6,
-                                keyboardType: TextInputType.number,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: (height * 0.04).toInt().toDouble(),
-                                ),
-                              ),
-                              Container(
-                                height: 1,
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(colors: [
-                                  Theme.of(context).primaryColor,
-                                  Theme.of(context).primaryColor,
-                                  Colors.white
-                                ])),
+                                width: height * 0.1,
                               )
                             ],
                           ),
                         ),
+                        Container(
+                          height: height * 0.25,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: Container(
+                                  child: Text(
+                                    "Telefonunuza\nGönderdiğimiz Kodu\nGiriniz.",
+                                    style: TextStyle(
+                                      fontSize:
+                                          (height * 0.04).toInt().toDouble(),
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).primaryColorDark,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Container(
+                              width: height * 0.22,
+                              padding: EdgeInsets.only(right: 20),
+                              child: Column(
+                                children: <Widget>[
+                                  SizedBox(
+                                    height: height * 0.022,
+                                  ),
+                                  TextField(
+                                    controller: codeController,
+                                    onTap: () => Scrollable.ensureVisible(
+                                      buttonKey.currentContext,
+                                      curve: Curves.easeIn,
+                                      duration: Duration(
+                                        milliseconds: 300,
+                                      ),
+                                    ),
+                                    decoration: InputDecoration(
+                                        counterText: "",
+                                        border: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            width: 0,
+                                            style: BorderStyle.none,
+                                          ),
+                                        ),
+                                        hintText: "xx xx xx"),
+                                    textAlign: TextAlign.end,
+                                    maxLength: 6,
+                                    keyboardType: TextInputType.number,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          (height * 0.04).toInt().toDouble(),
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 1,
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(colors: [
+                                      Theme.of(context).primaryColor,
+                                      Theme.of(context).primaryColor,
+                                      Colors.white
+                                    ])),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
+                          child: OutcomeButton(
+                            key: buttonKey,
+                            text: "Giriş Yap",
+                            action: () {
+                              signInWithPhoneNumber(context);
+                            },
+                          ),
+                        )
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
-                      child: OutcomeButton(
-                        text: "Giriş Yap",
-                        action: () {
-                          signInWithPhoneNumber(context);
-                        },
-                      ),
-                    )
-                  ],
+                  ),
                 ),
               ),
             )
