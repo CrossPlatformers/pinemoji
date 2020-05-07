@@ -32,10 +32,46 @@
               "client_type": 3
             },
             {
-              "client_id": "1074011055856-12gntuqjhd44jn13tdh5cgsirbafaqd6.apps.googleusercontent.com",
+              "client_id": "1074011055856-7eojmuh99dbr3g7iolg7vn3r49lrec8c.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.cagriaydin.pinemoji"
+                "bundle_id": "com.crossplatformers.pinemojiTTB"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1074011055856:android:c0a28dd57ad7abe9920435",
+        "android_client_info": {
+          "package_name": "com.crossplatformers.pinemojiTTB"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1074011055856-141e3fr1vtf00mmv1duadosmvot3nr6d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKIBYOGXy1w9MA4pIxj82_IOoxivL5Ao8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1074011055856-141e3fr1vtf00mmv1duadosmvot3nr6d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1074011055856-7eojmuh99dbr3g7iolg7vn3r49lrec8c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.crossplatformers.pinemojiTTB"
               }
             }
           ]
