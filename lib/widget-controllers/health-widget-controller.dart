@@ -24,7 +24,7 @@ class _HealthWidgetControllerState extends State<HealthWidgetController> {
   List<Widget> answerList(List<HealthStatusModel> healthStatusModelList) {
     if (widget.resultMap != null) {
       healthStatusModelList.forEach((healthModelWidget) {
-        if (healthModelWidget.text == widget.resultMap[widget.questionId] || healthModelWidget.hintText != null) {
+        if (healthModelWidget.text == widget.resultMap[widget.questionId] || healthModelWidget.hintText == widget.resultMap[widget.questionId]) {
           healthModelWidget.isActive = true;
         }
       });
@@ -36,7 +36,9 @@ class _HealthWidgetControllerState extends State<HealthWidgetController> {
           onTap: () {
             for (var current in healthStatusModelList) current.isActive = false;
             setState(() {
-              widget.resultMap[widget.questionId] = healthModelWidget.text;
+              if (widget.resultMap[widget.questionId] == null || !healthModelWidget.isOther) {
+                widget.resultMap[widget.questionId] = healthModelWidget.text;
+              }
               healthModelWidget.isActive = true;
             });
           },
