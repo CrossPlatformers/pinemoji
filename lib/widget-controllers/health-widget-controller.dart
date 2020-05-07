@@ -24,7 +24,7 @@ class _HealthWidgetControllerState extends State<HealthWidgetController> {
   List<Widget> answerList(List<HealthStatusModel> healthStatusModelList) {
     if (widget.resultMap != null) {
       healthStatusModelList.forEach((healthModelWidget) {
-        if (healthModelWidget.text == widget.resultMap[widget.questionId]) {
+        if (healthModelWidget.text == widget.resultMap[widget.questionId] || healthModelWidget.hintText != null) {
           healthModelWidget.isActive = true;
         }
       });
@@ -42,6 +42,9 @@ class _HealthWidgetControllerState extends State<HealthWidgetController> {
           },
           child: HealthStatusContent(
             healthStatusModel: healthModelWidget,
+            textEdtingCompleted: (text) {
+              widget.resultMap[widget.questionId] = text;
+            },
           ),
         ),
       );
