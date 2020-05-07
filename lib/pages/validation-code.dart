@@ -30,130 +30,129 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
     return Scaffold(
       key: _scaffOldState,
       body: !hasLoading
-          ? SafeArea(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          "assets/welcome-left.png",
-                          height: double.infinity,
-                          fit: BoxFit.fill,
-                          width: width - height * 0.1,
-                        ),
-                        SizedBox(
-                          width: height * 0.1,
-                        )
-                      ],
+          ? GestureDetector(
+              onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+              child: SafeArea(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            "assets/welcome-left.png",
+                            height: double.infinity,
+                            fit: BoxFit.fill,
+                            width: width - height * 0.1,
+                          ),
+                          SizedBox(
+                            width: height * 0.1,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    height: height * 0.25,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 30),
-                          child: Container(
-                            child: Text(
-                              "Telefonunuza\nGönderdiğimiz Kodu\nGiriniz.",
-                              style: TextStyle(
-                                fontSize: (height * 0.04).toInt().toDouble(),
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColorDark,
+                    Container(
+                      height: height * 0.25,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(left: 30),
+                            child: Container(
+                              child: Text(
+                                "Telefonunuza\nGönderdiğimiz Kodu\nGiriniz.",
+                                style: TextStyle(
+                                  fontSize: (height * 0.04).toInt().toDouble(),
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
                               ),
                             ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Container(
+                          width: height * 0.22,
+                          padding: EdgeInsets.only(right: 20),
+                          child: Column(
+                            children: <Widget>[
+                              SizedBox(
+                                height: height * 0.022,
+                              ),
+                              TextField(
+                                controller: codeController,
+                                decoration: InputDecoration(
+                                    counterText: "",
+                                    border: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
+                                      ),
+                                    ),
+                                    hintText: "xx xx xx"),
+                                textAlign: TextAlign.end,
+                                maxLength: 6,
+                                keyboardType: TextInputType.number,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: (height * 0.04).toInt().toDouble(),
+                                ),
+                              ),
+                              Container(
+                                height: 1,
+                                decoration: BoxDecoration(
+                                    gradient: LinearGradient(colors: [
+                                  Theme.of(context).primaryColor,
+                                  Theme.of(context).primaryColor,
+                                  Colors.white
+                                ])),
+                              )
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Container(
-                        width: height * 0.22,
-                        padding: EdgeInsets.only(right: 20),
-                        child: Column(
-                          children: <Widget>[
-                            SizedBox(
-                              height: height * 0.022,
-                            ),
-                            TextField(
-                              controller: codeController,
-                              decoration: InputDecoration(
-                                  counterText: "",
-                                  border: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      width: 0,
-                                      style: BorderStyle.none,
-                                    ),
-                                  ),
-                                  hintText: "xx xx xx"),
-                              textAlign: TextAlign.end,
-                              maxLength: 6,
-                              keyboardType: TextInputType.number,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: (height * 0.04).toInt().toDouble(),
-                              ),
-                            ),
-                            Container(
-                              height: 1,
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [
-                                Theme.of(context).primaryColor,
-                                Theme.of(context).primaryColor,
-                                Colors.white
-                              ])),
-                            )
-                          ],
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
+                      child: OutcomeButton(
+                        text: "Giriş Yap",
+                        action: () {
+                          signInWithPhoneNumber(context);
+                        },
                       ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
-                    child: OutcomeButton(
-                      text: "Giriş Yap",
-                      action: () {
-                        signInWithPhoneNumber(context);
-                      },
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             )
           : Center(
-              child: Expanded(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(
-                        backgroundColor: Colors.white70,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "Giriş Yapılıyor...",
-                        style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontSize: 24,
-                        ),
-                      )
-                    ],
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    backgroundColor: Colors.white70,
                   ),
-                ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "Giriş Yapılıyor...",
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontSize: 24,
+                    ),
+                  )
+                ],
               ),
             ),
     );
