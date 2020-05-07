@@ -17,7 +17,7 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
   final _scaffOldState = GlobalKey<ScaffoldState>();
 
   final TextEditingController phoneController = new TextEditingController();
-  GlobalKey buttonKey = GlobalKey();
+  ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -27,8 +27,12 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
+    final size = MediaQuery.of(context).size;
+    final mediaQuery = MediaQuery.of(context);
+    final double width = size.width;
+    final double height = size.height;
+    final bodyHeight =
+        height - (mediaQuery.padding.bottom + mediaQuery.padding.top);
     return Scaffold(
       key: _scaffOldState,
       body: !isLoading
@@ -36,8 +40,9 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
               onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
               child: SafeArea(
                 child: SingleChildScrollView(
+                  controller: _controller,
                   child: Container(
-                    height: height,
+                    height: bodyHeight,
                     width: width,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
@@ -97,18 +102,15 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
                                     height: height * 0.022,
                                   ),
                                   TextField(
-                                    onTap: () async {
-                                      await Future.delayed(
-                                          Duration(milliseconds: 300));
-                                      Scrollable.ensureVisible(
-                                        buttonKey.currentContext,
-                                        curve: Curves.easeIn,
-                                        duration: Duration(
-                                          milliseconds: 300,
-                                        ),
-                                      );
-                                    },
+                                    autofocus: false,
                                     controller: phoneController,
+                                    onTap: () async {
+                                      await Future.delayed(Duration(milliseconds: 400));
+                                      _controller.animateTo(
+                                        _controller.position.maxScrollExtent,
+                                        duration: Duration(milliseconds: 250),
+                                        curve: Curves.ease);
+                                    },
                                     decoration: InputDecoration(
                                         counterText: "",
                                         border: UnderlineInputBorder(
@@ -142,19 +144,11 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
-                          child: Column(
-                            children: <Widget>[
-                              OutcomeButton(
-                                text: "İlerle",
-                                action: () {
-                                  verifyPhone(context);
-                                },
-                              ),
-                              Container(
-                                key: buttonKey,
-                                height: 5,
-                              ),
-                            ],
+                          child: OutcomeButton(
+                            text: "İlerle",
+                            action: () {
+                              verifyPhone(context);
+                            },
                           ),
                         )
                       ],

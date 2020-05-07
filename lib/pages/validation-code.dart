@@ -19,7 +19,7 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
 
   final TextEditingController codeController = new TextEditingController();
 
-  GlobalKey buttonKey = GlobalKey();
+  ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -29,8 +29,12 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
+    final size = MediaQuery.of(context).size;
+    final mediaQuery = MediaQuery.of(context);
+    final double width = size.width;
+    final double height = size.height;
+    final bodyHeight =
+        height - (mediaQuery.padding.bottom + mediaQuery.padding.top);
     return Scaffold(
       key: _scaffOldState,
       body: !hasLoading
@@ -38,8 +42,9 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
               onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
               child: SafeArea(
                 child: SingleChildScrollView(
+                  controller: _controller,
                   child: Container(
-                    height: height,
+                    height: bodyHeight,
                     width: width,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
@@ -100,13 +105,13 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
                                   ),
                                   TextField(
                                     controller: codeController,
-                                    onTap: () => Scrollable.ensureVisible(
-                                      buttonKey.currentContext,
-                                      curve: Curves.easeIn,
-                                      duration: Duration(
-                                        milliseconds: 300,
-                                      ),
-                                    ),
+                                    onTap: () async {
+                                      await Future.delayed(Duration(milliseconds: 400));
+                                      _controller.animateTo(
+                                          _controller.position.maxScrollExtent,
+                                          duration: Duration(milliseconds: 250),
+                                          curve: Curves.ease);
+                                    },
                                     decoration: InputDecoration(
                                         counterText: "",
                                         border: UnderlineInputBorder(
@@ -142,7 +147,6 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
                           child: OutcomeButton(
-                            key: buttonKey,
                             text: "Giriş Yap",
                             action: () {
                               signInWithPhoneNumber(context);
