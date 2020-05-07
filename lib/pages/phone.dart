@@ -76,7 +76,7 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
                                 padding: const EdgeInsets.only(left: 30),
                                 child: Container(
                                   child: Text(
-                                    "Odamız İle\nPaylaşmış\nOlduğunuz Cep\nTelefonu Numaranızı\nGiriniz.",
+                                    "Odamız İle\nPaylaşmış\nOlduğunuz Cep\nTelefonu Numaranızı\nGiriniz",
                                     style: TextStyle(
                                       fontSize:
                                           (height * 0.04).toInt().toDouble(),

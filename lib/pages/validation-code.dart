@@ -78,7 +78,7 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
                                 padding: const EdgeInsets.only(left: 30),
                                 child: Container(
                                   child: Text(
-                                    "Telefonunuza\nGönderdiğimiz Kodu\nGiriniz.",
+                                    "Telefonunuza\nGönderdiğimiz Kodu\nGiriniz",
                                     style: TextStyle(
                                       fontSize:
                                           (height * 0.04).toInt().toDouble(),
