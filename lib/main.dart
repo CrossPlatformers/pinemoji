@@ -35,6 +35,7 @@ class _MyAppState extends State<MyApp> {
         });
       }
     });
+    Future.delayed(Duration(seconds: 5)).then((val) => setState(() => loggedIn = loggedIn == null ? false : loggedIn));
     super.initState();
   }
 
@@ -48,11 +49,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: customTheme,
       home: Scaffold(
-        body: loggedIn == null
-            ? Container()
-            : (loggedIn
-                ? BottomNavigation()
-                : WelcomePage()),
+        body: loggedIn == null ? Container() : (loggedIn ? BottomNavigation() : WelcomePage()),
       ),
     );
   }
