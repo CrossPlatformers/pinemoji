@@ -1,4 +1,4 @@
-package com.cagriaydin.pinemoji
+package com.crossplatformers.pinemojiTTB
 
 import io.flutter.embedding.android.FlutterActivity
 
