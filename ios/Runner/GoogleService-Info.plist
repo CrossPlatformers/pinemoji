@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>1074011055856-12gntuqjhd44jn13tdh5cgsirbafaqd6.apps.googleusercontent.com</string>
+	<string>1074011055856-7eojmuh99dbr3g7iolg7vn3r49lrec8c.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1074011055856-12gntuqjhd44jn13tdh5cgsirbafaqd6</string>
+	<string>com.googleusercontent.apps.1074011055856-7eojmuh99dbr3g7iolg7vn3r49lrec8c</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAI9f_9Ey7I6h8CB0_ytiUQPteXpGdb6kQ</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.cagriaydin.pinemoji</string>
+	<string>com.crossplatformers.pinemojiTTB</string>
 	<key>PROJECT_ID</key>
 	<string>pinemoji-xp</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1074011055856:ios:f86d47ad0755879f920435</string>
+	<string>1:1074011055856:ios:d91d35e348ef9817920435</string>
 	<key>DATABASE_URL</key>
 	<string>https://pinemoji-xp.firebaseio.com</string>
 </dict>
