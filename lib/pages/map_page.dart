@@ -192,7 +192,7 @@ class MapPageState extends State<MapPage> {
               Container(
                 height: closeList
                     ? 50
-                    : MediaQuery.of(context).size.height / 2.3 - 70,
+                    : MediaQuery.of(context).size.height /3 - 70,
                 width: MediaQuery.of(context).size.width,
               ),
             ],
@@ -202,7 +202,7 @@ class MapPageState extends State<MapPage> {
             child: AnimatedContainer(
               duration: Duration(milliseconds: 400),
               height:
-                  closeList ? 100 : MediaQuery.of(context).size.height / 2.3,
+                  closeList ? 100 : MediaQuery.of(context).size.height /3,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   color: Colors.white,
