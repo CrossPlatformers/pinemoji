@@ -3,7 +3,6 @@ import 'package:pinemoji/models/survey.dart';
 import 'package:pinemoji/repositories/company_repository.dart';
 import 'package:pinemoji/repositories/survey_repository.dart';
 import 'package:pinemoji/widgets/header-widget.dart';
-import 'package:pinemoji/widgets/status-title.dart';
 import 'package:pinemoji/widgets/vertical-slider.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
 

@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 class HealthStatusModel {
   String emoji;
   String text;
+  final String hintText;
   bool isOther = false;
   bool isActive = false;
-  HealthStatusModel(String emoji, String text, {bool isOther = false}) {
+  HealthStatusModel(String emoji, String text, {bool isOther = false, this.hintText}) {
     this.emoji = emoji;
     this.text = text;
     this.isOther = isOther;
@@ -14,8 +15,8 @@ class HealthStatusModel {
 
 class HealthStatusContent extends StatelessWidget {
   final HealthStatusModel healthStatusModel;
-
-  const HealthStatusContent({Key key, this.healthStatusModel})
+  final Function textEdtingCompleted;
+  HealthStatusContent({Key key, this.healthStatusModel, this.textEdtingCompleted})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -77,6 +78,7 @@ class HealthStatusContent extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 4, 0, 4),
               child: TextField(
+                onSubmitted: (value) => textEdtingCompleted(value),
                 style: TextStyle(
                   fontSize: 16,
                   fontStyle: FontStyle.italic,
@@ -84,7 +86,7 @@ class HealthStatusContent extends StatelessWidget {
                 ),
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: "Lütfen yazınız...",
+                  hintText: healthStatusModel.hintText ?? "Lütfen yazınız...",
                   hintStyle: TextStyle(
                     fontSize: 16,
                     fontStyle: FontStyle.italic,

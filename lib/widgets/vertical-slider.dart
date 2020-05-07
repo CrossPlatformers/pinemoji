@@ -61,6 +61,7 @@ class VerticalSlider extends StatelessWidget {
                                   HealthStatusModel(
                                     "😶",
                                     "Diğer",
+                                    hintText: result != null && !question.answerList.contains(result[question.id]) ? result[question.id] : null,
                                     isOther: true,
                                   )
                               ],
