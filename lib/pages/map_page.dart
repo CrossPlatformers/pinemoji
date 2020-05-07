@@ -401,6 +401,13 @@ class MapPageState extends State<MapPage> {
         handleLocation();
       }
     }
+    if(_lastCameraPosition == null){
+      //40.0903484,30.4452252,6z
+      _lastCameraPosition = CameraPosition(
+        target: LatLng(40.0903484, 30.4452252),
+        zoom: 10,
+      );
+    }
   }
 
   Function onFilterChange(List<String> filters) {
