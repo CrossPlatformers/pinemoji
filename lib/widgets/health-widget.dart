@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class HealthStatusModel {
   String emoji;
   String text;
-  final String hintText;
+  String hintText;
   bool isOther = false;
   bool isActive = false;
   HealthStatusModel(String emoji, String text, {bool isOther = false, this.hintText}) {
@@ -78,7 +78,7 @@ class HealthStatusContent extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 4, 0, 4),
               child: TextField(
-                onSubmitted: (value) => textEdtingCompleted(value),
+                onChanged: (value) => textEdtingCompleted(value),
                 style: TextStyle(
                   fontSize: 16,
                   fontStyle: FontStyle.italic,
