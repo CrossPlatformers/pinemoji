@@ -59,6 +59,8 @@ class MapPageState extends State<MapPage> {
     if (widget.fromRoot) {
       lastEmojiIdList = null;
       lastSelectedPin = null;
+      closeList = false;
+      showHeader = false;
     }
     handleMapIdleRequest();
     getCurrentLocationMarkers();
@@ -112,8 +114,8 @@ class MapPageState extends State<MapPage> {
                               initialCameraPosition: _lastCameraPosition,
                               onMapCreated:
                                   (GoogleMapController controller) async {
-                                String mapStyle = await rootBundle
-                                    .loadString('assets/map_style/standart.json');
+                                String mapStyle = await rootBundle.loadString(
+                                    'assets/map_style/standart.json');
                                 controller.setMapStyle(mapStyle);
                                 _controller.complete(controller);
                               },
@@ -375,7 +377,7 @@ class MapPageState extends State<MapPage> {
   getCurrentLocationMarkers() async {
     if (widget.fromRoot)
       await Future.delayed(Duration(
-        seconds: 2000,
+        milliseconds: 2000,
       ));
     lastRequestList = await MapRepository.getCurrentLocationMarkers(
       latLngBounds: lastLatLngBounds,
