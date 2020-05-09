@@ -6,7 +6,8 @@ class HealthStatusModel {
   String hintText;
   bool isOther = false;
   bool isActive = false;
-  HealthStatusModel(String emoji, String text, {bool isOther = false, this.hintText}) {
+  HealthStatusModel(String emoji, String text,
+      {bool isOther = false, this.hintText}) {
     this.emoji = emoji;
     this.text = text;
     this.isOther = isOther;
@@ -16,7 +17,9 @@ class HealthStatusModel {
 class HealthStatusContent extends StatelessWidget {
   final HealthStatusModel healthStatusModel;
   final Function textEdtingCompleted;
-  HealthStatusContent({Key key, this.healthStatusModel, this.textEdtingCompleted})
+  final TextEditingController otherInfoController = new TextEditingController();
+  HealthStatusContent(
+      {Key key, this.healthStatusModel, this.textEdtingCompleted})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -78,6 +81,7 @@ class HealthStatusContent extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 4, 0, 4),
               child: TextField(
+                controller: otherInfoController,
                 onChanged: (value) => textEdtingCompleted(value),
                 style: TextStyle(
                   fontSize: 16,
@@ -91,6 +95,10 @@ class HealthStatusContent extends StatelessWidget {
                     fontSize: 16,
                     fontStyle: FontStyle.italic,
                     color: Color(0xFFC7CAD1),
+                  ),
+                  suffixIcon: IconButton(
+                    onPressed: () => otherInfoController.clear(),
+                    icon: Icon(Icons.clear),
                   ),
                 ),
               ),
