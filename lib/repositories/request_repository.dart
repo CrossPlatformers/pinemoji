@@ -10,7 +10,7 @@ class RequestRepository {
     List<String> emojiIdList,
     String option,
     String lastSelectedId,
-    int limit = 10,
+    int limit = 15,
     LatLngBounds latLngBounds,
   }) async {
     List<Request> requestList = [];

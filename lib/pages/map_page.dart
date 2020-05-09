@@ -390,9 +390,10 @@ class MapPageState extends State<MapPage> {
   }
 
   void handleLocation() async {
+    final zoom = 13.0;
     if (AuthenticationService.verifiedUser.location != null) {
       _lastCameraPosition = CameraPosition(
-          target: AuthenticationService.verifiedUser.location, zoom: 12);
+          target: AuthenticationService.verifiedUser.location, zoom: zoom);
       return;
     }
     location = lc.Location();
@@ -401,11 +402,11 @@ class MapPageState extends State<MapPage> {
       lc.LocationData locationData = await location.getLocation();
       _lastCameraPosition = CameraPosition(
         target: LatLng(locationData.latitude, locationData.longitude),
-        zoom: 10,
+        zoom: zoom,
       );
       final GoogleMapController controller = await _controller.future;
       await controller.animateCamera(
-          CameraUpdate.newLatLngZoom(_lastCameraPosition.target, 10));
+          CameraUpdate.newLatLngZoom(_lastCameraPosition.target, zoom));
       await Future.delayed(Duration(milliseconds: 400));
       await controller.animateCamera(CameraUpdate.scrollBy(0, -50));
     } else {
@@ -419,7 +420,7 @@ class MapPageState extends State<MapPage> {
       //40.0903484,30.4452252,6z
       _lastCameraPosition = CameraPosition(
         target: LatLng(40.0903484, 30.4452252),
-        zoom: 10,
+        zoom: zoom,
       );
     }
   }
