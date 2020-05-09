@@ -40,6 +40,22 @@ class _MaterialStatusState extends State<MaterialStatus> {
     return Scaffold(
       key: _scaffOldState,
       backgroundColor: Colors.transparent,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => MapPage()));
+        },
+        child:  Center(
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(60)),
+            child: Image.asset(
+              "assets/icon.png",
+              width: 90,
+              fit: BoxFit.fill,
+            ),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,17 +96,6 @@ class _MaterialStatusState extends State<MaterialStatus> {
                     ),
                   ),
                 ),
-                // GestureDetector(
-                //   onTap: () => Navigator.push(context,
-                //       MaterialPageRoute(builder: (context) {
-                //     return MapPage();
-                //   })),
-                //   child: Image.asset(
-                //     "assets/map.png",
-                //     width: 90,
-                //     fit: BoxFit.fill,
-                //   ),
-                // ),
               ],
             ),
             hasLoading
