@@ -94,7 +94,7 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             Container(
-                              width: height * 0.33,
+                              width: height * 0.42,
                               padding: EdgeInsets.only(right: 20),
                               child: Column(
                                 children: <Widget>[
@@ -102,6 +102,7 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
                                     height: height * 0.022,
                                   ),
                                   TextField(
+                                    onChanged: (text) => setState(() {}),
                                     autofocus: false,
                                     controller: phoneController,
                                     onTap: () async {
@@ -121,10 +122,13 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
                                         ),
                                       ),
                                       hintText: "05xx xxx xx xx",
-                                      suffixIcon: IconButton(
-                                        onPressed: () => phoneController.clear(),
-                                        icon: Icon(Icons.clear),
-                                      ),
+                                      suffixIcon: phoneController.text != ""
+                                          ? IconButton(
+                                              onPressed: () =>
+                                                  phoneController.clear(),
+                                              icon: Icon(Icons.clear),
+                                            )
+                                          : null,
                                     ),
                                     maxLength: 11,
                                     style: TextStyle(

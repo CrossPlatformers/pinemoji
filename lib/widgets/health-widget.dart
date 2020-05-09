@@ -14,13 +14,21 @@ class HealthStatusModel {
   }
 }
 
-class HealthStatusContent extends StatelessWidget {
+class HealthStatusContent extends StatefulWidget {
   final HealthStatusModel healthStatusModel;
   final Function textEdtingCompleted;
-  final TextEditingController otherInfoController = new TextEditingController();
+
   HealthStatusContent(
       {Key key, this.healthStatusModel, this.textEdtingCompleted})
       : super(key: key);
+
+  @override
+  _HealthStatusContentState createState() => _HealthStatusContentState();
+}
+
+class _HealthStatusContentState extends State<HealthStatusContent> {
+  final TextEditingController otherInfoController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -30,7 +38,7 @@ class HealthStatusContent extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: healthStatusModel.isActive
+              color: widget.healthStatusModel.isActive
                   ? Color(0xFFF93963)
                   : Colors.transparent,
             ),
@@ -44,7 +52,7 @@ class HealthStatusContent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  healthStatusModel.emoji,
+                  widget.healthStatusModel.emoji,
                   style: TextStyle(fontSize: 35),
                 ),
                 SizedBox(
@@ -54,7 +62,7 @@ class HealthStatusContent extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(10.0, 0, 4.0, 0),
                     child: Text(
-                      healthStatusModel.text,
+                      widget.healthStatusModel.text,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 16,
@@ -82,7 +90,10 @@ class HealthStatusContent extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(10, 4, 0, 4),
               child: TextField(
                 controller: otherInfoController,
-                onChanged: (value) => textEdtingCompleted(value),
+                onChanged: (value) {
+                  widget.textEdtingCompleted(value);
+                  setState(() {});
+                },
                 style: TextStyle(
                   fontSize: 16,
                   fontStyle: FontStyle.italic,
@@ -90,21 +101,27 @@ class HealthStatusContent extends StatelessWidget {
                 ),
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: healthStatusModel.hintText ?? "Lütfen yazınız...",
+                  hintText:
+                      widget.healthStatusModel.hintText ?? "Lütfen yazınız...",
                   hintStyle: TextStyle(
                     fontSize: 16,
                     fontStyle: FontStyle.italic,
                     color: Color(0xFFC7CAD1),
                   ),
-                  suffixIcon: IconButton(
-                    onPressed: () => otherInfoController.clear(),
-                    icon: Icon(Icons.clear),
-                  ),
+                  suffixIcon: otherInfoController.text != ""
+                      ? IconButton(
+                          onPressed: () {
+                            otherInfoController.clear();
+                          },
+                          icon: Icon(Icons.clear),
+                        )
+                      : null,
                 ),
               ),
             ),
           ),
-          visible: healthStatusModel.isOther && healthStatusModel.isActive,
+          visible: widget.healthStatusModel.isOther &&
+              widget.healthStatusModel.isActive,
         )
       ],
     );

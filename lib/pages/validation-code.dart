@@ -96,7 +96,7 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             Container(
-                              width: height * 0.22,
+                              width: height * 0.28,
                               padding: EdgeInsets.only(right: 20),
                               child: Column(
                                 children: <Widget>[
@@ -104,6 +104,7 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
                                     height: height * 0.022,
                                   ),
                                   TextField(
+                                    onChanged: (text) => setState(() {}),
                                     controller: codeController,
                                     onTap: () async {
                                       await Future.delayed(
@@ -122,10 +123,13 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
                                         ),
                                       ),
                                       hintText: "xx xx xx",
-                                      suffixIcon: IconButton(
-                                        onPressed: () => codeController.clear(),
-                                        icon: Icon(Icons.clear),
-                                      ),
+                                      suffixIcon: codeController.text != ""
+                                          ? IconButton(
+                                              onPressed: () =>
+                                                  codeController.clear(),
+                                              icon: Icon(Icons.clear),
+                                            )
+                                          : null,
                                     ),
                                     textAlign: TextAlign.end,
                                     maxLength: 6,
