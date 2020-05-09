@@ -36,6 +36,7 @@ class _MaterialStatusState extends State<MaterialStatus> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffOldState,
       backgroundColor: Colors.transparent,
@@ -59,16 +60,37 @@ class _MaterialStatusState extends State<MaterialStatus> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) {
-                    return MapPage();
-                  })),
-                  child: Image.asset(
-                    "assets/map.png",
-                    width: 90,
-                    fit: BoxFit.fill,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          content: Profile(size: size),
+                        );
+                      },
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage("assets/default-profile.png"),
+                    ),
                   ),
                 ),
+                // GestureDetector(
+                //   onTap: () => Navigator.push(context,
+                //       MaterialPageRoute(builder: (context) {
+                //     return MapPage();
+                //   })),
+                //   child: Image.asset(
+                //     "assets/map.png",
+                //     width: 90,
+                //     fit: BoxFit.fill,
+                //   ),
+                // ),
               ],
             ),
             hasLoading
@@ -177,6 +199,95 @@ class _MaterialStatusState extends State<MaterialStatus> {
         ),
         backgroundColor: Colors.white,
         duration: Duration(milliseconds: 3000),
+      ),
+    );
+  }
+}
+
+class Profile extends StatelessWidget {
+  const Profile({
+    Key key,
+    @required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size.width / 2,
+      height: size.width / 2,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 80,
+                width: 80,
+                child: CircleAvatar(
+                  backgroundImage: AssetImage(
+                    "assets/default-profile.png",
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                (AuthenticationService.verifiedUser.extraInfo['unvan'] ?? "") +
+                    " " +
+                    (AuthenticationService.verifiedUser.name ?? "") +
+                    " " +
+                    (AuthenticationService.verifiedUser.surname ?? ""),
+                style: TextStyle(
+                  fontSize: size.width / 15,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Stack(
+                children: <Widget>[
+                  Image.asset(
+                    "assets/red-pin.png",
+                    width: 24,
+                  ),
+                  Positioned(
+                    top: 2,
+                    left: 7,
+                    child: Text(
+                      "H",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Text(
+                AuthenticationService.verifiedUser.extraInfo['location'] ?? "",
+                style: TextStyle(
+                    fontSize: size.width / 30, color: Color(0xFF6FCF97)),
+              )
+            ],
+          ),
+        ],
       ),
     );
   }

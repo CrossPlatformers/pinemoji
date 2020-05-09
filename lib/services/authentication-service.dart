@@ -70,7 +70,7 @@ class AuthenticationService {
       if (fUser != null) {
         verifiedUser = await UserRepository().getUser(fUser.uid);
       } else {
-        verifiedUser = User(name: user['ad'], surname: user['soyad'], phoneNumber: user['telNo'], extraInfo: {'status': user['yetki'], 'location': user['gorevYeri']});
+        verifiedUser = User(name: user['ad'], surname: user['soyad'], phoneNumber: user['telNo'], extraInfo: {'status': user['yetki'], 'location': user['gorevYeri'], 'unvan': user['unvan']});
       }
       return true;
     } else {
