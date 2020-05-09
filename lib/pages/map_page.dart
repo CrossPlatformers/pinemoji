@@ -56,6 +56,10 @@ class MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     handleLocation();
+    if (widget.fromRoot) {
+      lastEmojiIdList = null;
+      lastSelectedPin = null;
+    }
     handleMapIdleRequest();
     getCurrentLocationMarkers();
   }
@@ -79,37 +83,42 @@ class MapPageState extends State<MapPage> {
                     Column(
                       children: <Widget>[
                         Container(
-                          height: MediaQuery.of(context).size.height / 8,
+                          height: widget.fromRoot
+                              ? (MediaQuery.of(context).size.height / 8 - 40)
+                              : MediaQuery.of(context).size.height / 8,
                         ),
                         Expanded(
-                          child: GoogleMap(
-                            myLocationButtonEnabled: false,
-                            myLocationEnabled: true,
-                            zoomControlsEnabled: false,
-                            onCameraMove: (CameraPosition cameraPosition) {
-                              _lastCameraPosition = cameraPosition;
+                          child: AbsorbPointer(
+                            absorbing: widget.fromRoot,
+                            child: GoogleMap(
+                              myLocationButtonEnabled: false,
+                              myLocationEnabled: true,
+                              zoomControlsEnabled: false,
+                              onCameraMove: (CameraPosition cameraPosition) {
+                                _lastCameraPosition = cameraPosition;
 //                              cameraPosition.
 //                              print('northeast : ${_cameraTargetBounds.bounds.northeast.latitude.toString()} ${_cameraTargetBounds.bounds.northeast.longitude.toString()}');
 //                              print('northeast : ${_cameraTargetBounds.bounds.southwest.latitude.toString()} ${_cameraTargetBounds.bounds.southwest.longitude.toString()}');
-                            },
-                            onCameraIdle: () async {
-                              GoogleMapController controller =
-                                  await _controller.future;
-                              lastLatLngBounds =
-                                  await controller.getVisibleRegion();
-                              handleMapIdleRequest();
-                            },
-                            cameraTargetBounds: _cameraTargetBounds,
-                            mapType: MapType.normal,
-                            initialCameraPosition: _lastCameraPosition,
-                            onMapCreated:
-                                (GoogleMapController controller) async {
-                              String mapStyle = await rootBundle
-                                  .loadString('assets/map_style/standart.json');
-                              controller.setMapStyle(mapStyle);
-                              _controller.complete(controller);
-                            },
-                            markers: MapRepository.markers,
+                              },
+                              onCameraIdle: () async {
+                                GoogleMapController controller =
+                                    await _controller.future;
+                                lastLatLngBounds =
+                                    await controller.getVisibleRegion();
+                                handleMapIdleRequest();
+                              },
+                              cameraTargetBounds: _cameraTargetBounds,
+                              mapType: MapType.normal,
+                              initialCameraPosition: _lastCameraPosition,
+                              onMapCreated:
+                                  (GoogleMapController controller) async {
+                                String mapStyle = await rootBundle
+                                    .loadString('assets/map_style/standart.json');
+                                controller.setMapStyle(mapStyle);
+                                _controller.complete(controller);
+                              },
+                              markers: MapRepository.markers,
+                            ),
                           ),
                         ),
                       ],
@@ -118,6 +127,7 @@ class MapPageState extends State<MapPage> {
                       alignment: Alignment.topCenter,
                       child: GradientAppBar(
                         fromRoot: widget.fromRoot,
+                        barHeight: widget.fromRoot ? 100 : 280,
                         onPinChange: onPinChange,
                         onFilterChange: onFilterChange,
                         title: !isSearchMode
@@ -192,7 +202,7 @@ class MapPageState extends State<MapPage> {
               Container(
                 height: closeList
                     ? 50
-                    : MediaQuery.of(context).size.height /3 - 70,
+                    : MediaQuery.of(context).size.height / 3 - 70,
                 width: MediaQuery.of(context).size.width,
               ),
             ],
@@ -201,8 +211,7 @@ class MapPageState extends State<MapPage> {
             alignment: Alignment.bottomCenter,
             child: AnimatedContainer(
               duration: Duration(milliseconds: 400),
-              height:
-                  closeList ? 100 : MediaQuery.of(context).size.height /3,
+              height: closeList ? 100 : MediaQuery.of(context).size.height / 3,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -364,6 +373,10 @@ class MapPageState extends State<MapPage> {
 //  }
 
   getCurrentLocationMarkers() async {
+    if (widget.fromRoot)
+      await Future.delayed(Duration(
+        seconds: 2000,
+      ));
     lastRequestList = await MapRepository.getCurrentLocationMarkers(
       latLngBounds: lastLatLngBounds,
       option: lastSelectedPin,
@@ -426,22 +439,25 @@ class MapPageState extends State<MapPage> {
   void animateCamera(LatLng latLang) async {
     final GoogleMapController controller = await _controller.future;
     await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 20));
-    await Future.delayed(Duration(milliseconds: 600));
-    await controller.animateCamera(CameraUpdate.scrollBy(0, -25));
   }
 }
 
 class GradientAppBar extends StatelessWidget {
   final Widget title;
-  final double barHeight = 260.0;
+  final double barHeight;
   final bool fromRoot;
 
   final GetFilters onFilterChange;
 
   final Function(String) onPinChange;
 
-  GradientAppBar(
-      {this.title, this.onFilterChange, this.onPinChange, this.fromRoot});
+  GradientAppBar({
+    this.title,
+    this.onFilterChange,
+    this.onPinChange,
+    this.fromRoot,
+    this.barHeight = 280,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -472,18 +488,20 @@ class GradientAppBar extends StatelessWidget {
           SizedBox(
             height: 8,
           ),
-          ConditionFilter(
-            state: "Acil Destek",
-            onPinChange: onPinChange,
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: StockFilter(
-                onFilterChange: onFilterChange,
+          if (!fromRoot)
+            ConditionFilter(
+              state: "Acil Destek",
+              onPinChange: onPinChange,
+            ),
+          if (!fromRoot)
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: StockFilter(
+                  onFilterChange: onFilterChange,
+                ),
               ),
             ),
-          ),
         ],
       ),
       decoration: BoxDecoration(
