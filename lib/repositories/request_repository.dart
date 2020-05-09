@@ -10,11 +10,11 @@ class RequestRepository {
     List<String> emojiIdList,
     String option,
     String lastSelectedId,
-    int limit,
+    int limit = 15,
     LatLngBounds latLngBounds,
   }) async {
     List<Request> requestList = [];
-    Query query = Firestore.instance.collection(collectionName).limit(40);
+    Query query = Firestore.instance.collection(collectionName).limit(limit);
     if (emojiIdList != null && emojiIdList.isNotEmpty) {
       query = query.where(
         'emoji',
