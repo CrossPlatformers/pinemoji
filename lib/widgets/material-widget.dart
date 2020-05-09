@@ -46,9 +46,9 @@ class MaterialStatusContent extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              materialStatusModel.emoji,
-              style: TextStyle(fontSize: size.height / 18),
+            Image.asset(
+              "assets/emoji/" + getMaterialIcon(materialStatusModel.id),
+              width: size.height / 18,
             ),
             SizedBox(
               height: 5,
@@ -66,5 +66,30 @@ class MaterialStatusContent extends StatelessWidget {
         isVisible: materialStatusModel.isBlur,
       ),
     );
+  }
+
+  String getMaterialIcon(id) {
+    switch (id) {
+      case "1":
+        return "mask.png";
+        break;
+      case "2":
+        return "mask.png";
+        break;
+      case "3":
+        return "glasses.png";
+        break;
+      case "4":
+        return "glove.png";
+        break;
+      case "5":
+        return "robe.png";
+        break;
+      case "6":
+        return "unknown.png";
+        break;
+      default:
+        return "mask.png";
+    }
   }
 }

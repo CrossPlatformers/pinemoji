@@ -9,7 +9,6 @@ import 'package:pinemoji/widget-controllers/material-widget-controller.dart';
 import 'package:pinemoji/repositories/company_repository.dart';
 import 'package:pinemoji/widgets/header-widget.dart';
 import 'package:pinemoji/widgets/material-widget.dart';
-import 'package:pinemoji/widgets/status-title.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
 import 'package:pinemoji/repositories/user_repository.dart';
 
@@ -177,7 +176,7 @@ class _MaterialStatusState extends State<MaterialStatus> {
           style: TextStyle(color: Theme.of(context).primaryColorDark),
         ),
         backgroundColor: Colors.white,
-        duration: Duration(milliseconds: 1500),
+        duration: Duration(milliseconds: 3000),
       ),
     );
   }
