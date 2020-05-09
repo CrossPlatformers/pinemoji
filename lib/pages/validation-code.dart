@@ -106,21 +106,27 @@ class _ValidationCodePageState extends State<ValidationCodePage> {
                                   TextField(
                                     controller: codeController,
                                     onTap: () async {
-                                      await Future.delayed(Duration(milliseconds: 400));
+                                      await Future.delayed(
+                                          Duration(milliseconds: 400));
                                       _controller.animateTo(
                                           _controller.position.maxScrollExtent,
                                           duration: Duration(milliseconds: 250),
                                           curve: Curves.ease);
                                     },
                                     decoration: InputDecoration(
-                                        counterText: "",
-                                        border: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            width: 0,
-                                            style: BorderStyle.none,
-                                          ),
+                                      counterText: "",
+                                      border: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          width: 0,
+                                          style: BorderStyle.none,
                                         ),
-                                        hintText: "xx xx xx"),
+                                      ),
+                                      hintText: "xx xx xx",
+                                      suffixIcon: IconButton(
+                                        onPressed: () => codeController.clear(),
+                                        icon: Icon(Icons.clear),
+                                      ),
+                                    ),
                                     textAlign: TextAlign.end,
                                     maxLength: 6,
                                     keyboardType: TextInputType.number,

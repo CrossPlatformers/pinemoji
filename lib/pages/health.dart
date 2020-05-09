@@ -118,7 +118,7 @@ class _HealthStatusState extends State<HealthStatus> {
           style: TextStyle(color: Theme.of(context).primaryColorDark),
         ),
         backgroundColor: Colors.white,
-        duration: Duration(milliseconds: 1500),
+        duration: Duration(milliseconds: 3000),
       ),
     );
   }

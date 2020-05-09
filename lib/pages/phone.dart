@@ -105,21 +105,27 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
                                     autofocus: false,
                                     controller: phoneController,
                                     onTap: () async {
-                                      await Future.delayed(Duration(milliseconds: 400));
+                                      await Future.delayed(
+                                          Duration(milliseconds: 400));
                                       _controller.animateTo(
-                                        _controller.position.maxScrollExtent,
-                                        duration: Duration(milliseconds: 250),
-                                        curve: Curves.ease);
+                                          _controller.position.maxScrollExtent,
+                                          duration: Duration(milliseconds: 250),
+                                          curve: Curves.ease);
                                     },
                                     decoration: InputDecoration(
-                                        counterText: "",
-                                        border: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            width: 0,
-                                            style: BorderStyle.none,
-                                          ),
+                                      counterText: "",
+                                      border: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          width: 0,
+                                          style: BorderStyle.none,
                                         ),
-                                        hintText: "05xx xxx xx xx"),
+                                      ),
+                                      hintText: "05xx xxx xx xx",
+                                      suffixIcon: IconButton(
+                                        onPressed: () => phoneController.clear(),
+                                        icon: Icon(Icons.clear),
+                                      ),
+                                    ),
                                     maxLength: 11,
                                     style: TextStyle(
                                       fontSize:
