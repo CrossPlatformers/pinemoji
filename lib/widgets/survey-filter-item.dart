@@ -42,11 +42,14 @@ class SurveyFilterItem extends StatelessWidget {
                     ],
                   ),
                   Container(
-                    width: 80,
+                    width: 160,
                     padding: EdgeInsets.only(left: 4),
                     child: Text(
                       surveyAnswer.ownerList.values.first,
                       softWrap: true,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColorDark,
+                      ),
                     ),
                   )
                 ],
@@ -59,7 +62,9 @@ class SurveyFilterItem extends StatelessWidget {
                       surveyAnswer.emojiText.isNotEmpty
                           ? surveyAnswer.emojiText
                           : " ",
-                      style: TextStyle(fontSize: 30),
+                      style: TextStyle(
+                        fontSize: 30,
+                      ),
                     ),
                     Expanded(
                       child: Padding(
@@ -68,6 +73,10 @@ class SurveyFilterItem extends StatelessWidget {
                           surveyAnswer.answerText,
                           softWrap: true,
                           textWidthBasis: TextWidthBasis.parent,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                          ),
                         ),
                       ),
                     ),
@@ -79,12 +88,18 @@ class SurveyFilterItem extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      surveyAnswer.ownerList.length.toString(),
+                      "100",
                       style: TextStyle(
                         fontSize: 28,
+                        color: Theme.of(context).primaryColorDark,
                       ),
                     ),
-                    Text("Doktor"),
+                    Text(
+                      "Doktor",
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                    )
                   ],
                 ),
               ),

@@ -18,7 +18,9 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
 
   @override
   void initState() {
-    SurveyRepository().getSurveyResult().then((value) => setState(() => result = value));
+    SurveyRepository()
+        .getSurveyResult()
+        .then((value) => setState(() => result = value));
     super.initState();
   }
 
@@ -40,12 +42,16 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
             ),
           ),
           Container(
-            constraints: BoxConstraints(maxHeight: selectedQuestion != null ? MediaQuery.of(context).size.height / 2 - 50 : MediaQuery.of(context).size.height - 50),
+            constraints: BoxConstraints(
+                maxHeight: selectedQuestion != null
+                    ? MediaQuery.of(context).size.height * .34
+                    : MediaQuery.of(context).size.height * .65),
             child: GridView.count(
               crossAxisCount: 2,
               padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
               mainAxisSpacing: 40,
               crossAxisSpacing: 10,
+              childAspectRatio: .7,
               shrinkWrap: true,
               children: [
                 if (result != null)
@@ -164,7 +170,8 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
       }
       answer.ownerList.forEach((owner, location) {
         if (resultMap[location] == null) {
-          resultMap[answer.answerText][location] = answerFromJson(answerToJson(answer));
+          resultMap[answer.answerText][location] =
+              answerFromJson(answerToJson(answer));
         }
       });
     });
