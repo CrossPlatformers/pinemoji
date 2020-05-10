@@ -17,7 +17,7 @@ class OutcomeButton extends StatelessWidget {
       child: GestureDetector(
         onTap: () => action(),
         child: Container(
-          width: MediaQuery.of(context).size.width - 100,
+          width: MediaQuery.of(context).size.width - 145,
           decoration: BoxDecoration(
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(21.5),

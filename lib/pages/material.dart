@@ -36,9 +36,26 @@ class _MaterialStatusState extends State<MaterialStatus> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffOldState,
       backgroundColor: Colors.transparent,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => MapPage()));
+        },
+        child: Center(
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(60)),
+            child: Image.asset(
+              "assets/icon.png",
+              width: 90,
+              fit: BoxFit.fill,
+            ),
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,14 +76,24 @@ class _MaterialStatusState extends State<MaterialStatus> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) {
-                    return MapPage();
-                  })),
-                  child: Image.asset(
-                    "assets/map.png",
-                    width: 90,
-                    fit: BoxFit.fill,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          content: Profile(size: size),
+                        );
+                      },
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage("assets/default-profile.png"),
+                    ),
                   ),
                 ),
               ],
@@ -178,6 +205,89 @@ class _MaterialStatusState extends State<MaterialStatus> {
         backgroundColor: Colors.white,
         duration: Duration(milliseconds: 3000),
       ),
+    );
+  }
+}
+
+class Profile extends StatelessWidget {
+  const Profile({
+    Key key,
+    @required this.size,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    final widgetSize = MediaQuery.of(context).size;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: Container(
+            height: widgetSize.height / 6,
+            width: widgetSize.height / 6,
+            child: CircleAvatar(
+              backgroundImage: AssetImage(
+                "assets/default-profile.png",
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Text(
+          (AuthenticationService.verifiedUser.extraInfo['unvan'] ?? "") +
+              " " +
+              (AuthenticationService.verifiedUser.name ?? "") +
+              " " +
+              (AuthenticationService.verifiedUser.surname ?? ""),
+          style: TextStyle(
+            fontSize: 25,
+            color: Theme.of(context).primaryColorDark,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Row(
+          children: [
+            Stack(
+              children: <Widget>[
+                Image.asset(
+                  "assets/red-pin.png",
+                  width: 30,
+                ),
+                Positioned(
+                  top: 3,
+                  left: 8,
+                  child: Text(
+                    "H",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              width: 8,
+            ),
+            Flexible(
+              child: Text(
+                AuthenticationService.verifiedUser.extraInfo['location'] ??
+                    "Lütfen güncel kurum bilginizi TTB ile paylaşınız",
+                style: TextStyle(fontSize: 18, color: Color(0xFF6FCF97)),
+              ),
+            )
+          ],
+        ),
+      ],
     );
   }
 }

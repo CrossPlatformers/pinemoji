@@ -50,12 +50,12 @@ class BottomNavyBar extends StatelessWidget {
           CustomBoxShadow(
               color: shadowColor,
               offset: new Offset(1, -0.2),
-              blurRadius: 11.0,
+              blurRadius: 12.0,
               blurStyle: BlurStyle.outer),
           CustomBoxShadow(
               color: shadowColor,
               offset: new Offset(-1, -0.2),
-              blurRadius: 11.0,
+              blurRadius: 12.0,
               blurStyle: BlurStyle.outer),
         ],
         borderRadius: BorderRadius.only(
