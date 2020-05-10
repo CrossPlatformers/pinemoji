@@ -45,7 +45,7 @@ class _MaterialStatusState extends State<MaterialStatus> {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => MapPage()));
         },
-        child:  Center(
+        child: Center(
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(60)),
             child: Image.asset(
@@ -219,81 +219,75 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: size.width / 2,
-      height: size.width / 2,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 80,
-                width: 80,
-                child: CircleAvatar(
-                  backgroundImage: AssetImage(
-                    "assets/default-profile.png",
-                  ),
-                ),
+    final widgetSize = MediaQuery.of(context).size;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: Container(
+            height: widgetSize.height / 6,
+            width: widgetSize.height / 6,
+            child: CircleAvatar(
+              backgroundImage: AssetImage(
+                "assets/default-profile.png",
               ),
-            ],
+            ),
           ),
-          SizedBox(
-            height: 10,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Text(
+          (AuthenticationService.verifiedUser.extraInfo['unvan'] ?? "") +
+              " " +
+              (AuthenticationService.verifiedUser.name ?? "") +
+              " " +
+              (AuthenticationService.verifiedUser.surname ?? ""),
+          style: TextStyle(
+            fontSize: 25,
+            color: Theme.of(context).primaryColorDark,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                (AuthenticationService.verifiedUser.extraInfo['unvan'] ?? "") +
-                    " " +
-                    (AuthenticationService.verifiedUser.name ?? "") +
-                    " " +
-                    (AuthenticationService.verifiedUser.surname ?? ""),
-                style: TextStyle(
-                  fontSize: size.width / 15,
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Row(
+          children: [
+            Stack(
+              children: <Widget>[
+                Image.asset(
+                  "assets/red-pin.png",
+                  width: 30,
                 ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                children: <Widget>[
-                  Image.asset(
-                    "assets/red-pin.png",
-                    width: 24,
-                  ),
-                  Positioned(
-                    top: 2,
-                    left: 7,
-                    child: Text(
-                      "H",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
+                Positioned(
+                  top: 3,
+                  left: 8,
+                  child: Text(
+                    "H",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
                     ),
-                  )
-                ],
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              width: 8,
+            ),
+            Flexible(
+              child: Text(
+                AuthenticationService.verifiedUser.extraInfo['location'] ??
+                    "Lütfen güncel kurum bilginizi TTB ile paylaşınız",
+                style: TextStyle(fontSize: 18, color: Color(0xFF6FCF97)),
               ),
-              SizedBox(
-                width: 8,
-              ),
-              Text(
-                AuthenticationService.verifiedUser.extraInfo['location'] ?? "",
-                style: TextStyle(
-                    fontSize: size.width / 30, color: Color(0xFF6FCF97)),
-              )
-            ],
-          ),
-        ],
-      ),
+            )
+          ],
+        ),
+      ],
     );
   }
 }

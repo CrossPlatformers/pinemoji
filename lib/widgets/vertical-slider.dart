@@ -22,7 +22,7 @@ class VerticalSlider extends StatelessWidget {
         ),
         items: survey.questionList
             .map((question) => Padding(
-                  padding: const EdgeInsets.fromLTRB(4, 45, 4, 4),
+                  padding: const EdgeInsets.fromLTRB(4, 45, 4, 20),
                   child: SingleChildScrollView(
                     child: Container(
                       decoration: BoxDecoration(
