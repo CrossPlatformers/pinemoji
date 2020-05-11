@@ -88,7 +88,7 @@ class SurveyFilterItem extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      "100",
+                      surveyAnswer.ownerList.length.toString(),
                       style: TextStyle(
                         fontSize: 28,
                         color: Theme.of(context).primaryColorDark,
