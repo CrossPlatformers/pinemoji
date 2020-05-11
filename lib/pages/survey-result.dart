@@ -196,7 +196,6 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
   }
 
   createReport() async {
-    // var data = await SurveyRepository().getSurveyResult();
     var excel = Excel.createExcel();
     var sheet = excel.tables.keys.first;
     excel.insertRow(sheet, 0);
@@ -233,16 +232,15 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
     }
 
     final directory = await getApplicationDocumentsDirectory();
-    var file = File(directory.path + "/SurveyResults.xlsx");
+    var file = File(directory.path + "/AnketSonuclari.xlsx");
     file.writeAsBytesSync(await excel.encode());
 
     Uint8List readAsBytes = await file.readAsBytes();
     await Share.file(
       'excel file',
-      'SurveyResults.xlsx',
+      'AnketSonuclari.xlsx',
       readAsBytes,
       '*/*',
     );
-    // SHARE OPERATIONS
   }
 }
