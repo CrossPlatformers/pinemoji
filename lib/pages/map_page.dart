@@ -14,6 +14,7 @@ import 'package:pinemoji/services/authentication-service.dart';
 import 'package:pinemoji/widgets/header-widget.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
 
+
 class MapPage extends StatefulWidget {
   final bool isNormalUser;
 
@@ -71,6 +72,14 @@ class MapPageState extends State<MapPage> {
   void dispose() {
     MapRepository.clear();
     super.dispose();
+  }
+
+  setStateIfMounted(VoidCallback cb){
+    if (mounted) {
+      setState(() {
+        cb();
+      });
+    }
   }
 
   @override
@@ -151,7 +160,7 @@ class MapPageState extends State<MapPage> {
                                     ),
                                   ),
                                   // GestureDetector(
-                                  //   onTap: () => setState(() {
+                                  //   onTap: () => setStateIfMounted(() {
                                   //     isSearchMode = true;
                                   //   }),
                                   //   child: Padding(
@@ -183,7 +192,7 @@ class MapPageState extends State<MapPage> {
                                 onPressed: () {
                                   getCurrentLocationMarkers();
                                   if (_mapButtonVisibility == 1 && mounted) {
-                                    setState(() {
+                                    setStateIfMounted(() {
                                       _mapButtonVisibility = 0;
                                     });
                                   }
@@ -233,11 +242,11 @@ class MapPageState extends State<MapPage> {
                     GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
-                        setState(() {
+                        setStateIfMounted(() {
                           closeList = !closeList;
                           Future.delayed(Duration(milliseconds: 100)).then(
                               (val) =>
-                                  setState(() => {showHeader = closeList}));
+                                  setStateIfMounted(() => {showHeader = closeList}));
                         });
                       },
                       child: Padding(
@@ -344,14 +353,14 @@ class MapPageState extends State<MapPage> {
     if (_debounce?.isActive ?? false) _debounce.cancel();
     _debounce = Timer(const Duration(milliseconds: 600), () {
       if (_mapButtonVisibility == 0 && mounted) {
-        setState(() {
+        setStateIfMounted(() {
           _mapButtonVisibility = 1;
         });
       }
       if (_debounceNested?.isActive ?? false) _debounceNested.cancel();
       _debounceNested = Timer(const Duration(milliseconds: 5000), () {
         if (_mapButtonVisibility == 1 && mounted) {
-          setState(() {
+          setStateIfMounted(() {
             _mapButtonVisibility = 0;
           });
         }
@@ -365,7 +374,7 @@ class MapPageState extends State<MapPage> {
 //    LatLng latLang = MapRepository.getLatLngFromPlaceDetails(placeDetails);
 //    var list = MarkerType.values.toList();
 //    list.shuffle();
-//    setState(() {
+//    setStateIfMounted(() {
 //      MapRepository.addMarker(placeDetails, markerType: list.first);
 //    });
 //    final GoogleMapController controller = await _controller.future;
@@ -388,7 +397,7 @@ class MapPageState extends State<MapPage> {
       option: lastSelectedPin,
       emojiIdList: lastEmojiIdList,
     );
-    setState(() {
+    setStateIfMounted(() {
       lastRequestList.length;
     });
 //    print(lastRequestList.length);
@@ -586,6 +595,14 @@ class StockFilterState extends State<StockFilter> {
 
   List<String> _filters = <String>[];
 
+  setStateIfMounted(VoidCallback cb){
+    if (mounted) {
+      setState(() {
+        cb();
+      });
+    }
+  }
+
   getFilters() {
     if (widget.onFilterChange != null) {
       widget.onFilterChange(_filters);
@@ -634,7 +651,7 @@ class StockFilterState extends State<StockFilter> {
           shadowColor: Colors.transparent,
           selected: _filters.contains(filter.id),
           onSelected: (bool value) {
-            setState(() {
+            setStateIfMounted(() {
               if (value) {
                 _filters.add(filter.id);
               } else {
@@ -704,6 +721,14 @@ class _ConditionFilterState extends State<ConditionFilter> {
     ),
   ];
 
+  setStateIfMounted(VoidCallback cb){
+    if (mounted) {
+      setState(() {
+        cb();
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -734,7 +759,7 @@ class _ConditionFilterState extends State<ConditionFilter> {
             conditionFilterModels.forEach((element) {
               element.isActive = false;
             });
-            setState(() {
+            setStateIfMounted(() {
               current.isActive = true;
             });
             if (widget.onPinChange != null) {
