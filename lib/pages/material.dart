@@ -22,6 +22,7 @@ class MaterialStatus extends StatefulWidget {
       id: currentElement.id,
     );
   }).toList();
+
   MaterialStatus({
     Key key,
   }) : super(key: key);
@@ -43,7 +44,13 @@ class _MaterialStatusState extends State<MaterialStatus> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => MapPage()));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MapPage(
+                        isNormalUser: !(AuthenticationService
+                                .verifiedUser.extraInfo['status'] ==
+                            "TTBA"),
+                      )));
         },
         child: Center(
           child: ClipRRect(

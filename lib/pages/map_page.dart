@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as lc;
 import 'package:pinemoji/models/emoji.dart';
 import 'package:pinemoji/models/request.dart';
+import 'package:pinemoji/pages/material.dart';
 import 'package:pinemoji/repositories/company_repository.dart';
 import 'package:pinemoji/repositories/map_repository.dart';
 import 'package:pinemoji/repositories/request_repository.dart';
@@ -13,10 +14,11 @@ import 'package:pinemoji/services/authentication-service.dart';
 import 'package:pinemoji/widgets/header-widget.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
 
-class MapPage extends StatefulWidget {
-  final bool fromRoot;
 
-  MapPage({this.fromRoot = false});
+class MapPage extends StatefulWidget {
+  final bool isNormalUser;
+
+  MapPage({this.isNormalUser});
 
   @override
   State<MapPage> createState() => MapPageState();
@@ -56,7 +58,7 @@ class MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     handleLocation();
-    if (widget.fromRoot) {
+    if (widget.isNormalUser) {
       lastEmojiIdList = null;
       lastSelectedPin = null;
       closeList = false;
@@ -72,6 +74,14 @@ class MapPageState extends State<MapPage> {
     super.dispose();
   }
 
+  setStateIfMounted(VoidCallback cb){
+    if (mounted) {
+      setState(() {
+        cb();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -85,13 +95,13 @@ class MapPageState extends State<MapPage> {
                     Column(
                       children: <Widget>[
                         Container(
-                          height: widget.fromRoot
+                          height: widget.isNormalUser
                               ? (MediaQuery.of(context).size.height / 8 - 40)
                               : MediaQuery.of(context).size.height / 8,
                         ),
                         Expanded(
                           child: AbsorbPointer(
-                            absorbing: widget.fromRoot,
+                            absorbing: widget.isNormalUser,
                             child: GoogleMap(
                               myLocationButtonEnabled: false,
                               myLocationEnabled: true,
@@ -128,8 +138,8 @@ class MapPageState extends State<MapPage> {
                     Align(
                       alignment: Alignment.topCenter,
                       child: GradientAppBar(
-                        fromRoot: widget.fromRoot,
-                        barHeight: widget.fromRoot ? 100 : 280,
+                        isNormalUser: widget.isNormalUser,
+                        barHeight: widget.isNormalUser ? 155 : 280,
                         onPinChange: onPinChange,
                         onFilterChange: onFilterChange,
                         title: !isSearchMode
@@ -150,7 +160,7 @@ class MapPageState extends State<MapPage> {
                                     ),
                                   ),
                                   // GestureDetector(
-                                  //   onTap: () => setState(() {
+                                  //   onTap: () => setStateIfMounted(() {
                                   //     isSearchMode = true;
                                   //   }),
                                   //   child: Padding(
@@ -170,33 +180,36 @@ class MapPageState extends State<MapPage> {
                               ),
                       ),
                     ),
-                    Positioned(
-                      right: 8,
-                      bottom: closeList ? 60 : 90,
-                      child: AnimatedOpacity(
-                        opacity: _mapButtonVisibility,
-                        duration: Duration(milliseconds: 800),
-                        child: FloatingActionButton.extended(
-                          onPressed: () {
-                            getCurrentLocationMarkers();
-                            if (_mapButtonVisibility == 1 && mounted) {
-                              setState(() {
-                                _mapButtonVisibility = 0;
-                              });
-                            }
-                          },
-                          label: Text(
-                            'Bu Bölgede Ara',
-                            style: TextStyle(fontSize: 12),
+                    widget.isNormalUser
+                        ? Container()
+                        : Positioned(
+                            right: 8,
+                            bottom: closeList ? 60 : 90,
+                            child: AnimatedOpacity(
+                              opacity: _mapButtonVisibility,
+                              duration: Duration(milliseconds: 800),
+                              child: FloatingActionButton.extended(
+                                onPressed: () {
+                                  getCurrentLocationMarkers();
+                                  if (_mapButtonVisibility == 1 && mounted) {
+                                    setStateIfMounted(() {
+                                      _mapButtonVisibility = 0;
+                                    });
+                                  }
+                                },
+                                label: Text(
+                                  'Bu Bölgede Ara',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                icon: Icon(
+                                  Icons.search,
+                                  size: 20,
+                                ),
+                                backgroundColor:
+                                    Theme.of(context).primaryColorDark,
+                              ),
+                            ),
                           ),
-                          icon: Icon(
-                            Icons.search,
-                            size: 20,
-                          ),
-                          backgroundColor: Theme.of(context).primaryColorDark,
-                        ),
-                      ),
-                    ),
                   ],
                   fit: StackFit.expand,
                 ),
@@ -229,11 +242,11 @@ class MapPageState extends State<MapPage> {
                     GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
-                        setState(() {
+                        setStateIfMounted(() {
                           closeList = !closeList;
                           Future.delayed(Duration(milliseconds: 100)).then(
                               (val) =>
-                                  setState(() => {showHeader = closeList}));
+                                  setStateIfMounted(() => {showHeader = closeList}));
                         });
                       },
                       child: Padding(
@@ -340,14 +353,14 @@ class MapPageState extends State<MapPage> {
     if (_debounce?.isActive ?? false) _debounce.cancel();
     _debounce = Timer(const Duration(milliseconds: 600), () {
       if (_mapButtonVisibility == 0 && mounted) {
-        setState(() {
+        setStateIfMounted(() {
           _mapButtonVisibility = 1;
         });
       }
       if (_debounceNested?.isActive ?? false) _debounceNested.cancel();
       _debounceNested = Timer(const Duration(milliseconds: 5000), () {
         if (_mapButtonVisibility == 1 && mounted) {
-          setState(() {
+          setStateIfMounted(() {
             _mapButtonVisibility = 0;
           });
         }
@@ -361,7 +374,7 @@ class MapPageState extends State<MapPage> {
 //    LatLng latLang = MapRepository.getLatLngFromPlaceDetails(placeDetails);
 //    var list = MarkerType.values.toList();
 //    list.shuffle();
-//    setState(() {
+//    setStateIfMounted(() {
 //      MapRepository.addMarker(placeDetails, markerType: list.first);
 //    });
 //    final GoogleMapController controller = await _controller.future;
@@ -375,7 +388,7 @@ class MapPageState extends State<MapPage> {
 //  }
 
   getCurrentLocationMarkers() async {
-    if (widget.fromRoot)
+    if (widget.isNormalUser)
       await Future.delayed(Duration(
         milliseconds: 2000,
       ));
@@ -384,7 +397,7 @@ class MapPageState extends State<MapPage> {
       option: lastSelectedPin,
       emojiIdList: lastEmojiIdList,
     );
-    setState(() {
+    setStateIfMounted(() {
       lastRequestList.length;
     });
 //    print(lastRequestList.length);
@@ -448,7 +461,7 @@ class MapPageState extends State<MapPage> {
 class GradientAppBar extends StatelessWidget {
   final Widget title;
   final double barHeight;
-  final bool fromRoot;
+  final bool isNormalUser;
 
   final GetFilters onFilterChange;
 
@@ -458,7 +471,7 @@ class GradientAppBar extends StatelessWidget {
     this.title,
     this.onFilterChange,
     this.onPinChange,
-    this.fromRoot,
+    this.isNormalUser,
     this.barHeight = 280,
   });
 
@@ -478,7 +491,7 @@ class GradientAppBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              if (!fromRoot)
+              if (Navigator.canPop(context))
                 IconButton(
                   icon: Icon(Icons.arrow_back_ios),
                   onPressed: () {
@@ -486,17 +499,39 @@ class GradientAppBar extends StatelessWidget {
                   },
                 ),
               Expanded(child: title),
+              if (!Navigator.canPop(context))
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          content: Profile(size: MediaQuery.of(context).size),
+                        );
+                      },
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage("assets/default-profile.png"),
+                    ),
+                  ),
+                ),
             ],
           ),
           SizedBox(
             height: 8,
           ),
-          if (!fromRoot)
+          if (!isNormalUser)
             ConditionFilter(
               state: "Acil Destek",
               onPinChange: onPinChange,
             ),
-          if (!fromRoot)
+          if (!isNormalUser)
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -560,6 +595,14 @@ class StockFilterState extends State<StockFilter> {
 
   List<String> _filters = <String>[];
 
+  setStateIfMounted(VoidCallback cb){
+    if (mounted) {
+      setState(() {
+        cb();
+      });
+    }
+  }
+
   getFilters() {
     if (widget.onFilterChange != null) {
       widget.onFilterChange(_filters);
@@ -608,7 +651,7 @@ class StockFilterState extends State<StockFilter> {
           shadowColor: Colors.transparent,
           selected: _filters.contains(filter.id),
           onSelected: (bool value) {
-            setState(() {
+            setStateIfMounted(() {
               if (value) {
                 _filters.add(filter.id);
               } else {
@@ -678,6 +721,14 @@ class _ConditionFilterState extends State<ConditionFilter> {
     ),
   ];
 
+  setStateIfMounted(VoidCallback cb){
+    if (mounted) {
+      setState(() {
+        cb();
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -708,7 +759,7 @@ class _ConditionFilterState extends State<ConditionFilter> {
             conditionFilterModels.forEach((element) {
               element.isActive = false;
             });
-            setState(() {
+            setStateIfMounted(() {
               current.isActive = true;
             });
             if (widget.onPinChange != null) {
@@ -818,44 +869,55 @@ class HospitalConditionCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: <Widget>[
-                  Stack(
-                    children: <Widget>[
-                      Image.asset(
-                        "assets/red-pin.png",
-                        width: 24,
-                      ),
-                      Positioned(
-                        top: 2,
-                        left: 7,
-                        child: Text(
-                          "H",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                          ),
+              Flexible(
+                flex: 2,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        Image.asset(
+                          "assets/red-pin.png",
+                          width: 24,
                         ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(hospitalName),
-                ],
+                        Positioned(
+                          top: 2,
+                          left: 7,
+                          child: Text(
+                            "H",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Flexible(
+                      child: Text(
+                        hospitalName + "dsadas",
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              Row(
-                children: [
-                  Text(
-                    emoji,
-                    style: TextStyle(fontSize: 26),
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(emojiDescription),
-                ],
+              Flexible(
+                child: Row(
+                  children: [
+                    Text(
+                      emoji,
+                      style: TextStyle(fontSize: 26),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(emojiDescription),
+                  ],
+                ),
               )
             ],
           ),
