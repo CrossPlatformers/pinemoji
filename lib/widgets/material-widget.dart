@@ -56,10 +56,11 @@ class MaterialStatusContent extends StatelessWidget {
             Text(
               materialStatusModel.text,
               style: TextStyle(
-                fontSize: size.height / 45,
+                fontSize: size.height / 50,
                 fontStyle: FontStyle.italic,
                 color: Color(0xFFC7CAD1),
               ),
+              textAlign: TextAlign.center,
             )
           ],
         ),

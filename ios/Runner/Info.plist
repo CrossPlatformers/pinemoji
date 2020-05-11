@@ -56,6 +56,6 @@
     <key>NSLocationAlwaysUsageDescription</key>
     <string>I need it </string>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Because we want to show the information nearby you</string>
+    <string>Yakınınızdaki bilgileri, haritadan görebilmeniz için izin vermeniz gerekiyor</string>
 </dict>
 </plist>

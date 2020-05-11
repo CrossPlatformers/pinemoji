@@ -14,7 +14,6 @@ import 'package:pinemoji/services/authentication-service.dart';
 import 'package:pinemoji/widgets/header-widget.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
 
-
 class MapPage extends StatefulWidget {
   final bool isNormalUser;
 
@@ -74,7 +73,7 @@ class MapPageState extends State<MapPage> {
     super.dispose();
   }
 
-  setStateIfMounted(VoidCallback cb){
+  setStateIfMounted(VoidCallback cb) {
     if (mounted) {
       setState(() {
         cb();
@@ -245,8 +244,8 @@ class MapPageState extends State<MapPage> {
                         setStateIfMounted(() {
                           closeList = !closeList;
                           Future.delayed(Duration(milliseconds: 100)).then(
-                              (val) =>
-                                  setStateIfMounted(() => {showHeader = closeList}));
+                              (val) => setStateIfMounted(
+                                  () => {showHeader = closeList}));
                         });
                       },
                       child: Padding(
@@ -589,13 +588,13 @@ class StockFilterState extends State<StockFilter> {
     const FilterEntry('N95 Maske', '😷', "2"),
     const FilterEntry('Siperlik / Gözlük', '🥽', "3"),
     const FilterEntry('Eldiven', '🧤', "4"),
-    const FilterEntry('Önlük', '🥼', "5"),
+    const FilterEntry('Tek Kullanımlık Önlük', '🥼', "5"),
     const FilterEntry('Solunum Cihazı', '⚗', "6"),
   ];
 
   List<String> _filters = <String>[];
 
-  setStateIfMounted(VoidCallback cb){
+  setStateIfMounted(VoidCallback cb) {
     if (mounted) {
       setState(() {
         cb();
@@ -721,7 +720,7 @@ class _ConditionFilterState extends State<ConditionFilter> {
     ),
   ];
 
-  setStateIfMounted(VoidCallback cb){
+  setStateIfMounted(VoidCallback cb) {
     if (mounted) {
       setState(() {
         cb();
@@ -898,7 +897,7 @@ class HospitalConditionCard extends StatelessWidget {
                     ),
                     Flexible(
                       child: Text(
-                        hospitalName + "dsadas",
+                        hospitalName,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -915,7 +914,12 @@ class HospitalConditionCard extends StatelessWidget {
                     SizedBox(
                       width: 8,
                     ),
-                    Text(emojiDescription),
+                    Flexible(
+                      child: Text(
+                        emojiDescription,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ],
                 ),
               )

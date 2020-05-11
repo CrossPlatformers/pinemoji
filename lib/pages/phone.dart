@@ -76,7 +76,7 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
                                 padding: const EdgeInsets.only(left: 30),
                                 child: Container(
                                   child: Text(
-                                    "Odamız İle\nPaylaşmış\nOlduğunuz Cep\nTelefonu Numaranızı\nGiriniz",
+                                    "Birliğimiz İle\nPaylaşmış\nOlduğunuz Cep\nTelefonu Numaranızı\nGiriniz",
                                     style: TextStyle(
                                       fontSize:
                                           (height * 0.04).toInt().toDouble(),
@@ -202,6 +202,11 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
             isLoading = false;
           });
           pushToValidationPage(context, status.verificationId);
+        } else if (status.authenticationEnum == AuthenticationEnum.fail) {
+          setState(() {
+            isLoading = false;
+          });
+          showWarning(status.exceptionCode);
         }
       });
     } else {
@@ -214,6 +219,9 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
       SnackBar(
         content: Text(text),
         behavior: SnackBarBehavior.fixed,
+        duration: Duration(
+          milliseconds: 3000,
+        ),
       ),
     );
   }

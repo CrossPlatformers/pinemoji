@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pinemoji/models/company.dart';
 import 'package:pinemoji/models/emoji.dart';
 import 'package:pinemoji/models/emoji_option.dart';
 import 'package:pinemoji/models/question.dart';
-import 'package:pinemoji/models/request.dart';
 import 'package:pinemoji/models/survey.dart';
 
 class CompanyRepository {
@@ -63,7 +61,7 @@ class CompanyRepository {
           stateList: []),
       Emoji(
           companyId: "2df77a23-1534-4736-825c-d180566250a3",
-          description: "Önlük",
+          description: "Tek Kullanımlık Önlük",
           info: "🥼",
           id: "5",
           optionList: [
