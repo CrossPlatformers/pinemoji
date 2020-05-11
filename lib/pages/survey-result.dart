@@ -22,10 +22,13 @@ class SurveyResultPage extends StatefulWidget {
 class _SurveyResultPageState extends State<SurveyResultPage> {
   QuestionResult selectedQuestion;
   Result result;
+  bool hasLoading = false;
 
   @override
   void initState() {
-    SurveyRepository().getSurveyResult().then((value) => setState(() => result = value));
+    SurveyRepository()
+        .getSurveyResult()
+        .then((value) => setState(() => result = value));
     super.initState();
   }
 
@@ -46,46 +49,73 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
               ),
             ),
           ),
-          Container(
-            constraints: BoxConstraints(maxHeight: selectedQuestion != null ? MediaQuery.of(context).size.height * .34 : MediaQuery.of(context).size.height * .65),
-            child: GridView.count(
-              crossAxisCount: 2,
-              padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
-              mainAxisSpacing: 40,
-              crossAxisSpacing: 10,
-              childAspectRatio: .7,
-              shrinkWrap: true,
-              children: [
-                if (result != null)
-                  ...result.questionResultList.map((question) {
-                    final GlobalKey _currentQuestionKey = GlobalKey();
-                    return GestureDetector(
-                      key: _currentQuestionKey,
-                      onTap: () {
-                        setState(() {
-                          if (selectedQuestion == question) {
-                            selectedQuestion = null;
-                          } else {
-                            selectedQuestion = question;
-                            Scrollable.ensureVisible(
-                              _currentQuestionKey.currentContext,
-                              curve: Curves.easeIn,
-                              duration: Duration(
-                                milliseconds: 300,
-                              ),
-                            );
-                          }
-                        });
-                      },
-                      child: SurveyCard(
-                        selectedQuestion: selectedQuestion,
-                        question: question,
-                      ),
-                    );
-                  }).toList()
-              ],
-            ),
-          ),
+          hasLoading
+              ? Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          backgroundColor: Colors.white70,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "Sonuçlar Hazırlanıyor...",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontStyle: FontStyle.italic,
+                            fontSize: 24,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              : Container(
+                  constraints: BoxConstraints(
+                      maxHeight: selectedQuestion != null
+                          ? MediaQuery.of(context).size.height * .34
+                          : MediaQuery.of(context).size.height * .65),
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
+                    mainAxisSpacing: 40,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: .7,
+                    shrinkWrap: true,
+                    children: [
+                      if (result != null)
+                        ...result.questionResultList.map((question) {
+                          final GlobalKey _currentQuestionKey = GlobalKey();
+                          return GestureDetector(
+                            key: _currentQuestionKey,
+                            onTap: () {
+                              setState(() {
+                                if (selectedQuestion == question) {
+                                  selectedQuestion = null;
+                                } else {
+                                  selectedQuestion = question;
+                                  Scrollable.ensureVisible(
+                                    _currentQuestionKey.currentContext,
+                                    curve: Curves.easeIn,
+                                    duration: Duration(
+                                      milliseconds: 300,
+                                    ),
+                                  );
+                                }
+                              });
+                            },
+                            child: SurveyCard(
+                              selectedQuestion: selectedQuestion,
+                              question: question,
+                            ),
+                          );
+                        }).toList()
+                    ],
+                  ),
+                ),
           if (selectedQuestion != null)
             Expanded(
               child: Column(
@@ -158,7 +188,7 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
                 ],
               ),
             ),
-          if (selectedQuestion == null)
+          if (selectedQuestion == null && !hasLoading)
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 7, 0, 0),
               child: OutcomeButton(
@@ -182,7 +212,8 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
       }
       answer.ownerList.forEach((owner, location) {
         if (resultMap[location] == null) {
-          resultMap[answer.answerText][location] = answerFromJson(answerToJson(answer));
+          resultMap[answer.answerText][location] =
+              answerFromJson(answerToJson(answer));
         }
       });
     });
@@ -196,20 +227,41 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
   }
 
   createReport() async {
+    setState(() {
+      hasLoading = true;
+    });
     var excel = Excel.createExcel();
     var sheet = excel.tables.keys.first;
     excel.insertRow(sheet, 0);
-    excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 0), "No", backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
+    excel.updateCell(
+        sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 0), "No",
+        backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
 
-    excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 1), "Anket Sorusu", backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
+    excel.updateCell(sheet,
+        CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 1), "Anket Sorusu",
+        backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
 
-    excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 2), "Katılımcı Sayısı", backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
+    excel.updateCell(
+        sheet,
+        CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 2),
+        "Katılımcı Sayısı",
+        backgroundColorHex: "#263964",
+        fontColorHex: "#C7CAD1");
 
-    excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 3), "Hastane Adı", backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
+    excel.updateCell(sheet,
+        CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 3), "Hastane Adı",
+        backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
 
-    excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 4), "Yanıt", backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
+    excel.updateCell(
+        sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 4), "Yanıt",
+        backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
 
-    excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 5), "Yanıtlayan Doktor Sayısı", backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
+    excel.updateCell(
+        sheet,
+        CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 5),
+        "Yanıtlayan Doktor Sayısı",
+        backgroundColorHex: "#263964",
+        fontColorHex: "#C7CAD1");
 
     int index = 0;
     for (QuestionResult res in result.questionResultList) {
@@ -219,15 +271,33 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
       for (Answer answer in answerList) {
         index++;
         excel.insertRow(sheet, index);
-        excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: index, columnIndex: 0), result.questionResultList.indexOf(res) + 1);
-        excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: index, columnIndex: 1), res.questionText);
-        excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: index, columnIndex: 3), answer.ownerList[answer.ownerList.keys.elementAt(0)]);
-        excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: index, columnIndex: 4), answer.answerText);
-        excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: index, columnIndex: 5), answer.ownerList.length);
+        excel.updateCell(
+            sheet,
+            CellIndex.indexByColumnRow(rowIndex: index, columnIndex: 0),
+            result.questionResultList.indexOf(res) + 1);
+        excel.updateCell(
+            sheet,
+            CellIndex.indexByColumnRow(rowIndex: index, columnIndex: 1),
+            res.questionText);
+        excel.updateCell(
+            sheet,
+            CellIndex.indexByColumnRow(rowIndex: index, columnIndex: 3),
+            answer.ownerList[answer.ownerList.keys.elementAt(0)]);
+        excel.updateCell(
+            sheet,
+            CellIndex.indexByColumnRow(rowIndex: index, columnIndex: 4),
+            answer.answerText);
+        excel.updateCell(
+            sheet,
+            CellIndex.indexByColumnRow(rowIndex: index, columnIndex: 5),
+            answer.ownerList.length);
         answerCount = answerCount + answer.ownerList.length;
       }
       for (int i = startIndex; i <= index; i++) {
-        excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: i, columnIndex: 2), answerCount);
+        excel.updateCell(
+            sheet,
+            CellIndex.indexByColumnRow(rowIndex: i, columnIndex: 2),
+            answerCount);
       }
     }
 
@@ -236,6 +306,9 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
     file.writeAsBytesSync(await excel.encode());
 
     Uint8List readAsBytes = await file.readAsBytes();
+    setState(() {
+      hasLoading = false;
+    });
     await Share.file(
       'excel file',
       'AnketSonuclari.xlsx',
