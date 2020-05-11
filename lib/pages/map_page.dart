@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as lc;
 import 'package:pinemoji/models/emoji.dart';
 import 'package:pinemoji/models/request.dart';
+import 'package:pinemoji/pages/material.dart';
 import 'package:pinemoji/repositories/company_repository.dart';
 import 'package:pinemoji/repositories/map_repository.dart';
 import 'package:pinemoji/repositories/request_repository.dart';
@@ -14,9 +15,9 @@ import 'package:pinemoji/widgets/header-widget.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
 
 class MapPage extends StatefulWidget {
-  final bool fromRoot;
+  final bool isNormalUser;
 
-  MapPage({this.fromRoot = false});
+  MapPage({this.isNormalUser});
 
   @override
   State<MapPage> createState() => MapPageState();
@@ -56,7 +57,7 @@ class MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     handleLocation();
-    if (widget.fromRoot) {
+    if (widget.isNormalUser) {
       lastEmojiIdList = null;
       lastSelectedPin = null;
       closeList = false;
@@ -85,13 +86,13 @@ class MapPageState extends State<MapPage> {
                     Column(
                       children: <Widget>[
                         Container(
-                          height: widget.fromRoot
+                          height: widget.isNormalUser
                               ? (MediaQuery.of(context).size.height / 8 - 40)
                               : MediaQuery.of(context).size.height / 8,
                         ),
                         Expanded(
                           child: AbsorbPointer(
-                            absorbing: widget.fromRoot,
+                            absorbing: widget.isNormalUser,
                             child: GoogleMap(
                               myLocationButtonEnabled: false,
                               myLocationEnabled: true,
@@ -128,8 +129,8 @@ class MapPageState extends State<MapPage> {
                     Align(
                       alignment: Alignment.topCenter,
                       child: GradientAppBar(
-                        fromRoot: widget.fromRoot,
-                        barHeight: widget.fromRoot ? 100 : 280,
+                        isNormalUser: widget.isNormalUser,
+                        barHeight: widget.isNormalUser ? 100 : 280,
                         onPinChange: onPinChange,
                         onFilterChange: onFilterChange,
                         title: !isSearchMode
@@ -170,33 +171,36 @@ class MapPageState extends State<MapPage> {
                               ),
                       ),
                     ),
-                    Positioned(
-                      right: 8,
-                      bottom: closeList ? 60 : 90,
-                      child: AnimatedOpacity(
-                        opacity: _mapButtonVisibility,
-                        duration: Duration(milliseconds: 800),
-                        child: FloatingActionButton.extended(
-                          onPressed: () {
-                            getCurrentLocationMarkers();
-                            if (_mapButtonVisibility == 1 && mounted) {
-                              setState(() {
-                                _mapButtonVisibility = 0;
-                              });
-                            }
-                          },
-                          label: Text(
-                            'Bu Bölgede Ara',
-                            style: TextStyle(fontSize: 12),
+                    widget.isNormalUser
+                        ? Container()
+                        : Positioned(
+                            right: 8,
+                            bottom: closeList ? 60 : 90,
+                            child: AnimatedOpacity(
+                              opacity: _mapButtonVisibility,
+                              duration: Duration(milliseconds: 800),
+                              child: FloatingActionButton.extended(
+                                onPressed: () {
+                                  getCurrentLocationMarkers();
+                                  if (_mapButtonVisibility == 1 && mounted) {
+                                    setState(() {
+                                      _mapButtonVisibility = 0;
+                                    });
+                                  }
+                                },
+                                label: Text(
+                                  'Bu Bölgede Ara',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                icon: Icon(
+                                  Icons.search,
+                                  size: 20,
+                                ),
+                                backgroundColor:
+                                    Theme.of(context).primaryColorDark,
+                              ),
+                            ),
                           ),
-                          icon: Icon(
-                            Icons.search,
-                            size: 20,
-                          ),
-                          backgroundColor: Theme.of(context).primaryColorDark,
-                        ),
-                      ),
-                    ),
                   ],
                   fit: StackFit.expand,
                 ),
@@ -375,7 +379,7 @@ class MapPageState extends State<MapPage> {
 //  }
 
   getCurrentLocationMarkers() async {
-    if (widget.fromRoot)
+    if (widget.isNormalUser)
       await Future.delayed(Duration(
         milliseconds: 2000,
       ));
@@ -448,7 +452,7 @@ class MapPageState extends State<MapPage> {
 class GradientAppBar extends StatelessWidget {
   final Widget title;
   final double barHeight;
-  final bool fromRoot;
+  final bool isNormalUser;
 
   final GetFilters onFilterChange;
 
@@ -458,7 +462,7 @@ class GradientAppBar extends StatelessWidget {
     this.title,
     this.onFilterChange,
     this.onPinChange,
-    this.fromRoot,
+    this.isNormalUser,
     this.barHeight = 280,
   });
 
@@ -478,7 +482,7 @@ class GradientAppBar extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              if (!fromRoot)
+              if (Navigator.canPop(context))
                 IconButton(
                   icon: Icon(Icons.arrow_back_ios),
                   onPressed: () {
@@ -486,17 +490,39 @@ class GradientAppBar extends StatelessWidget {
                   },
                 ),
               Expanded(child: title),
+              if (!Navigator.canPop(context))
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          content: Profile(size: MediaQuery.of(context).size),
+                        );
+                      },
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage("assets/default-profile.png"),
+                    ),
+                  ),
+                ),
             ],
           ),
           SizedBox(
             height: 8,
           ),
-          if (!fromRoot)
+          if (!isNormalUser)
             ConditionFilter(
               state: "Acil Destek",
               onPinChange: onPinChange,
             ),
-          if (!fromRoot)
+          if (!isNormalUser)
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

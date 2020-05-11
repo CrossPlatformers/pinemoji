@@ -95,7 +95,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 "PD"
               ].contains(AuthenticationService.verifiedUser.extraInfo['status'])
                   ? MapPage(
-                      fromRoot: true,
+                      isNormalUser: !(AuthenticationService.verifiedUser.extraInfo['status'] == "TTBA"),
                     )
                   : MaterialStatus(),
               AuthenticationService.verifiedUser.extraInfo['status'] == "TTBA"
