@@ -25,9 +25,7 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
 
   @override
   void initState() {
-    SurveyRepository()
-        .getSurveyResult()
-        .then((value) => setState(() => result = value));
+    SurveyRepository().getSurveyResult().then((value) => setState(() => result = value));
     super.initState();
   }
 
@@ -49,10 +47,7 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
             ),
           ),
           Container(
-            constraints: BoxConstraints(
-                maxHeight: selectedQuestion != null
-                    ? MediaQuery.of(context).size.height * .34
-                    : MediaQuery.of(context).size.height * .65),
+            constraints: BoxConstraints(maxHeight: selectedQuestion != null ? MediaQuery.of(context).size.height * .34 : MediaQuery.of(context).size.height * .65),
             child: GridView.count(
               crossAxisCount: 2,
               padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
@@ -187,8 +182,7 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
       }
       answer.ownerList.forEach((owner, location) {
         if (resultMap[location] == null) {
-          resultMap[answer.answerText][location] =
-              answerFromJson(answerToJson(answer));
+          resultMap[answer.answerText][location] = answerFromJson(answerToJson(answer));
         }
       });
     });
@@ -206,41 +200,48 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
     var excel = Excel.createExcel();
     var sheet = excel.tables.keys.first;
     excel.insertRow(sheet, 0);
-    excel.updateCell(
-        sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 0), "No");
+    excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 0), "No", backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
 
-    excel.updateCell(
-        sheet,
-        CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 1),
-        "Anket Sorusu");
+    excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 1), "Anket Sorusu", backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
 
-    excel.updateCell(
-        sheet,
-        CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 2),
-        "Katılımcı Sayısı");
+    excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 2), "Katılımcı Sayısı", backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
 
-    excel.updateCell(sheet,
-        CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 3), "Hastane Adı");
+    excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 3), "Hastane Adı", backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
 
-    excel.updateCell(sheet,
-        CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 4), "Yanıt");
+    excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 4), "Yanıt", backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
 
-    excel.updateCell(
-        sheet,
-        CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 5),
-        "Yanıtlayan Doktor Sayısı");
+    excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 5), "Yanıtlayan Doktor Sayısı", backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
+
+    int index = 0;
+    for (QuestionResult res in result.questionResultList) {
+      int startIndex = index + 1;
+      int answerCount = 0;
+      List<Answer> answerList = groupByAnswer(res.answerList);
+      for (Answer answer in answerList) {
+        index++;
+        excel.insertRow(sheet, index);
+        excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: index, columnIndex: 0), result.questionResultList.indexOf(res) + 1);
+        excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: index, columnIndex: 1), res.questionText);
+        excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: index, columnIndex: 3), answer.ownerList[answer.ownerList.keys.elementAt(0)]);
+        excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: index, columnIndex: 4), answer.answerText);
+        excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: index, columnIndex: 5), answer.ownerList.length);
+        answerCount = answerCount + answer.ownerList.length;
+      }
+      for (int i = startIndex; i <= index; i++) {
+        excel.updateCell(sheet, CellIndex.indexByColumnRow(rowIndex: i, columnIndex: 2), answerCount);
+      }
+    }
 
     final directory = await getApplicationDocumentsDirectory();
-    var file = File(directory.path + "/COVID19.xlsx");
+    var file = File(directory.path + "/SurveyResults.xlsx");
     file.writeAsBytesSync(await excel.encode());
 
     Uint8List readAsBytes = await file.readAsBytes();
     await Share.file(
       'excel file',
-      'COVID19.xlsx',
+      'SurveyResults.xlsx',
       readAsBytes,
       '*/*',
-      text: 'My optional text.',
     );
     // SHARE OPERATIONS
   }
