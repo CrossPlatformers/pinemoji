@@ -130,7 +130,7 @@ class MapPageState extends State<MapPage> {
                       alignment: Alignment.topCenter,
                       child: GradientAppBar(
                         isNormalUser: widget.isNormalUser,
-                        barHeight: widget.isNormalUser ? 100 : 280,
+                        barHeight: widget.isNormalUser ? 155 : 280,
                         onPinChange: onPinChange,
                         onFilterChange: onFilterChange,
                         title: !isSearchMode
@@ -844,44 +844,55 @@ class HospitalConditionCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: <Widget>[
-                  Stack(
-                    children: <Widget>[
-                      Image.asset(
-                        "assets/red-pin.png",
-                        width: 24,
-                      ),
-                      Positioned(
-                        top: 2,
-                        left: 7,
-                        child: Text(
-                          "H",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                          ),
+              Flexible(
+                flex: 2,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        Image.asset(
+                          "assets/red-pin.png",
+                          width: 24,
                         ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(hospitalName),
-                ],
+                        Positioned(
+                          top: 2,
+                          left: 7,
+                          child: Text(
+                            "H",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Flexible(
+                      child: Text(
+                        hospitalName + "dsadas",
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              Row(
-                children: [
-                  Text(
-                    emoji,
-                    style: TextStyle(fontSize: 26),
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(emojiDescription),
-                ],
+              Flexible(
+                child: Row(
+                  children: [
+                    Text(
+                      emoji,
+                      style: TextStyle(fontSize: 26),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(emojiDescription),
+                  ],
+                ),
               )
             ],
           ),
