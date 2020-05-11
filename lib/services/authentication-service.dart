@@ -52,7 +52,7 @@ class AuthenticationService {
   }
 
   Future<bool> checkPhoneNumber(String phoneNo) async {
-    if (['+905075797878', '+905078533433'].contains(phoneNo)) {
+    if (['+905075797878', '+905078533433', '+905415435019'].contains(phoneNo)) {
       verifiedUser = await UserRepository().getUserByPhone(phoneNo);
       return true;
     }
