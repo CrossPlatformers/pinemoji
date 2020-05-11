@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
@@ -232,6 +234,14 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
     var file = File(directory.path + "/COVID19.xlsx");
     file.writeAsBytesSync(await excel.encode());
 
+    Uint8List readAsBytes = await file.readAsBytes();
+    await Share.file(
+      'excel file',
+      'COVID19.xlsx',
+      readAsBytes,
+      '*/*',
+      text: 'My optional text.',
+    );
     // SHARE OPERATIONS
   }
 }

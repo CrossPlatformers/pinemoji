@@ -22,6 +22,7 @@ dependencies:
 
 
   location: ^3.0.0
+  esys_flutter_share: ^1.0.2
 
   google_maps_flutter: ^0.5.26+4
   google_maps_webservice: ^0.0.16
