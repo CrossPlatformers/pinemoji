@@ -5,7 +5,7 @@ import 'package:pinemoji/services/authentication-service.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
 
 class ValidationCodePage extends StatefulWidget {
-  String verificationId;
+  final String verificationId;
 
   ValidationCodePage({this.verificationId});
 

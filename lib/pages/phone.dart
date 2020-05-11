@@ -196,6 +196,7 @@ class _PhoneValidationPageState extends State<PhoneValidationPage> {
         isLoading = true;
       });
       await AuthenticationService()
+          // ignore: missing_return
           .verifyPhone('+9' + phoneController.text, context, (status) {
         if (status.authenticationEnum == AuthenticationEnum.smsSent) {
           setState(() {

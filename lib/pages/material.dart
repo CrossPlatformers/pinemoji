@@ -14,14 +14,14 @@ import 'package:pinemoji/repositories/user_repository.dart';
 
 class MaterialStatus extends StatefulWidget {
   static var emojiList = CompanyRepository().getEmojiList();
-  static var materialModelList = emojiList.map((currentElement) {
-    return MaterialStatusModel(
-      emoji: currentElement.info,
-      text: currentElement.description,
-      color: Colors.white38,
-      id: currentElement.id,
-    );
-  }).toList();
+  static var materialModelList = emojiList
+      .map((currentElement) => MaterialStatusModel(
+            emoji: currentElement.info,
+            text: currentElement.description,
+            color: Colors.white38,
+            id: currentElement.id,
+          ))
+      .toList();
 
   MaterialStatus({
     Key key,

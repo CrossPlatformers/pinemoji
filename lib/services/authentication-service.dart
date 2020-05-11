@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_webservice/geolocation.dart';
 import 'package:pinemoji/enums/authentication-enum.dart';
 import 'package:pinemoji/enums/verification-status-enum.dart';
 import 'package:pinemoji/models/authentication-status.dart';
@@ -26,6 +24,8 @@ class AuthenticationService {
         verifiedUser.location = (await MapRepository.getPlaceDetailsFromName(verifiedUser.extraInfo['location'])).location;
         await UserRepository().addUser(verifiedUser);
         return VerificationStatusEnum.ok;
+      }else {
+        return VerificationStatusEnum.wrongCode;
       }
     } on PlatformException catch (e) {
       switch (e.code) {
@@ -80,7 +80,7 @@ class AuthenticationService {
     }
   }
 
-  verifyPhone(String phoneNo, BuildContext context, Function callback(AuthenticationStatus authenticationStatus)) async {
+  verifyPhone(String phoneNo, BuildContext context, VoidCallback callback(AuthenticationStatus authenticationStatus)) async {
     AuthenticationStatus status;
     await checkPhoneNumber(phoneNo);
     if (verifiedUser == null) {

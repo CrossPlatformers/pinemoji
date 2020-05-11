@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pinemoji/models/company.dart';
 import 'package:pinemoji/models/emoji.dart';
 import 'package:pinemoji/models/emoji_option.dart';
 import 'package:pinemoji/models/question.dart';
-import 'package:pinemoji/models/request.dart';
 import 'package:pinemoji/models/survey.dart';
 
 class CompanyRepository {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pinemoji/pages/phone.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
-import 'package:pinemoji/widgets/state-filter-item.dart';
 
 class WelcomePage extends StatelessWidget {
   @override

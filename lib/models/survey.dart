@@ -25,8 +25,8 @@ class Survey {
   Survey({
     this.id,
     @required this.companyId,
-    @required this.startDate,
-    @required this.endDate,
+    this.startDate,
+    this.endDate,
     @required this.active,
     @required this.sendType,
     @required this.answerType,

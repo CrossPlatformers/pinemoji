@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
 class StatusTitle extends StatelessWidget {
-  String text;
-  double width;
+  final String text;
+  final double width;
 
-  StatusTitle(String text, double width) {
-    this.text = text;
-    this.width = width;
-  }
+  StatusTitle({this.text, this.width});
+
   @override
   Widget build(BuildContext context) {
     return Container(

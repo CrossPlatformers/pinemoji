@@ -33,9 +33,9 @@ class Request {
     @required this.locationName,
     @required this.companyId,
     @required this.emoji,
-    @required this.image,
-    @required this.state,
-    @required this.responseList,
+    this.image,
+    this.state,
+    this.responseList,
     @required this.option,
     @required this.date,
   });

@@ -8,7 +8,8 @@ import 'package:pinemoji/widgets/material-widget.dart';
 
 class MaterialWidgetController extends StatefulWidget {
   final List<MaterialStatusModel> materialStatusModelList;
-  List<Request> requestList;
+  final List<Request> requestList;
+
   MaterialWidgetController(
       {Key key, this.materialStatusModelList, this.requestList})
       : super(key: key);
@@ -19,12 +20,14 @@ class MaterialWidgetController extends StatefulWidget {
 
 class _MaterialWidgetControllerState extends State<MaterialWidgetController> {
   bool timeout = false;
+  List requestList;
+
   @override
   void initState() {
     super.initState();
-    RequestRepository().getMyRequests().then((requestList) {
+    RequestRepository().getMyRequests().then((reqList) {
       setState(() {
-        widget.requestList = requestList;
+        requestList = reqList;
         for (var request in requestList) {
           var currentWidget = widget.materialStatusModelList
               .firstWhere((x) => x.id == request.emoji);

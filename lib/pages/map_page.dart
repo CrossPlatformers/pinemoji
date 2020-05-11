@@ -440,7 +440,7 @@ class MapPageState extends State<MapPage> {
     }
   }
 
-  Function onFilterChange(List<String> filters) {
+  dynamic onFilterChange(List<String> filters) {
 //    print(filters.toString());
     lastEmojiIdList = filters;
     getCurrentLocationMarkers();
@@ -572,7 +572,7 @@ class FilterEntry {
   final String id;
 }
 
-typedef Function GetFilters(List<String> filters);
+typedef VoidCallback GetFilters(List<String> filters);
 
 class StockFilter extends StatefulWidget {
   final GetFilters onFilterChange;
@@ -785,7 +785,7 @@ class ConditionFilterModel {
   ConditionFilterModel({
     @required this.imagePath,
     @required this.text,
-    @required this.pinCount,
+    this.pinCount,
     this.isActive = false,
   });
 }
