@@ -1,9 +1,14 @@
+import 'dart:io';
+
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pinemoji/models/answer.dart';
 import 'package:pinemoji/models/question_result.dart';
 import 'package:pinemoji/models/result.dart';
 import 'package:pinemoji/repositories/survey_repository.dart';
 import 'package:pinemoji/widgets/header-widget.dart';
+import 'package:pinemoji/widgets/outcome-button.dart';
 import 'package:pinemoji/widgets/survey-card.dart';
 import 'package:pinemoji/widgets/survey-filter-item.dart';
 
@@ -155,6 +160,16 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
                   )
                 ],
               ),
+            ),
+          if (selectedQuestion == null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 7, 0, 0),
+              child: OutcomeButton(
+                text: "Sonuçları Paylaş",
+                action: () {
+                  createReport();
+                },
+              ),
             )
         ],
       ),
@@ -182,5 +197,41 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
       });
     });
     return reslutList;
+  }
+
+  createReport() async {
+    // var data = await SurveyRepository().getSurveyResult();
+    var excel = Excel.createExcel();
+    var sheet = excel.tables.keys.first;
+    excel.insertRow(sheet, 0);
+    excel.updateCell(
+        sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 0), "No");
+
+    excel.updateCell(
+        sheet,
+        CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 1),
+        "Anket Sorusu");
+
+    excel.updateCell(
+        sheet,
+        CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 2),
+        "Katılımcı Sayısı");
+
+    excel.updateCell(sheet,
+        CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 3), "Hastane Adı");
+
+    excel.updateCell(sheet,
+        CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 4), "Yanıt");
+
+    excel.updateCell(
+        sheet,
+        CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 5),
+        "Yanıtlayan Doktor Sayısı");
+
+    final directory = await getApplicationDocumentsDirectory();
+    var file = File(directory.path + "/COVID19.xlsx");
+    file.writeAsBytesSync(await excel.encode());
+
+    // SHARE OPERATIONS
   }
 }
