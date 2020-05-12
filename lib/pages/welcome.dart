@@ -40,7 +40,7 @@ class WelcomePage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(right: 24.0),
+                        padding: const EdgeInsets.only(right: 24.0, top: 24.0),
                         child: Image.asset(
                           "assets/ttb.png",
                           width: height * 0.1,

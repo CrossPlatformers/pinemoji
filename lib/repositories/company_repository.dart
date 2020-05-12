@@ -96,7 +96,7 @@ class CompanyRepository {
         questionList: [
           Question(
               id: "d92abe85-fa24-4a04-b29d-3b8245640491",
-              description: "Şu ana kadar COVID-19 tanısı aldınız mı?",
+              description: "Şu ana kadar son salgında tanı aldınız mı?",
               type: "TEXT",
               answerList: [
                 "Hayır",
@@ -110,7 +110,7 @@ class CompanyRepository {
               ]),
           Question(
               id: "22d61d18-da9a-48ac-a88f-b24af8dcba73",
-              description: "COVID-19 nedeniyle uygulanan tedavi",
+              description: "Son salgın nedeniyle uygulanan tedavi",
               type: "TEXT",
               answerList: [
                 "Tanı almadım",
@@ -128,13 +128,13 @@ class CompanyRepository {
               ]),
           Question(
               id: "c7706328-7dc4-488b-9ab4-f5ad18466b4d",
-              description: "Riskli COVID 19 temasınız oldu mu?",
+              description: "Son salgın hastası ile riskli bir temasınız oldu mu?",
               type: "SELECT",
               answerList: [
                 "Hayır",
-                "Evet düşük riskli",
-                "Evet orta riskli",
-                "Evet yüksek riskli",
+                "Evet düşük riskli (Tıbbi maske takılmış, gözlük, eldiven ve önlük kullanılmamış)",
+                "Evet orta riskli (Tıbbi maske veya N95 kullanmamış/N95 endikasyonu olan durumda tıbbi maske kullanmış / göz koruyucu kullanılmamış)",
+                "Evet yüksek riskli (Tıbbi maske veya N95 kullanmamış)",
               ],
               emojiList: [
                 "😊",
@@ -145,13 +145,13 @@ class CompanyRepository {
           Question(
               id: "268feb88-38ee-4abd-8a04-57a9fe5ff805",
               description:
-                  "Temas sonrası SB riskli temas algoritması uygun bir şekilde uygulandı mı?",
+                  "Temas sonrası SB riskli temas algoritması uygulandı mı?",
               type: "TEXT",
               answerList: [
-                "Hayır, protokol uygulanmadı ve çalışmaya zorlandım",
-                "Evet, yüksek riskliydim hidroksiklorin tedavisiyle beş gün istirahat sonrasında testim negatif çıktı işe başladım",
-                "Evet orta riskliydim maskeyle çalıştım ve beş gün sonra test yapıldı",
-                "Evet düşük riskliydim, maske ile çalıştım, semptom takibim yapıldı ve yedinci günde test yapıldı",
+                "Hayır, herhangi bir protokol uygulanmadı ve çalışmaya devam ettim",
+                "Evet, yüksek riskliydim ve algoritmaya göre izlendim",
+                "Evet orta riskliydim maskeyle çalıştım ve yedi gün sonra test yapıldı",
+                "Evet düşük riskliydim, maske ile çalıştım, semptom takibim yapıldı",
               ],
               emojiList: [
                 "😓",
