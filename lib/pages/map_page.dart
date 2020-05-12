@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:after_layout/after_layout.dart';
 import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,7 +26,7 @@ class MapPage extends StatefulWidget {
   State<MapPage> createState() => MapPageState();
 }
 
-class MapPageState extends State<MapPage> {
+class MapPageState extends State<MapPage> with AfterLayoutMixin {
   Completer<GoogleMapController> _controller = Completer();
 
   String _query = 'dokuz eylül hastanesi izmir';
@@ -154,9 +155,22 @@ class MapPageState extends State<MapPage> {
                                         const EdgeInsets.only(top: 8, left: 8),
                                     child: Container(
                                       width: 150,
-                                      child: HeaderWidget(
-                                        title: "Malzemeler",
-                                        isDarkTeheme: true,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          return FeatureDiscovery
+                                              .clearPreferences(context, [
+                                            'map',
+                                            'profile',
+                                            'anket',
+                                            'marker',
+                                            'emoji',
+                                            'filter'
+                                          ]);
+                                        },
+                                        child: HeaderWidget(
+                                          title: "Malzemeler",
+                                          isDarkTeheme: true,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -460,6 +474,12 @@ class MapPageState extends State<MapPage> {
     final GoogleMapController controller = await _controller.future;
     await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 20));
   }
+
+  @override
+  void afterFirstLayout(BuildContext context) async {
+    await Future.delayed(Duration(milliseconds: 300));
+    FeatureDiscovery.discoverFeatures(context, ['profile']);
+  }
 }
 
 class GradientAppBar extends StatelessWidget {
@@ -505,8 +525,9 @@ class GradientAppBar extends StatelessWidget {
               Expanded(child: title),
               if (!Navigator.canPop(context))
                 GestureDetector(
-                  onTap: () {
-                    showDialog(
+                  onTap: () async {
+                    FeatureDiscovery.completeCurrentStep(context);
+                    await showDialog(
                       context: context,
                       builder: (context) {
                         return AlertDialog(
@@ -517,6 +538,7 @@ class GradientAppBar extends StatelessWidget {
                         );
                       },
                     );
+                    FeatureDiscovery.discoverFeatures(context, ['filter']);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
@@ -524,6 +546,11 @@ class GradientAppBar extends StatelessWidget {
                       backgroundImage: AssetImage("assets/default-profile.png"),
                     ),
                   ),
+                ).showFeature(
+                  context,
+                  title: 'Profil',
+                  description: 'Buradan profil bilgilerinizi görebilirsiniz',
+                  featureId: 'profile',
                 ),
             ],
           ),
@@ -817,6 +844,16 @@ class ConditionFilterItem extends StatelessWidget {
             Expanded(
               child: Image.asset(
                 conditionFilterModel.imagePath,
+              ).showFeature(
+                context,
+                title: 'Haritada Filtrele',
+                description:
+                    "İstediğiniz malzeme stok bildirimi pin'ini ve malzeme türünü seçerek haritada filtereleyebilirsiniz",
+                featureId: 'filter',
+                onCompleteCallback: () {
+                  FeatureDiscovery.discoverFeatures(context, ['marker']);
+                },
+                contentLocation: ContentLocation.below,
               ),
             ),
             SizedBox(
@@ -901,9 +938,9 @@ class HospitalConditionCard extends StatelessWidget {
                       ],
                     ).showFeature(
                       context,
-                      title: 'Harita',
+                      title: 'Pin',
                       description:
-                          'Hastane isimlerene basarak haritadaki pinleri daha yakından görün!',
+                          "Pin'e dokunarak hastaneye odaklanabilirsiniz",
                       featureId: 'marker',
                       show: (index == 0),
                     ),

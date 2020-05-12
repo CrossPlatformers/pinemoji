@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'package:pinemoji/widgets/feature_shower.dart';
+
 class HealthStatusModel {
   String emoji;
   String text;
   String hintText;
   bool isOther = false;
   bool isActive = false;
+
   HealthStatusModel(String emoji, String text,
       {bool isOther = false, this.hintText}) {
     this.emoji = emoji;
@@ -54,6 +57,13 @@ class _HealthStatusContentState extends State<HealthStatusContent> {
                 Text(
                   widget.healthStatusModel.emoji,
                   style: TextStyle(fontSize: 35),
+                ).showFeature(
+                  context,
+                  title: 'Anket',
+                  description:
+                      "Soruları, size en uygun şekilde yanıtlayarak TTB'nin doğru veri toplamasına destek olabilirsiniz",
+                  featureId: 'anket',
+                  show: widget.healthStatusModel.text == 'Hayır'
                 ),
                 SizedBox(
                   height: 5,

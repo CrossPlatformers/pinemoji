@@ -51,12 +51,12 @@ class _MaterialStatusState extends State<MaterialStatus> with AfterLayoutMixin {
               context,
               MaterialPageRoute(
                   builder: (context) => FeatureDiscovery(
-                    child: MapPage(
+                        child: MapPage(
                           isNormalUser: !(AuthenticationService
                                   .verifiedUser.extraInfo['status'] ==
                               "TTBA"),
                         ),
-                  )));
+                      )));
         },
         child: Center(
           child: ClipRRect(
@@ -72,7 +72,7 @@ class _MaterialStatusState extends State<MaterialStatus> with AfterLayoutMixin {
         context,
         title: 'Harita',
         description:
-            'Haritadan etrafınızdaki hastanelerin malzeme durmunu görün.',
+            'Harita üzerinde, etrafınızdaki malzeme durum bildirim pinlerini görebilirsiniz',
         featureId: 'map',
       ),
       body: SafeArea(
@@ -89,7 +89,11 @@ class _MaterialStatusState extends State<MaterialStatus> with AfterLayoutMixin {
                   child: Container(
                     width: 210,
                     child: GestureDetector(
-                      onTap: ()=>FeatureDiscovery.clearPreferences(context, ['map','profile']),
+                      onTap: () {
+//                        AuthenticationService.instance.signOut();
+                        return FeatureDiscovery.clearPreferences(context,
+                            ['map', 'profile', 'anket', 'marker', 'emoji']);
+                      },
                       child: HeaderWidget(
                         title: "Malzeme Durumu",
                         isDarkTeheme: true,
@@ -114,7 +118,7 @@ class _MaterialStatusState extends State<MaterialStatus> with AfterLayoutMixin {
                     FeatureDiscovery.discoverFeatures(
                       context,
                       const <String>{
-                        'map',
+                        'emoji',
                       },
                     );
 //                    FeatureDiscovery.clearPreferences(context, ['profile','map']);
@@ -128,7 +132,7 @@ class _MaterialStatusState extends State<MaterialStatus> with AfterLayoutMixin {
                 ).showFeature(
                   context,
                   title: 'Profil',
-                  description: 'Kendi profil bilgilieriniz görün.',
+                  description: 'Buradan profil bilgilerinizi görebilirsiniz',
                   featureId: 'profile',
                 ),
               ],
@@ -249,7 +253,6 @@ class _MaterialStatusState extends State<MaterialStatus> with AfterLayoutMixin {
     FeatureDiscovery.discoverFeatures(
       context,
       const <String>{
-        // Feature ids for every feature that you want to showcase in order.
         'profile',
       },
     );

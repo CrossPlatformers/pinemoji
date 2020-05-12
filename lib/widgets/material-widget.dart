@@ -1,8 +1,10 @@
 import 'dart:ui';
 
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:pinemoji/enums/marker-type-enum.dart';
 import 'package:pinemoji/widgets/blur-widget.dart';
+import 'package:pinemoji/widgets/feature_shower.dart';
 
 class MaterialStatusModel {
   String emoji;
@@ -13,6 +15,7 @@ class MaterialStatusModel {
   bool hasBorder = true;
   MarkerType markerType;
   Color color;
+
   MaterialStatusModel({String emoji, String text, Color color, String id}) {
     this.emoji = emoji;
     this.text = text;
@@ -49,6 +52,23 @@ class MaterialStatusContent extends StatelessWidget {
             Image.asset(
               "assets/emoji/" + getMaterialIcon(materialStatusModel.id),
               width: size.height / 18,
+            ).showFeature(
+              context,
+              title: 'Malzeme Durumu',
+              description:
+              'Stok durumunu bildirmek istediğiniz malzemeyi seçebilirsiniz',
+              featureId: 'emoji',
+              onCompleteCallback: () async {
+                await Future.delayed(Duration(milliseconds: 500));
+                FeatureDiscovery.discoverFeatures(
+                  context,
+                  const <String>{
+                    // Feature ids for every feature that you want to showcase in order.
+                    'map',
+                  },
+                );
+              },
+              show: int.tryParse(materialStatusModel.id) == 1,
             ),
             SizedBox(
               height: 5,
