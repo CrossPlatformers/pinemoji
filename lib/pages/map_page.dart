@@ -26,7 +26,7 @@ class MapPage extends StatefulWidget {
   State<MapPage> createState() => MapPageState();
 }
 
-class MapPageState extends State<MapPage> with AfterLayoutMixin {
+class MapPageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
 
   String _query = 'dokuz eylül hastanesi izmir';
@@ -155,22 +155,9 @@ class MapPageState extends State<MapPage> with AfterLayoutMixin {
                                         const EdgeInsets.only(top: 8, left: 8),
                                     child: Container(
                                       width: 150,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          return FeatureDiscovery
-                                              .clearPreferences(context, [
-                                            'map',
-                                            'profile',
-                                            'anket',
-                                            'marker',
-                                            'emoji',
-                                            'filter'
-                                          ]);
-                                        },
-                                        child: HeaderWidget(
-                                          title: "Malzemeler",
-                                          isDarkTeheme: true,
-                                        ),
+                                      child: HeaderWidget(
+                                        title: "Malzemeler",
+                                        isDarkTeheme: true,
                                       ),
                                     ),
                                   ),
@@ -417,7 +404,11 @@ class MapPageState extends State<MapPage> with AfterLayoutMixin {
       lastRequestList.length;
     });
     await Future.delayed(Duration(milliseconds: 300));
-    FeatureDiscovery.discoverFeatures(context, ['marker']);
+    if (widget.isNormalUser) {
+      FeatureDiscovery.discoverFeatures(context, ['profile']);
+    } else {
+      FeatureDiscovery.discoverFeatures(context, ['marker']);
+    }
 //    print(lastRequestList.length);
 //    print(MapRepository.markers.length);
   }
@@ -473,12 +464,6 @@ class MapPageState extends State<MapPage> with AfterLayoutMixin {
   void animateCamera(LatLng latLang) async {
     final GoogleMapController controller = await _controller.future;
     await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 20));
-  }
-
-  @override
-  void afterFirstLayout(BuildContext context) async {
-    await Future.delayed(Duration(milliseconds: 300));
-    FeatureDiscovery.discoverFeatures(context, ['profile']);
   }
 }
 
@@ -538,7 +523,11 @@ class GradientAppBar extends StatelessWidget {
                         );
                       },
                     );
-                    FeatureDiscovery.discoverFeatures(context, ['filter']);
+                    if (isNormalUser) {
+                      FeatureDiscovery.discoverFeatures(context, ['marker']);
+                    } else {
+                      FeatureDiscovery.discoverFeatures(context, ['filter']);
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),

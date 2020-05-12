@@ -88,16 +88,9 @@ class _MaterialStatusState extends State<MaterialStatus> with AfterLayoutMixin {
                   padding: const EdgeInsets.only(left: 20, top: 20),
                   child: Container(
                     width: 210,
-                    child: GestureDetector(
-                      onTap: () {
-//                        AuthenticationService.instance.signOut();
-                        return FeatureDiscovery.clearPreferences(context,
-                            ['map', 'profile', 'anket', 'marker', 'emoji']);
-                      },
-                      child: HeaderWidget(
-                        title: "Malzeme Durumu",
-                        isDarkTeheme: true,
-                      ),
+                    child: HeaderWidget(
+                      title: "Malzeme Durumu",
+                      isDarkTeheme: true,
                     ),
                   ),
                 ),
