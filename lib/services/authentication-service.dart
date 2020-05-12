@@ -102,7 +102,7 @@ class AuthenticationService {
       status = AuthenticationStatus(
           authenticationEnum: AuthenticationEnum.fail,
           exceptionCode:
-              'Kayıtlı kullanıcı bulunamadı, lütfen TTB ile iletişime geçip güncelleyiniz.');
+              'Telefon numaranız sistemimizde güncel değil, lütfen TTB ile iletişime geçip güncelleyiniz.');
       callback(status);
     }
     final PhoneVerificationCompleted verified = (AuthCredential auth) {
