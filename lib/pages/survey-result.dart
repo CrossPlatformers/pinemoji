@@ -234,7 +234,7 @@ class _SurveyResultPageState extends State<SurveyResultPage> {
     var sheet = excel.tables.keys.first;
     excel.insertRow(sheet, 0);
     excel.updateCell(
-        sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 0), "No",
+        sheet, CellIndex.indexByColumnRow(rowIndex: 0, columnIndex: 0), "Soru No",
         backgroundColorHex: "#263964", fontColorHex: "#C7CAD1");
 
     excel.updateCell(sheet,
