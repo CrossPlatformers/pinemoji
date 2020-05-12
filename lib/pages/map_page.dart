@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:after_layout/after_layout.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,6 +15,7 @@ import 'package:pinemoji/repositories/request_repository.dart';
 import 'package:pinemoji/services/authentication-service.dart';
 import 'package:pinemoji/widgets/header-widget.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
+import 'package:pinemoji/widgets/feature_shower.dart';
 
 class MapPage extends StatefulWidget {
   final bool isNormalUser;
@@ -333,6 +336,7 @@ class MapPageState extends State<MapPage> {
                                 emoji: emoji.info ?? 'info',
                                 emojiDescription:
                                     emoji.description ?? 'description',
+                                index: index,
                               ),
                             );
                           },
@@ -399,6 +403,12 @@ class MapPageState extends State<MapPage> {
     setStateIfMounted(() {
       lastRequestList.length;
     });
+    await Future.delayed(Duration(milliseconds: 300));
+    if (widget.isNormalUser) {
+      FeatureDiscovery.discoverFeatures(context, ['profile']);
+    } else {
+      FeatureDiscovery.discoverFeatures(context, ['marker']);
+    }
 //    print(lastRequestList.length);
 //    print(MapRepository.markers.length);
   }
@@ -500,8 +510,9 @@ class GradientAppBar extends StatelessWidget {
               Expanded(child: title),
               if (!Navigator.canPop(context))
                 GestureDetector(
-                  onTap: () {
-                    showDialog(
+                  onTap: () async {
+                    FeatureDiscovery.completeCurrentStep(context);
+                    await showDialog(
                       context: context,
                       builder: (context) {
                         return AlertDialog(
@@ -512,6 +523,11 @@ class GradientAppBar extends StatelessWidget {
                         );
                       },
                     );
+                    if (isNormalUser) {
+                      FeatureDiscovery.discoverFeatures(context, ['marker']);
+                    } else {
+                      FeatureDiscovery.discoverFeatures(context, ['filter']);
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
@@ -519,6 +535,11 @@ class GradientAppBar extends StatelessWidget {
                       backgroundImage: AssetImage("assets/default-profile.png"),
                     ),
                   ),
+                ).showFeature(
+                  context,
+                  title: 'Profil',
+                  description: 'Buradan profil bilgilerinizi görebilirsiniz',
+                  featureId: 'profile',
                 ),
             ],
           ),
@@ -812,6 +833,16 @@ class ConditionFilterItem extends StatelessWidget {
             Expanded(
               child: Image.asset(
                 conditionFilterModel.imagePath,
+              ).showFeature(
+                context,
+                title: 'Haritada Filtrele',
+                description:
+                    "İstediğiniz malzeme stok bildirimi pin'ini ve malzeme türünü seçerek haritada filtereleyebilirsiniz",
+                featureId: 'filter',
+                onCompleteCallback: () {
+                  FeatureDiscovery.discoverFeatures(context, ['marker']);
+                },
+                contentLocation: ContentLocation.below,
               ),
             ),
             SizedBox(
@@ -848,11 +879,14 @@ class HospitalConditionCard extends StatelessWidget {
 
   final String emoji;
 
+  final int index;
+
   const HospitalConditionCard({
     Key key,
     @required this.hospitalName,
     @required this.emojiDescription,
     @required this.emoji,
+    this.index,
   }) : super(key: key);
 
   @override
@@ -891,6 +925,13 @@ class HospitalConditionCard extends StatelessWidget {
                           ),
                         )
                       ],
+                    ).showFeature(
+                      context,
+                      title: 'Pin',
+                      description:
+                          "Pin'e dokunarak hastaneye odaklanabilirsiniz",
+                      featureId: 'marker',
+                      show: (index == 0),
                     ),
                     SizedBox(
                       width: 8,

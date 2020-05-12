@@ -1,3 +1,4 @@
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:pinemoji/pages/map_page.dart';
 import 'package:pinemoji/repositories/map_repository.dart';
@@ -94,10 +95,12 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 "TTBA",
                 "PD"
               ].contains(AuthenticationService.verifiedUser.extraInfo['status'])
-                  ? MapPage(
-                      isNormalUser: !(AuthenticationService.verifiedUser.extraInfo['status'] == "TTBA"),
-                    )
-                  : MaterialStatus(),
+                  ? FeatureDiscovery(
+                    child: MapPage(
+                        isNormalUser: !(AuthenticationService.verifiedUser.extraInfo['status'] == "TTBA"),
+                      ),
+                  )
+                  : FeatureDiscovery(child: MaterialStatus()),
               AuthenticationService.verifiedUser.extraInfo['status'] == "TTBA"
                   ? SurveyResultPage()
                   : HealthStatus(),
