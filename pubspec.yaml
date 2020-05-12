@@ -40,6 +40,8 @@ dependencies:
   path_provider: ^1.6.7
 
   shared_preferences: 0.5.7
+  feature_discovery: ^0.8.0
+  after_layout: ^1.0.7+2
   http: 0.12.1
 
 dev_dependencies:

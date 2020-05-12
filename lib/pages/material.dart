@@ -1,3 +1,5 @@
+import 'package:after_layout/after_layout.dart';
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinemoji/enums/marker-type-enum.dart';
@@ -11,6 +13,7 @@ import 'package:pinemoji/widgets/header-widget.dart';
 import 'package:pinemoji/widgets/material-widget.dart';
 import 'package:pinemoji/widgets/outcome-button.dart';
 import 'package:pinemoji/repositories/user_repository.dart';
+import 'package:pinemoji/widgets/feature_shower.dart';
 
 class MaterialStatus extends StatefulWidget {
   static var emojiList = CompanyRepository().getEmojiList();
@@ -31,7 +34,7 @@ class MaterialStatus extends StatefulWidget {
   _MaterialStatusState createState() => _MaterialStatusState();
 }
 
-class _MaterialStatusState extends State<MaterialStatus> {
+class _MaterialStatusState extends State<MaterialStatus> with AfterLayoutMixin {
   final _scaffOldState = GlobalKey<ScaffoldState>();
   bool hasLoading = false;
 
@@ -43,14 +46,17 @@ class _MaterialStatusState extends State<MaterialStatus> {
       backgroundColor: Colors.transparent,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          FeatureDiscovery.completeCurrentStep(context);
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => MapPage(
-                        isNormalUser: !(AuthenticationService
-                                .verifiedUser.extraInfo['status'] ==
-                            "TTBA"),
-                      )));
+                  builder: (context) => FeatureDiscovery(
+                    child: MapPage(
+                          isNormalUser: !(AuthenticationService
+                                  .verifiedUser.extraInfo['status'] ==
+                              "TTBA"),
+                        ),
+                  )));
         },
         child: Center(
           child: ClipRRect(
@@ -62,6 +68,12 @@ class _MaterialStatusState extends State<MaterialStatus> {
             ),
           ),
         ),
+      ).showFeature(
+        context,
+        title: 'Harita',
+        description:
+            'Haritadan etrafınızdaki hastanelerin malzeme durmunu görün.',
+        featureId: 'map',
       ),
       body: SafeArea(
         child: Column(
@@ -76,15 +88,19 @@ class _MaterialStatusState extends State<MaterialStatus> {
                   padding: const EdgeInsets.only(left: 20, top: 20),
                   child: Container(
                     width: 210,
-                    child: HeaderWidget(
-                      title: "Malzeme Durumu",
-                      isDarkTeheme: true,
+                    child: GestureDetector(
+                      onTap: ()=>FeatureDiscovery.clearPreferences(context, ['map','profile']),
+                      child: HeaderWidget(
+                        title: "Malzeme Durumu",
+                        isDarkTeheme: true,
+                      ),
                     ),
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    showDialog(
+                  onTap: () async {
+                    FeatureDiscovery.completeCurrentStep(context);
+                    var x = await showDialog(
                       context: context,
                       builder: (context) {
                         return AlertDialog(
@@ -95,6 +111,13 @@ class _MaterialStatusState extends State<MaterialStatus> {
                         );
                       },
                     );
+                    FeatureDiscovery.discoverFeatures(
+                      context,
+                      const <String>{
+                        'map',
+                      },
+                    );
+//                    FeatureDiscovery.clearPreferences(context, ['profile','map']);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
@@ -102,6 +125,11 @@ class _MaterialStatusState extends State<MaterialStatus> {
                       backgroundImage: AssetImage("assets/default-profile.png"),
                     ),
                   ),
+                ).showFeature(
+                  context,
+                  title: 'Profil',
+                  description: 'Kendi profil bilgilieriniz görün.',
+                  featureId: 'profile',
                 ),
               ],
             ),
@@ -212,6 +240,18 @@ class _MaterialStatusState extends State<MaterialStatus> {
         backgroundColor: Colors.white,
         duration: Duration(milliseconds: 3000),
       ),
+    );
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) async {
+    await Future.delayed(Duration(milliseconds: 500));
+    FeatureDiscovery.discoverFeatures(
+      context,
+      const <String>{
+        // Feature ids for every feature that you want to showcase in order.
+        'profile',
+      },
     );
   }
 }

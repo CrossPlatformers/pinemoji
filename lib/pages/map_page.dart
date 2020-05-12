@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,6 +14,7 @@ import 'package:pinemoji/repositories/request_repository.dart';
 import 'package:pinemoji/services/authentication-service.dart';
 import 'package:pinemoji/widgets/header-widget.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
+import 'package:pinemoji/widgets/feature_shower.dart';
 
 class MapPage extends StatefulWidget {
   final bool isNormalUser;
@@ -333,6 +335,7 @@ class MapPageState extends State<MapPage> {
                                 emoji: emoji.info ?? 'info',
                                 emojiDescription:
                                     emoji.description ?? 'description',
+                                index: index,
                               ),
                             );
                           },
@@ -399,6 +402,8 @@ class MapPageState extends State<MapPage> {
     setStateIfMounted(() {
       lastRequestList.length;
     });
+    await Future.delayed(Duration(milliseconds: 300));
+    FeatureDiscovery.discoverFeatures(context, ['marker']);
 //    print(lastRequestList.length);
 //    print(MapRepository.markers.length);
   }
@@ -848,11 +853,14 @@ class HospitalConditionCard extends StatelessWidget {
 
   final String emoji;
 
+  final int index;
+
   const HospitalConditionCard({
     Key key,
     @required this.hospitalName,
     @required this.emojiDescription,
     @required this.emoji,
+    this.index,
   }) : super(key: key);
 
   @override
@@ -891,6 +899,13 @@ class HospitalConditionCard extends StatelessWidget {
                           ),
                         )
                       ],
+                    ).showFeature(
+                      context,
+                      title: 'Harita',
+                      description:
+                          'Hastane isimlerene basarak haritadaki pinleri daha yakından görün!',
+                      featureId: 'marker',
+                      show: (index == 0),
                     ),
                     SizedBox(
                       width: 8,
