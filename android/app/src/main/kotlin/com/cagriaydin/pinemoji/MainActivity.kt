@@ -1,4 +1,4 @@
-package com.crossplatformers.pinemojiTTB
+package com.crossplatformers.pinemojiTTBIR
 
 import io.flutter.embedding.android.FlutterActivity
 

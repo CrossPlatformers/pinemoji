@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.crossplatformers.pinemojiTTB</string>
+	<string>com.crossplatformers.pinemojiTTBIR</string>
 	<key>PROJECT_ID</key>
 	<string>pinemoji-xp</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1074011055856:ios:d91d35e348ef9817920435</string>
+	<string>1:1074011055856:ios:fa7edbf386d7284f920435</string>
 	<key>DATABASE_URL</key>
 	<string>https://pinemoji-xp.firebaseio.com</string>
 </dict>

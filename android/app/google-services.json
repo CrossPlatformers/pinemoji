@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1074011055856:android:56190b86ef5f9090920435",
+        "mobilesdk_app_id": "1:1074011055856:android:c0a28dd57ad7abe9920435",
         "android_client_info": {
-          "package_name": "com.crossplatformers.pinemojiTTB"
+          "package_name": "com.crossplatformers.pinemojiTTBIR"
         }
       },
       "oauth_client": [
@@ -35,7 +35,7 @@
               "client_id": "1074011055856-7eojmuh99dbr3g7iolg7vn3r49lrec8c.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.crossplatformers.pinemojiTTB"
+                "bundle_id": "com.crossplatformers.pinemojiTTBIR"
               }
             }
           ]
@@ -44,9 +44,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1074011055856:android:c0a28dd57ad7abe9920435",
+        "mobilesdk_app_id": "1:1074011055856:android:9559c38d28351aaf920435",
         "android_client_info": {
-          "package_name": "com.crossplatformers.pinemojiTTB"
+          "package_name": "com.crossplatformers.pinemojiTTBIR"
         }
       },
       "oauth_client": [
@@ -71,7 +71,7 @@
               "client_id": "1074011055856-7eojmuh99dbr3g7iolg7vn3r49lrec8c.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.crossplatformers.pinemojiTTB"
+                "bundle_id": "com.crossplatformers.pinemojiTTBIR"
               }
             }
           ]
