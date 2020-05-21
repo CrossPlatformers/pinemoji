@@ -23,9 +23,7 @@ class AuthenticationService {
       result = await instance.signInWithCredential(credential);
       if (result != null) {
         verifiedUser.phoneNumber = result.user.phoneNumber;
-        verifiedUser.location = (await MapRepository.getPlaceDetailsFromName(
-                verifiedUser.extraInfo['location']))
-            .location;
+        verifiedUser.location = (await MapRepository.getPlaceDetailsFromName(verifiedUser.extraInfo['location'])).location;
         await UserRepository().addUser(verifiedUser);
         return VerificationStatusEnum.ok;
       }
@@ -43,10 +41,8 @@ class AuthenticationService {
     }
   }
 
-  Future<VerificationStatusEnum> signInWithOTP(
-      String smsCode, String verId) async {
-    AuthCredential _authCredential = PhoneAuthProvider.getCredential(
-        verificationId: verId, smsCode: smsCode);
+  Future<VerificationStatusEnum> signInWithOTP(String smsCode, String verId) async {
+    AuthCredential _authCredential = PhoneAuthProvider.getCredential(verificationId: verId, smsCode: smsCode);
     VerificationStatusEnum status = await signIn(_authCredential);
     return status;
   }
@@ -56,8 +52,7 @@ class AuthenticationService {
   }
 
   Future<bool> checkPhoneNumber(String phoneNo) async {
-    if (['+905075797878', '+905078533433', '+905319750171', '+905415435019', '+905314397896']
-        .contains(phoneNo)) {
+    if (['+905075797878', '+905078533433', '+905319750171', '+905314397896'].contains(phoneNo)) {
       verifiedUser = await UserRepository().getUserByPhone(phoneNo);
       return true;
     }
@@ -70,22 +65,17 @@ class AuthenticationService {
       headers: {'x-api-key': 'FA872702-6321-45DC-21F0-FC1BE921591B'},
     );
     if (res.statusCode == 200) {
-      Map<String, dynamic> user =
-          jsonDecode(Utf8Decoder().convert(res.bodyBytes));
-      FirebaseUser fUser = await instance.currentUser();
-      if (fUser != null) {
-        verifiedUser = await UserRepository().getUser(fUser.uid);
-      } else {
-        verifiedUser = User(
-            name: user['ad'],
-            surname: user['soyad'],
-            phoneNumber: user['telNo'],
-            extraInfo: {
-              'status': user['yetki'],
-              'location': user['gorevYeri'],
-              'unvan': user['unvan']
-            });
-      }
+      Map<String, dynamic> user = jsonDecode(Utf8Decoder().convert(res.bodyBytes));
+      verifiedUser = User(
+        name: user['ad'],
+        surname: user['soyad'],
+        phoneNumber: user['telNo'],
+        extraInfo: {
+          'status': user['yetki'],
+          'location': user['gorevYeri'],
+          'unvan': user['unvan'],
+        },
+      );
       return true;
     } else {
       verifiedUser = null;
@@ -94,39 +84,28 @@ class AuthenticationService {
     }
   }
 
-  verifyPhone(String phoneNo, BuildContext context,
-      Function callback(AuthenticationStatus authenticationStatus)) async {
+  verifyPhone(String phoneNo, BuildContext context, Function callback(AuthenticationStatus authenticationStatus)) async {
     AuthenticationStatus status;
     await checkPhoneNumber(phoneNo);
     if (verifiedUser == null) {
       status = AuthenticationStatus(
-          authenticationEnum: AuthenticationEnum.fail,
-          exceptionCode:
-              'Telefon numaranız sistemimizde güncel değil, lütfen TTB ile iletişime geçip güncelleyiniz.');
+          authenticationEnum: AuthenticationEnum.fail, exceptionCode: 'Telefon numaranız sistemimizde güncel değil, lütfen TTB ile iletişime geçip güncelleyiniz.');
       callback(status);
     }
     final PhoneVerificationCompleted verified = (AuthCredential auth) {
-      status =
-          AuthenticationStatus(authenticationEnum: AuthenticationEnum.success);
+      status = AuthenticationStatus(authenticationEnum: AuthenticationEnum.success);
       callback(status);
     };
-    final PhoneVerificationFailed verificationFailed =
-        (AuthException authException) {
-      status = AuthenticationStatus(
-          authenticationEnum: AuthenticationEnum.fail,
-          exceptionCode: authException.code);
+    final PhoneVerificationFailed verificationFailed = (AuthException authException) {
+      status = AuthenticationStatus(authenticationEnum: AuthenticationEnum.fail, exceptionCode: authException.code);
       callback(status);
     };
     final PhoneCodeSent smsSent = (String verId, [int forceResend]) {
-      status = AuthenticationStatus(
-          authenticationEnum: AuthenticationEnum.smsSent,
-          verificationId: verId);
+      status = AuthenticationStatus(authenticationEnum: AuthenticationEnum.smsSent, verificationId: verId);
       callback(status);
     };
     final PhoneCodeAutoRetrievalTimeout autoTimeout = (String verId) {
-      status = AuthenticationStatus(
-          authenticationEnum: AuthenticationEnum.timeout,
-          verificationId: verId);
+      status = AuthenticationStatus(authenticationEnum: AuthenticationEnum.timeout, verificationId: verId);
       callback(status);
     };
 
