@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_webservice/geolocation.dart';
 import 'package:pinemoji/enums/authentication-enum.dart';
 import 'package:pinemoji/enums/verification-status-enum.dart';
 import 'package:pinemoji/models/authentication-status.dart';
