@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class HeaderWidget extends StatelessWidget {
   final bool isDarkTeheme;
   final String title;
+
   const HeaderWidget({
     this.title,
     this.isDarkTeheme = false,
