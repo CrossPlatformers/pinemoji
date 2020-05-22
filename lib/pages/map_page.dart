@@ -33,7 +33,7 @@ class MapPageState extends State<MapPage> with AfterLayoutMixin {
 
   CameraPosition _lastCameraPosition = CameraPosition(
     target: LatLng(40.0903484, 30.4452252),
-    zoom: 15,
+    zoom: 13,
   );
 
   CameraTargetBounds _cameraTargetBounds;
@@ -413,6 +413,7 @@ class MapPageState extends State<MapPage> with AfterLayoutMixin {
 
   void handleLocation() async {
     final zoom = 13.0;
+    final GoogleMapController controller = await _controller.future;
     if (AuthenticationService.verifiedUser.location != null) {
       _lastCameraPosition = CameraPosition(
           target: AuthenticationService.verifiedUser.location, zoom: zoom);
@@ -426,7 +427,6 @@ class MapPageState extends State<MapPage> with AfterLayoutMixin {
         target: LatLng(locationData.latitude, locationData.longitude),
         zoom: zoom,
       );
-      final GoogleMapController controller = await _controller.future;
       await controller.animateCamera(
           CameraUpdate.newLatLngZoom(_lastCameraPosition.target, zoom));
       await Future.delayed(Duration(milliseconds: 400));
@@ -445,6 +445,8 @@ class MapPageState extends State<MapPage> with AfterLayoutMixin {
         zoom: zoom,
       );
     }
+    await controller.animateCamera(
+        CameraUpdate.newLatLngZoom(_lastCameraPosition.target, zoom));
   }
 
   Function onFilterChange(List<String> filters) {
@@ -834,8 +836,8 @@ class ConditionFilterItem extends StatelessWidget {
       duration: Duration(milliseconds: 300),
       child: Container(
         padding: EdgeInsets.all(8),
-        height: size.width / 4,
-        width: size.width / 4,
+        height: size.width / 4 > 75 ? 80: size.width,
+        width: size.width / 4 > 75 ? 80: size.width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
