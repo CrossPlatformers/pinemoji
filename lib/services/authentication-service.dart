@@ -69,7 +69,7 @@ class AuthenticationService {
         surname: user['soyad'],
         phoneNumber: user['telNo'],
         extraInfo: {
-          'status': user['yetki'],
+          'status': user['yetki'] != null && user['yetki'].toString().length > 0 ? user['yetki'] : 'PD',
           'location': user['gorevYeri'],
           'unvan': user['unvan'],
         },
