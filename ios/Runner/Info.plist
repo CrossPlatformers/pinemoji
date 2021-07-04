@@ -18,14 +18,31 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.1074011055856-12gntuqjhd44jn13tdh5cgsirbafaqd6</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>I need it </string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Yakınınızdaki bilgileri, haritadan görebilmeniz için izin vermeniz gerekiyor</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>UIStatusBarHidden</key>
+	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -37,25 +54,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIStatusBarHidden</key>
-	<true/>
-
-	 <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>com.googleusercontent.apps.1074011055856-12gntuqjhd44jn13tdh5cgsirbafaqd6</string>
-            </array>
-        </dict>
-    </array>
 	<key>io.flutter.embedded_views_preview</key>
-    <true/>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>I need it </string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Yakınınızdaki bilgileri, haritadan görebilmeniz için izin vermeniz gerekiyor</string>
+	<true/>
 </dict>
 </plist>

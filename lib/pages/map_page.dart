@@ -13,9 +13,9 @@ import 'package:pinemoji/repositories/company_repository.dart';
 import 'package:pinemoji/repositories/map_repository.dart';
 import 'package:pinemoji/repositories/request_repository.dart';
 import 'package:pinemoji/services/authentication-service.dart';
+import 'package:pinemoji/widgets/feature_shower.dart';
 import 'package:pinemoji/widgets/header-widget.dart';
 import 'package:pinemoji/widgets/search_bar.dart';
-import 'package:pinemoji/widgets/feature_shower.dart';
 
 class MapPage extends StatefulWidget {
   final bool isNormalUser;
@@ -26,12 +26,15 @@ class MapPage extends StatefulWidget {
   State<MapPage> createState() => MapPageState();
 }
 
-class MapPageState extends State<MapPage> {
+class MapPageState extends State<MapPage> with AfterLayoutMixin {
   Completer<GoogleMapController> _controller = Completer();
 
   String _query = 'dokuz eylül hastanesi izmir';
 
-  CameraPosition _lastCameraPosition;
+  CameraPosition _lastCameraPosition = CameraPosition(
+    target: LatLng(40.0903484, 30.4452252),
+    zoom: 13,
+  );
 
   CameraTargetBounds _cameraTargetBounds;
 
@@ -403,18 +406,14 @@ class MapPageState extends State<MapPage> {
     setStateIfMounted(() {
       lastRequestList.length;
     });
-    await Future.delayed(Duration(milliseconds: 300));
-    if (widget.isNormalUser) {
-      FeatureDiscovery.discoverFeatures(context, ['profile']);
-    } else {
-      FeatureDiscovery.discoverFeatures(context, ['marker']);
-    }
+//    await Future.delayed(Duration(milliseconds: 300));
 //    print(lastRequestList.length);
 //    print(MapRepository.markers.length);
   }
 
   void handleLocation() async {
     final zoom = 13.0;
+    final GoogleMapController controller = await _controller.future;
     if (AuthenticationService.verifiedUser.location != null) {
       _lastCameraPosition = CameraPosition(
           target: AuthenticationService.verifiedUser.location, zoom: zoom);
@@ -428,7 +427,6 @@ class MapPageState extends State<MapPage> {
         target: LatLng(locationData.latitude, locationData.longitude),
         zoom: zoom,
       );
-      final GoogleMapController controller = await _controller.future;
       await controller.animateCamera(
           CameraUpdate.newLatLngZoom(_lastCameraPosition.target, zoom));
       await Future.delayed(Duration(milliseconds: 400));
@@ -447,6 +445,8 @@ class MapPageState extends State<MapPage> {
         zoom: zoom,
       );
     }
+    await controller.animateCamera(
+        CameraUpdate.newLatLngZoom(_lastCameraPosition.target, zoom));
   }
 
   Function onFilterChange(List<String> filters) {
@@ -464,6 +464,17 @@ class MapPageState extends State<MapPage> {
   void animateCamera(LatLng latLang) async {
     final GoogleMapController controller = await _controller.future;
     await controller.animateCamera(CameraUpdate.newLatLngZoom(latLang, 20));
+  }
+
+  @override
+  Future<void> afterFirstLayout(BuildContext context) async {
+//    await Future.delayed(Duration(seconds: 2));
+//    FeatureShower
+    if (!widget.isNormalUser) {
+      FeatureDiscovery.discoverFeatures(context, ['profile']);
+    } else {
+      FeatureDiscovery.discoverFeatures(context, ['marker']);
+    }
   }
 }
 
@@ -825,8 +836,8 @@ class ConditionFilterItem extends StatelessWidget {
       duration: Duration(milliseconds: 300),
       child: Container(
         padding: EdgeInsets.all(8),
-        height: size.width / 4,
-        width: size.width / 4,
+        height: size.width / 4 > 75 ? 80: size.width,
+        width: size.width / 4 > 75 ? 80: size.width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
